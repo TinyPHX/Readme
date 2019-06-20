@@ -14,6 +14,7 @@ namespace TP.Readme {
     {   
         [SerializeField] private ReadmeData readmeData;
         private string lastSavedFileName = "";
+        public Color fontColor = Color.black;
     
         public string Text
         {

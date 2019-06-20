@@ -17,6 +17,8 @@ namespace TP.Readme {
             bool empty = readme.Text == "";
             
             selectableText = new GUIStyle();
+            selectableText.focused.textColor = readme.fontColor;
+            selectableText.normal.textColor = readme.fontColor;
             selectableText.wordWrap = true;
             selectableText.padding = new RectOffset(textPadding, textPadding, textPadding + 2, textPadding);
             
@@ -42,7 +44,10 @@ namespace TP.Readme {
             else
             {
                 readme.Text = EditorGUILayout.TextArea(readme.Text, editableText, GUILayout.Height(textAreaHeight));
-    
+
+                float smallButtonWidth = EditorGUIUtility.singleLineHeight * 2;
+                readme.fontColor = EditorGUILayout.ColorField(readme.fontColor, GUILayout.Width(smallButtonWidth));
+                
                 Undo.RecordObject(target, "Readme");
             }
             
