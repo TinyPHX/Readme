@@ -210,40 +210,44 @@ namespace TP.Readme {
         
         public void RebuildStyleMaps()
         {
-            Dictionary<string, List<bool>> updatedStyleMaps = new Dictionary<string, List<bool>>();
-            
-            foreach (string tag in supportedTags)
+            if (text.Length > 0)
             {
-                List<bool> styleMap = Enumerable.Repeat(false, text.Length).ToList();
-    
-                int lastTagIndex = 0;
-                int maxTagCount = RichText.Split('<').Length - 1;
-                for (int i = 0; i < maxTagCount; i++)
+                Dictionary<string, List<bool>> updatedStyleMaps = new Dictionary<string, List<bool>>();
+
+                foreach (string tag in supportedTags)
                 {
-                    int startOfStyle = RichText.IndexOf(Tag(tag), lastTagIndex);
-                    if (startOfStyle == -1)
+                    List<bool> styleMap = Enumerable.Repeat(false, text.Length).ToList();
+
+                    int lastTagIndex = 0;
+                    int maxTagCount = RichText.Split('<').Length - 1;
+                    for (int i = 0; i < maxTagCount; i++)
                     {
-                        break;
+                        int startOfStyle = RichText.IndexOf(Tag(tag), lastTagIndex);
+                        if (startOfStyle == -1)
+                        {
+                            break;
+                        }
+
+                        lastTagIndex = startOfStyle + 1;
+
+                        int endOfStyle = RichText.IndexOf(EndTag(tag), startOfStyle);
+                        if (endOfStyle == -1)
+                        {
+                            break;
+                        }
+
+                        for (int styleIndex = startOfStyle; styleIndex < endOfStyle; styleIndex++)
+                        {
+                            int poorTextIndex = GetPoorIndex(styleIndex);
+                            styleMap[poorTextIndex] = true;
+                        }
                     }
-                    lastTagIndex = startOfStyle + 1;
-    
-                    int endOfStyle = RichText.IndexOf(EndTag(tag), startOfStyle);
-                    if (endOfStyle == -1)
-                    {
-                        break;
-                    }
-                
-                    for (int styleIndex = startOfStyle; styleIndex < endOfStyle; styleIndex++)
-                    {
-                        int poorTextIndex = GetPoorIndex(styleIndex);
-                        styleMap[poorTextIndex] = true;
-                    }
+
+                    updatedStyleMaps[tag] = styleMap;
                 }
-    
-                updatedStyleMaps[tag] = styleMap;
+
+                styleMaps = updatedStyleMaps;
             }
-    
-            styleMaps = updatedStyleMaps;
         }
         
         //TODO can optimize by building a rich to poor index map.
