@@ -19,14 +19,8 @@ namespace TP.Readme {
         private bool sourceOn = false;
         
         // Cursor fix 
-        private bool fixCursorBug = true;
-        private TextEditor textEditor;
-        private const string readmeEditorTextAreaName = "Readme Text Editor";
-        private int previousSelctIndex = -1;
-        private bool selectIndexChanged = false;
-        private int previousCursorIndex = -1;
-        private bool cursorIndexChanged = false;
-        private Rect textAreaRect;
+        private RichTextEditor richTextEditor;
+        private int previousCursorIndex;
         
         // Styles
         private GUIStyle activeTextAreaStyle;
@@ -63,9 +57,11 @@ namespace TP.Readme {
             float textAreaWidth = EditorGUIUtility.currentViewWidth - 19;
             float textAreaHeight = editableRichText.CalcHeight(new GUIContent(readme.Text), textAreaWidth);
             
-            textEditor = typeof(EditorGUI)
-                .GetField("activeEditor", BindingFlags.Static | BindingFlags.NonPublic)
-                .GetValue(null) as TextEditor;
+//            textEditor = typeof(EditorGUI)
+//                .GetField("activeEditor", BindingFlags.Static | BindingFlags.NonPublic)
+//                .GetValue(null) as TextEditor;
+            
+            richTextEditor = new RichTextEditor();
             
             EditorGUILayout.Space();
             
@@ -83,19 +79,20 @@ namespace TP.Readme {
             }
             else
             {
-                GUI.SetNextControlName(readmeEditorTextAreaName);
                 if (sourceOn)
                 {
                     readme.RichText = EditorGUILayout.TextArea(readme.RichText, editableText, GUILayout.Height(textAreaHeight));
                 }
                 else
                 {
+                    string textAreaName = "Readme Text Editor";
+                    GUI.SetNextControlName(textAreaName);
                     readme.RichText = EditorGUILayout.TextArea(readme.RichText, editableRichText, GUILayout.Height(textAreaHeight));
-                    Rect lastRect = GUILayoutUtility.GetLastRect();
-    
-                    if (lastRect.x != 0 || lastRect.y != 0)
+                    Rect textAreaRect = GUILayoutUtility.GetLastRect();
+                    
+                    if (textAreaRect.x != 0 || textAreaRect.y != 0)
                     {
-                        textAreaRect = lastRect;
+                        richTextEditor.setTextArea(textAreaName, textAreaRect);
                     }
     
                     activeTextAreaStyle = editableRichText;
@@ -103,7 +100,7 @@ namespace TP.Readme {
     
                 FixCursorBug();
 
-                if (selectIndexChanged || cursorIndexChanged)
+                if (richTextEditor.cursorIndex !=  previousCursorIndex)
                 {
                     UpdateStyleState();
                 }
@@ -190,16 +187,16 @@ namespace TP.Readme {
                 Readme.advancedOptions = EditorGUILayout.Foldout(Readme.advancedOptions, "Advanced");
                 if (Readme.advancedOptions)
                 {
-                    fixCursorBug = EditorGUILayout.Toggle("Cursor Correction", fixCursorBug);
+                    richTextEditor.FixCursorBug = EditorGUILayout.Toggle("Cursor Correction", richTextEditor.FixCursorBug);
                     EditorGUILayout.LabelField("Cursor Position");
                     EditorGUI.indentLevel++;
                     string richTextWithCursor = readme.RichText;
-                    if (textEditor != null && textEditor.selectIndex <= readme.RichText.Length)
+                    if (richTextEditor != null && richTextEditor.selectIndex <= readme.RichText.Length)
                     {
-                        richTextWithCursor = richTextWithCursor.Insert(Mathf.Max(textEditor.selectIndex, textEditor.cursorIndex), "|");
-                        if (textEditor.selectIndex != textEditor.cursorIndex)
+                        richTextWithCursor = richTextWithCursor.Insert(Mathf.Max(richTextEditor.selectIndex, textEditor.cursorIndex), "|");
+                        if (richTextEditor.selectIndex != richTextEditor.cursorIndex)
                         {
-                            richTextWithCursor = richTextWithCursor.Insert(Mathf.Min(textEditor.selectIndex, textEditor.cursorIndex), "|");
+                            richTextWithCursor = richTextWithCursor.Insert(Mathf.Min(richTextEditor.selectIndex, textEditor.cursorIndex), "|");
                         }
                     }
                     richTextWithCursor = richTextWithCursor.Replace("\n", " \\n\n");
@@ -211,12 +208,12 @@ namespace TP.Readme {
                     {
                         EditorGUILayout.HelpBox(
                             "mousePosition: " + Event.current.mousePosition + "\n" +
-                            "textAreaRect.position: " + textAreaRect.position + "\n" +
-                            "graphicalCursorPos: " + textEditor.graphicalCursorPos + "\n" +
-                            "Calc Cursor Position: " + (Event.current.mousePosition - textAreaRect.position) + "\n" +
-                            "cursorIndex: " + textEditor.cursorIndex + "\n" +
-                            "selectIndex: " + textEditor.selectIndex + "\n" +
-                            "position: " + textEditor.position + "\n" +
+                            "textAreaRect.position: " + richTextEditor.TextAreaRect.position + "\n" +
+                            "graphicalCursorPos: " + richTextEditor.graphicalCursorPos + "\n" +
+                            "Calc Cursor Position: " + (Event.current.mousePosition - richTextEditor.position) + "\n" +
+                            "cursorIndex: " + richTextEditor.cursorIndex + "\n" +
+                            "selectIndex: " + richTextEditor.selectIndex + "\n" +
+                            "position: " + richTextEditor.position + "\n" +
                             "TagsError: " + TagsError(readme.RichText) + "\n" +
                             "Style Map Info: " + "\n" +
                             "\t<b> tags:" + (readme.StyleMaps.ContainsKey("b") ? readme.StyleMaps["b"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
@@ -297,7 +294,7 @@ namespace TP.Readme {
                     readme.LoadLastSave();
                     Debug.LogWarning("You can't do that!");
                 }
-    
+                
                 EditorGUI.FocusTextInControl("");
                 textEditor.cursorIndex = readme.GetRichIndex(styleEndIndex);
     //            EditorGUI.FocusTextInControl(readmeEditorTextAreaName);
@@ -323,376 +320,6 @@ namespace TP.Readme {
             
             boldOn = readme.IsStyle("b", index);
             italicOn = readme.IsStyle("i", index);
-        }
-        
-        private void FixCursorBug()
-        {
-            if (fixCursorBug && textEditor != null && GUI.GetNameOfFocusedControl() == readmeEditorTextAreaName && !TagsError(readme.RichText) && !sourceOn)
-            {
-                selectIndexChanged = previousSelctIndex != textEditor.selectIndex;
-                cursorIndexChanged = previousCursorIndex != textEditor.cursorIndex;
-    
-                if (selectIndexChanged || cursorIndexChanged)
-                {
-                    FixMouseCursor();
-                    FixArrowCursor();
-                }
-                
-                previousSelctIndex = textEditor.selectIndex;
-                previousCursorIndex = textEditor.cursorIndex;
-            }
-        }
-    
-        public void FixMouseCursor()
-        {
-            bool isKeyboard = new KeyCode[] {KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(Event.current.keyCode);
-            bool typing = Event.current.character != '\0' || Event.current.keyCode != KeyCode.None;
-    
-            int selectIndex = textEditor.selectIndex;
-    
-            if (!typing && Event.current.clickCount <= 1)
-            {
-                int mousePositionIndex = MousePositionToIndex;
-    
-                if (selectIndexChanged)
-                {
-                    textEditor.selectIndex = mousePositionIndex;
-                }
-    
-                if (cursorIndexChanged)
-                {
-                    textEditor.cursorIndex = mousePositionIndex;
-                }
-            }
-        }
-    
-        public void FixArrowCursor()
-        {
-            bool isKeyboard = new KeyCode[] {KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(Event.current.keyCode);
-            bool isDoubleClick = Event.current.clickCount == 2;
-            if (isKeyboard || isDoubleClick)
-            {
-                int direction = isDoubleClick ? 1 : 0;
-    
-                if (isDoubleClick)
-                {
-                    int mouseIndex = MousePositionToIndex;
-                    textEditor.selectIndex = mouseIndex;
-                    textEditor.cursorIndex = mouseIndex;
-                    textEditor.selectIndex = WordStartIndex;
-                    textEditor.cursorIndex = WordEndIndex;
-                }
-                
-                if (cursorIndexChanged)
-                {
-                    textEditor.cursorIndex = GetNearestPoorTextIndex(textEditor.cursorIndex, previousCursorIndex, direction);
-                }
-    
-                if (selectIndexChanged)
-                {
-                    textEditor.selectIndex = GetNearestPoorTextIndex(textEditor.selectIndex, previousSelctIndex, direction);
-                }
-            }
-        }
-    
-        public int GetNearestPoorTextIndex(int index, int previousIndex, int direction = 0)
-        {
-            int nearestPoorTextIndex = index;
-            
-            if (IsOnTag(index))
-            {
-                int selectIndex = textEditor.selectIndex;
-                int cursorIndex = textEditor.cursorIndex;
-                
-                int attempts = readme.richTextTagMap.Count;
-    
-                if (direction == 0)
-                {
-                    direction = index - previousIndex;
-                }
-    
-                for (int i = 0; i < attempts && IsOnTag(index); i++)
-                {
-                    if (index == 0 || index == textEditor.text.Length - 1)
-                    {
-                        direction *= -1;
-                    }   
-    
-                    previousIndex = index;
-                    if (direction > 0)
-                    {
-                        textEditor.MoveRight();
-                        index++;
-                    }
-                    else
-                    {
-                        textEditor.MoveLeft();
-                        index--;
-                    }
-                }
-    
-                nearestPoorTextIndex = index;
-                
-                textEditor.selectIndex = selectIndex;
-                textEditor.cursorIndex = cursorIndex;
-            }
-    
-            return nearestPoorTextIndex;
-        }
-    
-        public bool TagsError(string richText)
-        {
-            bool tagsError = true;
-            bool hasTags = readme.richTextTagMap.Find(isTag => isTag);
-    
-            if (!hasTags)
-            {
-                tagsError = false;
-            }
-            else
-            {
-                string badTag = "</b>";
-                GUIStyle richStyle = new GUIStyle();
-                richStyle.richText = true;
-                richStyle.wordWrap = false;
-    
-                richText = richText.Replace('\n', ' ');
-    
-                float minWidth;
-                float maxWidth;
-                richStyle.CalcMinMaxWidth(new GUIContent(richText), out minWidth, out maxWidth);
-    
-                GUILayout.MaxWidth(100000);
-                
-                float badTagWidth = richStyle.CalcSize(new GUIContent(badTag)).x;
-                float textAndBadTagWidth = richStyle.CalcSize(new GUIContent(badTag + richText)).x;
-                float textWidth = richStyle.CalcSize(new GUIContent(richText)).x;
-    
-                if (textWidth != textAndBadTagWidth - badTagWidth)
-                {
-                    tagsError = false;
-                }
-            }
-    
-            return tagsError;
-        }
-    
-        public bool IsOnTag(int index)
-        {
-            bool isOnTag = false;
-    
-            if (readme != null && readme.richTextTagMap.Count > index)
-            {
-                isOnTag = readme.richTextTagMap[index];
-            }
-    
-            return isOnTag;
-        }
-    
-        public int GetPoorSelectIndex(string richText, int richSelectIndex)
-        {
-            int poorSelectIndex = richSelectIndex;
-    
-            for (int i = 0; i < richSelectIndex; i++)
-            {
-                char character = richText[i];
-                if (character == '<' || character == '/')
-                {
-                    foreach (string tag in Readme.SupportedTags)
-                    {
-                        if (richText.Length >= richSelectIndex + tag.Length && richText.Substring(richSelectIndex, tag.Length) == tag)
-                        {
-                            int richCharCount = 3;
-                            if (character == '/')
-                            {
-                                richCharCount += 1;
-                            }
-    
-                            poorSelectIndex -= richCharCount;
-                        }
-                    }
-                }
-            }
-    
-            return poorSelectIndex;
-        }
-    
-        public int GetRichSelectIndex(string richText, int selectIndex)
-        {
-            int richSelectIndex = selectIndex;
-            
-            for (int i = 0; i < richSelectIndex; i++)
-            {
-                char character = richText[i];
-                if (character == '<' || character == '/')
-                {
-                    foreach (string tag in Readme.SupportedTags)
-                    {
-                        if (richText.Length >= richSelectIndex + tag.Length && richText.Substring(richSelectIndex, tag.Length) == tag)
-                        {
-                            int richCharCount = 3;
-                            if (character == '/')
-                            {
-                                richCharCount += 1;
-                            }
-    
-                            richSelectIndex += richCharCount;
-                            i += 3;
-    
-                            break;
-                        }
-                    }
-                }
-            }
-    
-            return richSelectIndex;
-        }
-    
-        public int MousePositionToIndex
-        {
-            get
-            {
-                int index = -1;
-                Vector2 graphicalPosition = Vector2.zero;
-                int tmpCursorIndex = textEditor.cursorIndex;
-                int tmpSelectIndex = textEditor.selectIndex;
-    
-                Vector2 goalPosition = Event.current.mousePosition - textAreaRect.position;
-    
-                float cursorYOffset = activeTextAreaStyle.lineHeight;
-                
-                textEditor.cursorIndex = 0;
-                textEditor.selectIndex = 0;
-                MoveCursorToNextPoorChar();
-                Vector2 currentGraphicalPosition = GraphicalCursorPos;
-                int attempts = 0;
-                for (int currentIndex = textEditor.cursorIndex; index == -1; currentIndex = textEditor.cursorIndex)
-                {
-                    attempts++;
-                    if (attempts == 500)
-                    {
-                        Debug.Log("Yo dude you might want to check this out. ");
-                    }
-                    if (attempts > 1000)
-                    {
-                        Debug.Log("Too many attempts at finding mouse cursor position!");
-                        break;
-                    }
-                    
-                    //TODO: Check for end of word wrapped line.
-                    bool isEndOfLine = readme.RichText.Length > currentIndex ? readme.RichText[currentIndex] == '\n' : true;
-    
-                    if (currentGraphicalPosition.y < goalPosition.y - cursorYOffset)
-                    {
-                        textEditor.MoveRight();
-                        MoveCursorToNextPoorChar();
-                    }
-                    else if (currentGraphicalPosition.x < goalPosition.x && !isEndOfLine)
-                    {
-                        textEditor.MoveRight();
-                        MoveCursorToNextPoorChar();
-    
-                        if (GraphicalCursorPos.x < currentGraphicalPosition.x)
-                        {
-                            index = textEditor.cursorIndex;
-                        }
-                    }
-                    else
-                    {
-                        index = textEditor.cursorIndex;
-                    }
-    
-                    if (textEditor.cursorIndex == readme.RichText.Length)
-                    {
-                        index = textEditor.cursorIndex;
-                    }
-                    
-                    currentGraphicalPosition = GraphicalCursorPos;
-                }
-                
-                textEditor.cursorIndex = tmpCursorIndex;
-                textEditor.selectIndex = tmpSelectIndex;
-                
-                return index;
-            }
-        }
-    
-        public void MoveCursorToNextPoorChar()
-        {
-            while (readme.RichText.Length - 1 > textEditor.cursorIndex &&
-                   readme.richTextTagMap[textEditor.cursorIndex])
-            {
-                textEditor.MoveRight();   
-            }
-        }
-    
-        public int GraphicalLineStart
-        {
-            get
-            {
-                int graphicalLineStart;
-                int tmpCursorIndex = textEditor.cursorIndex;
-                int tmpSelectIndex = textEditor.selectIndex;
-    
-                float previousGraphicalCursorPosition = GraphicalCursorPos.x;
-                float currentGraphicalCursorPosition = GraphicalCursorPos.x;
-                for (graphicalLineStart = textEditor.cursorIndex + 1; graphicalLineStart > 0; graphicalLineStart--)
-                {
-                    if (currentGraphicalCursorPosition > previousGraphicalCursorPosition)
-                    {
-                        if (readme.RichText[graphicalLineStart] == '\n')
-                        {
-                            graphicalLineStart++;
-                        }
-    
-                        break;
-                    }
-                    else
-                    {
-                        textEditor.MoveLeft();
-                    }
-                    
-                    previousGraphicalCursorPosition = currentGraphicalCursorPosition;
-                    currentGraphicalCursorPosition = GraphicalCursorPos.x;
-                }
-                
-                textEditor.cursorIndex = tmpCursorIndex;
-                textEditor.selectIndex = tmpSelectIndex;
-    
-                return graphicalLineStart;
-            }
-        }
-    
-        public int GraphicalLineEnd
-        {
-            get
-            {
-                int graphicalLineEnd;
-                int tmpCursorIndex = textEditor.cursorIndex;
-                int tmpSelectIndex = textEditor.selectIndex;
-    
-                float previousGraphicalCursorPosition = GraphicalCursorPos.x;
-                float currentGraphicalCursorPosition = GraphicalCursorPos.x;
-                for (graphicalLineEnd = textEditor.cursorIndex - 1; graphicalLineEnd < readme.RichText.Length; graphicalLineEnd++)
-                {
-                    if (currentGraphicalCursorPosition < previousGraphicalCursorPosition)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        textEditor.MoveRight();
-                    }
-                    
-                    previousGraphicalCursorPosition = currentGraphicalCursorPosition;
-                    currentGraphicalCursorPosition = GraphicalCursorPos.x;
-                }
-                
-                textEditor.cursorIndex = tmpCursorIndex;
-                textEditor.selectIndex = tmpSelectIndex;
-    
-                return graphicalLineEnd;
-            }
         }
     
         public int WordStartIndex

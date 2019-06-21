@@ -74,17 +74,6 @@ namespace TP.Readme {
         {
             get { return supportedTags; }
         }
-    
-        public string MakePoorText(string richText)
-        {
-            return richText
-                .Replace("<b>", "")
-                .Replace("</b>", "")
-                .Replace("<i>", "")
-                .Replace("</i>", "");
-            
-            //  <color=#00ffffff>
-        }
 
         public bool IsStyle(string style, int index)
         {
