@@ -11,20 +11,28 @@ namespace TP.Readme {
     public class ReadmeEditor : Editor
     {
         private Readme readme;
+        
+        // State
         private bool editing = false;
+        private bool boldOn = false;
+        private bool italicOn = false;
         private bool sourceOn = false;
+        
+        // Cursor fix 
+        private bool fixCursorBug = true;
+        private TextEditor textEditor;
+        private const string readmeEditorTextAreaName = "Readme Text Editor";
         private int previousSelctIndex = -1;
         private bool selectIndexChanged = false;
         private int previousCursorIndex = -1;
         private bool cursorIndexChanged = false;
-        private TextEditor textEditor;
         private Rect textAreaRect;
+        
+        // Styles
         private GUIStyle activeTextAreaStyle;
         private GUIStyle selectableRichText;
         private GUIStyle editableRichText;
         private GUIStyle editableText;
-        private const string readmeEditorTextAreaName = "Readme Text Editor";
-        private bool fixCursorBug = true;
         private int textPadding = 5;
         
         public override void OnInspectorGUI()
@@ -35,11 +43,15 @@ namespace TP.Readme {
             selectableRichText = new GUIStyle();
             selectableRichText.focused.textColor = readme.fontColor;
             selectableRichText.normal.textColor = readme.fontColor;
+            selectableRichText.font = readme.font;
+            selectableRichText.fontSize = readme.fontSize;
             selectableRichText.wordWrap = true;
             selectableRichText.padding = new RectOffset(textPadding, textPadding, textPadding + 2, textPadding);
             
             editableRichText = new GUIStyle(GUI.skin.textArea);
             editableRichText.richText = true;
+            editableRichText.font = readme.font;
+            editableRichText.fontSize = readme.fontSize;
             editableRichText.wordWrap = true;
             editableRichText.padding = new RectOffset(textPadding, textPadding, textPadding, textPadding);
             
@@ -71,6 +83,7 @@ namespace TP.Readme {
             }
             else
             {
+                GUI.SetNextControlName(readmeEditorTextAreaName);
                 if (sourceOn)
                 {
                     readme.RichText = EditorGUILayout.TextArea(readme.RichText, editableText, GUILayout.Height(textAreaHeight));
@@ -89,6 +102,11 @@ namespace TP.Readme {
                 }
     
                 FixCursorBug();
+
+                if (selectIndexChanged || cursorIndexChanged)
+                {
+                    UpdateStyleState();
+                }
 
                 Undo.RecordObject(target, "Readme");
             }
@@ -112,7 +130,43 @@ namespace TP.Readme {
                 GUILayout.BeginHorizontal();
     
                 float smallButtonWidth = EditorGUIUtility.singleLineHeight * 2;
+                
                 readme.fontColor = EditorGUILayout.ColorField(readme.fontColor, GUILayout.Width(smallButtonWidth));
+                readme.font = EditorGUILayout.ObjectField(readme.font, typeof(Font)) as Font;
+                
+                string[] options = new string[]
+                {
+                    "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72" 
+                };
+                int selected = options.ToList().IndexOf(readme.fontSize.ToString());
+                if (selected == -1)
+                {
+                    selected = 4;
+                }
+                selected = EditorGUILayout.Popup(selected, options, GUILayout.Width(smallButtonWidth));
+                readme.fontSize = int.Parse(options[selected]);
+                
+                GUIStyle boldButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
+                boldButtonStyle.fontStyle = FontStyle.Normal;
+                if (boldOn)
+                {
+                    boldButtonStyle.fontStyle = FontStyle.Bold;
+                }
+                if (GUILayout.Button(new GUIContent("B", "Bold (alt+b)"), boldButtonStyle, GUILayout.Width(smallButtonWidth)))
+                {
+                    ToggleStyle("b");
+                }
+                
+                GUIStyle italicizedButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
+                italicizedButtonStyle.fontStyle = FontStyle.Normal;
+                if (italicOn)
+                {
+                    italicizedButtonStyle.fontStyle = FontStyle.Italic;
+                }
+                if (GUILayout.Button(new GUIContent("I", "Italic (alt+i)"), italicizedButtonStyle, GUILayout.Width(smallButtonWidth)))
+                {
+                    ToggleStyle("i");
+                }
                 
                 GUIStyle sourceButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
                 sourceButtonStyle.fontStyle = FontStyle.Normal;
@@ -137,6 +191,49 @@ namespace TP.Readme {
                 if (Readme.advancedOptions)
                 {
                     fixCursorBug = EditorGUILayout.Toggle("Cursor Correction", fixCursorBug);
+                    EditorGUILayout.LabelField("Cursor Position");
+                    EditorGUI.indentLevel++;
+                    string richTextWithCursor = readme.RichText;
+                    if (textEditor != null && textEditor.selectIndex <= readme.RichText.Length)
+                    {
+                        richTextWithCursor = richTextWithCursor.Insert(Mathf.Max(textEditor.selectIndex, textEditor.cursorIndex), "|");
+                        if (textEditor.selectIndex != textEditor.cursorIndex)
+                        {
+                            richTextWithCursor = richTextWithCursor.Insert(Mathf.Min(textEditor.selectIndex, textEditor.cursorIndex), "|");
+                        }
+                    }
+                    richTextWithCursor = richTextWithCursor.Replace("\n", " \\n\n");
+                    float adjustedTextAreaHeight = editableRichText.CalcHeight(new GUIContent(richTextWithCursor), textAreaWidth - 50);
+                    EditorGUILayout.TextArea(richTextWithCursor, editableText, GUILayout.Height(adjustedTextAreaHeight));
+                    EditorGUI.indentLevel--;
+    
+                    if (textEditor != null)
+                    {
+                        EditorGUILayout.HelpBox(
+                            "mousePosition: " + Event.current.mousePosition + "\n" +
+                            "textAreaRect.position: " + textAreaRect.position + "\n" +
+                            "graphicalCursorPos: " + textEditor.graphicalCursorPos + "\n" +
+                            "Calc Cursor Position: " + (Event.current.mousePosition - textAreaRect.position) + "\n" +
+                            "cursorIndex: " + textEditor.cursorIndex + "\n" +
+                            "selectIndex: " + textEditor.selectIndex + "\n" +
+                            "position: " + textEditor.position + "\n" +
+                            "TagsError: " + TagsError(readme.RichText) + "\n" +
+                            "Style Map Info: " + "\n" +
+                            "\t<b> tags:" + (readme.StyleMaps.ContainsKey("b") ? readme.StyleMaps["b"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
+                            "\t<i> tags:" + (readme.StyleMaps.ContainsKey("i") ? readme.StyleMaps["i"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
+                            ""
+                            , MessageType.Info);
+                    }
+    
+                    bool textEditorActive = textEditor != null;
+                    MessageType messageType = textEditorActive ? MessageType.Info : MessageType.Warning;
+                    EditorGUILayout.HelpBox("Text Editor Active: " + (textEditorActive ? "Yes" : "No"), messageType);
+                    
+                    EditorGUILayout.HelpBox("Shortcuts: \n" + 
+                        "\tBold: alt+b\n" +
+                        "\tItalic: alt+i"
+                        , MessageType.Info);
+                    
                     GUILayout.BeginHorizontal();
     
                     if (GUILayout.Button("Save to File", GUILayout.Width(smallButtonWidth * 4)))
@@ -144,6 +241,7 @@ namespace TP.Readme {
                         readme.Save();
                     }
     
+                    GUIStyle loadButtonStyle = new GUIStyle(GUI.skin.button);
                     if (GUILayout.Button("Load from File", GUILayout.Width(smallButtonWidth * 4)))
                     {
                         readme.LoadLastSave();
@@ -151,8 +249,80 @@ namespace TP.Readme {
                     }
     
                     GUILayout.EndHorizontal();
+                    
+                    EditorGUI.indentLevel--;
                 }
             }
+    
+            CheckKeyboardShortCuts();
+        }
+    
+        private void CheckKeyboardShortCuts()
+        {
+            Event currentEvent = Event.current;
+            
+            //Alt + b for bold
+            if (currentEvent.type != EventType.KeyUp && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
+            {
+                ToggleStyle("b");
+                currentEvent.Use();
+            }
+            
+            //Alt + i for italic
+            if (currentEvent.type != EventType.KeyUp && currentEvent.alt && currentEvent.keyCode == KeyCode.I)
+            {
+                ToggleStyle("i");
+                currentEvent.Use();
+            }
+        }
+    
+        private void ToggleStyle(string tag)
+        {
+            if (TagsError(readme.RichText))
+            {
+                Debug.LogWarning("Please fix any mismatched tags first!");
+                return;
+            }
+            
+            if (textEditor != null)
+            {
+                int styleStartIndex = readme.GetPoorIndex(Mathf.Min(textEditor.cursorIndex, textEditor.selectIndex));
+                int styleEndIndex = readme.GetPoorIndex(Mathf.Max(textEditor.cursorIndex, textEditor.selectIndex));
+                int poorStyleLength = styleEndIndex - styleStartIndex;
+    
+                readme.ToggleStyle(tag, styleStartIndex, poorStyleLength);
+    
+                if (TagsError(readme.RichText))
+                {
+                    readme.LoadLastSave();
+                    Debug.LogWarning("You can't do that!");
+                }
+    
+                EditorGUI.FocusTextInControl("");
+                textEditor.cursorIndex = readme.GetRichIndex(styleEndIndex);
+    //            EditorGUI.FocusTextInControl(readmeEditorTextAreaName);
+
+                UpdateStyleState();
+            }
+        }
+
+        void UpdateStyleState()
+        {
+            int index = 0;
+            int poorCursorIndex = readme.GetPoorIndex(textEditor.cursorIndex);
+            int poorSelectIndex = readme.GetPoorIndex(textEditor.selectIndex);
+
+            if (poorSelectIndex != poorCursorIndex)
+            {
+                index = Mathf.Max(poorCursorIndex, poorSelectIndex) - 1;
+            }
+            else
+            {
+                index = poorCursorIndex;
+            }
+            
+            boldOn = readme.IsStyle("b", index);
+            italicOn = readme.IsStyle("i", index);
         }
         
         private void FixCursorBug()
@@ -319,6 +489,65 @@ namespace TP.Readme {
             return isOnTag;
         }
     
+        public int GetPoorSelectIndex(string richText, int richSelectIndex)
+        {
+            int poorSelectIndex = richSelectIndex;
+    
+            for (int i = 0; i < richSelectIndex; i++)
+            {
+                char character = richText[i];
+                if (character == '<' || character == '/')
+                {
+                    foreach (string tag in Readme.SupportedTags)
+                    {
+                        if (richText.Length >= richSelectIndex + tag.Length && richText.Substring(richSelectIndex, tag.Length) == tag)
+                        {
+                            int richCharCount = 3;
+                            if (character == '/')
+                            {
+                                richCharCount += 1;
+                            }
+    
+                            poorSelectIndex -= richCharCount;
+                        }
+                    }
+                }
+            }
+    
+            return poorSelectIndex;
+        }
+    
+        public int GetRichSelectIndex(string richText, int selectIndex)
+        {
+            int richSelectIndex = selectIndex;
+            
+            for (int i = 0; i < richSelectIndex; i++)
+            {
+                char character = richText[i];
+                if (character == '<' || character == '/')
+                {
+                    foreach (string tag in Readme.SupportedTags)
+                    {
+                        if (richText.Length >= richSelectIndex + tag.Length && richText.Substring(richSelectIndex, tag.Length) == tag)
+                        {
+                            int richCharCount = 3;
+                            if (character == '/')
+                            {
+                                richCharCount += 1;
+                            }
+    
+                            richSelectIndex += richCharCount;
+                            i += 3;
+    
+                            break;
+                        }
+                    }
+                }
+            }
+    
+            return richSelectIndex;
+        }
+    
         public int MousePositionToIndex
         {
             get
@@ -350,6 +579,7 @@ namespace TP.Readme {
                         break;
                     }
                     
+                    //TODO: Check for end of word wrapped line.
                     bool isEndOfLine = readme.RichText.Length > currentIndex ? readme.RichText[currentIndex] == '\n' : true;
     
                     if (currentGraphicalPosition.y < goalPosition.y - cursorYOffset)
@@ -393,6 +623,75 @@ namespace TP.Readme {
                    readme.richTextTagMap[textEditor.cursorIndex])
             {
                 textEditor.MoveRight();   
+            }
+        }
+    
+        public int GraphicalLineStart
+        {
+            get
+            {
+                int graphicalLineStart;
+                int tmpCursorIndex = textEditor.cursorIndex;
+                int tmpSelectIndex = textEditor.selectIndex;
+    
+                float previousGraphicalCursorPosition = GraphicalCursorPos.x;
+                float currentGraphicalCursorPosition = GraphicalCursorPos.x;
+                for (graphicalLineStart = textEditor.cursorIndex + 1; graphicalLineStart > 0; graphicalLineStart--)
+                {
+                    if (currentGraphicalCursorPosition > previousGraphicalCursorPosition)
+                    {
+                        if (readme.RichText[graphicalLineStart] == '\n')
+                        {
+                            graphicalLineStart++;
+                        }
+    
+                        break;
+                    }
+                    else
+                    {
+                        textEditor.MoveLeft();
+                    }
+                    
+                    previousGraphicalCursorPosition = currentGraphicalCursorPosition;
+                    currentGraphicalCursorPosition = GraphicalCursorPos.x;
+                }
+                
+                textEditor.cursorIndex = tmpCursorIndex;
+                textEditor.selectIndex = tmpSelectIndex;
+    
+                return graphicalLineStart;
+            }
+        }
+    
+        public int GraphicalLineEnd
+        {
+            get
+            {
+                int graphicalLineEnd;
+                int tmpCursorIndex = textEditor.cursorIndex;
+                int tmpSelectIndex = textEditor.selectIndex;
+    
+                float previousGraphicalCursorPosition = GraphicalCursorPos.x;
+                float currentGraphicalCursorPosition = GraphicalCursorPos.x;
+                for (graphicalLineEnd = textEditor.cursorIndex - 1; graphicalLineEnd < readme.RichText.Length; graphicalLineEnd++)
+                {
+                    if (currentGraphicalCursorPosition < previousGraphicalCursorPosition)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        textEditor.MoveRight();
+                    }
+                    
+                    previousGraphicalCursorPosition = currentGraphicalCursorPosition;
+                    currentGraphicalCursorPosition = GraphicalCursorPos.x;
+                }
+                
+                textEditor.cursorIndex = tmpCursorIndex;
+                textEditor.selectIndex = tmpSelectIndex;
+    
+                return graphicalLineEnd;
             }
         }
     
