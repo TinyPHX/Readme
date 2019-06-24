@@ -2,10 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace TP.Readme {
+
+    public class TextAreaObjectField
+    {
+        private Rect bounds;
+        private string objectId;
+        
+        private static readonly Color textBoxBackgroundColor = new Color(211, 211, 211);
+
+        public TextAreaObjectField(Rect bounds, string objectId)
+        {
+            this.bounds = bounds;
+            this.objectId = objectId;
+        }
+
+        public void Draw()
+        {
+            //TODO get object from objectId.
+            Object test = GameObject.FindObjectOfType<GameManager>();
+            
+            EditorGUI.DrawRect(bounds, textBoxBackgroundColor);
+            EditorGUI.ObjectField(bounds, test, typeof(GameManager), false);
+        }
+
+        public Rect Bounds
+        {
+            get { return bounds; }
+        }
+
+        public string ObjectId
+        {
+            get { return objectId; }
+        }
+    }
 
     [CustomEditor(typeof(Readme)), ExecuteInEditMode]
     public class ReadmeEditor : Editor
@@ -34,10 +70,17 @@ namespace TP.Readme {
         private GUIStyle editableRichText;
         private GUIStyle editableText;
         private int textPadding = 5;
+
+        private List<TextAreaObjectField> textAreaObjectFields = new List<TextAreaObjectField> { };
         
         public override void OnInspectorGUI()
         {
-            readme = (Readme) target;
+            Readme readmeTarget = (Readme) target;
+            if (readmeTarget != null)
+            {
+                readme = readmeTarget;
+            }
+
             bool empty = readme.Text == "";
             
             selectableRichText = new GUIStyle();
@@ -68,6 +111,8 @@ namespace TP.Readme {
                 .GetValue(null) as TextEditor;
             
             EditorGUILayout.Space();
+            
+            DrawTextAreaObjectFields(); //Have to draw these first so they get cursor event data.
             
             if (!editing)
             {
@@ -190,6 +235,11 @@ namespace TP.Readme {
                 Readme.advancedOptions = EditorGUILayout.Foldout(Readme.advancedOptions, "Advanced");
                 if (Readme.advancedOptions)
                 {
+                    GUI.enabled = false;
+                    SerializedProperty prop = serializedObject.FindProperty("m_Script");
+                    EditorGUILayout.PropertyField(prop, true, new GUILayoutOption[0]);
+                    GUI.enabled = true;
+                    
                     fixCursorBug = EditorGUILayout.Toggle("Cursor Correction", fixCursorBug);
                     EditorGUILayout.LabelField("Cursor Position");
                     EditorGUI.indentLevel++;
@@ -255,6 +305,63 @@ namespace TP.Readme {
             }
     
             CheckKeyboardShortCuts();
+
+            UpdateTextAreaObjectFields();
+        }
+
+        void UpdateTextAreaObjectFields()
+        {
+            if (readme.RichText != null && textEditor != null)
+            {
+                textAreaObjectFields.Clear();
+                foreach (Match match in Regex.Matches(readme.RichText, " <o=\"[a-z0-9]*\"></o> ", RegexOptions.None))
+                {
+                    if (match.Success)
+                    {
+                        string id = match.Value.Replace(" <o=\"", "").Replace("\"></o> ", "");
+                            
+                        Debug.Log("Found " + match.Value + " with id " + id + " at position " + match.Index + ".");
+                        int startIndex = match.Index;
+                        int endIndex = match.Index + match.Value.Length;
+                        Rect rect = GetRect(startIndex, endIndex);
+                        rect.position += textAreaRect.position;
+                        Debug.Log("rect: " + rect);
+                        
+                        textAreaObjectFields.Add(new TextAreaObjectField(rect, id));
+                    }
+                }
+
+                DrawTextAreaObjectFields();
+            }
+        }
+
+        void DrawTextAreaObjectFields()
+        {
+            if (readme.RichText != null && textEditor != null)
+            {
+                foreach (TextAreaObjectField textAreaObjectField in textAreaObjectFields)
+                {
+                    textAreaObjectField.Draw();
+                }
+            }
+        }
+
+        private Rect GetRect(int startIndex, int endIndex)
+        {
+            Vector2 startPosition = GetGraphicalCursorPos(startIndex) + new Vector2(1, 0);
+            Vector2 endPosition = GetGraphicalCursorPos(endIndex) + new Vector2(-1, 0);
+            
+            GUIStyle singleLineTextArea = new GUIStyle(activeTextAreaStyle);
+            singleLineTextArea.wordWrap = false;
+            float height = editableRichText.CalcHeight(new GUIContent(""), 100) - 10;
+            
+            endPosition.y += height;
+
+            Vector2 size = endPosition - startPosition;
+            
+            Rect rect = new Rect(startPosition, size);
+
+            return rect;
         }
     
         private void CheckKeyboardShortCuts()
@@ -505,7 +612,7 @@ namespace TP.Readme {
                 textEditor.cursorIndex = 0;
                 textEditor.selectIndex = 0;
                 MoveCursorToNextPoorChar();
-                Vector2 currentGraphicalPosition = GraphicalCursorPos;
+                Vector2 currentGraphicalPosition = GetGraphicalCursorPos();
                 int attempts = 0;
                 for (int currentIndex = textEditor.cursorIndex; index == -1; currentIndex = textEditor.cursorIndex)
                 {
@@ -533,7 +640,7 @@ namespace TP.Readme {
                         textEditor.MoveRight();
                         MoveCursorToNextPoorChar();
     
-                        if (GraphicalCursorPos.x < currentGraphicalPosition.x)
+                        if (GetGraphicalCursorPos().x < currentGraphicalPosition.x)
                         {
                             index = textEditor.cursorIndex;
                         }
@@ -548,7 +655,7 @@ namespace TP.Readme {
                         index = textEditor.cursorIndex;
                     }
                     
-                    currentGraphicalPosition = GraphicalCursorPos;
+                    currentGraphicalPosition = GetGraphicalCursorPos();
                 }
                 
                 textEditor.cursorIndex = tmpCursorIndex;
@@ -600,16 +707,31 @@ namespace TP.Readme {
                 return wordStartIndex;
             }
         }
-    
-        public Vector2 GraphicalCursorPos
+
+        public Vector2 GetGraphicalCursorPos(int cursorIndex = -1)
         {
-            get
+            if (textEditor == null)
             {
-                Rect position = textEditor.position;
-                GUIContent content = textEditor.content;
-                int cursorPos = textEditor.cursorIndex;
-                return editableRichText.GetCursorPixelPosition(new Rect(0, 0, position.width, position.height), content, cursorPos);
+                return Vector2.zero;
             }
+            
+            int tmpCursorIndex = -1;
+            if (cursorIndex != -1)
+            {
+                tmpCursorIndex = textEditor.cursorIndex;
+                textEditor.cursorIndex = cursorIndex;
+            }
+            
+            Rect position = textEditor.position;
+            GUIContent content = textEditor.content;
+            int cursorPos = textEditor.cursorIndex;
+            
+            if (tmpCursorIndex != -1)
+            {
+                textEditor.cursorIndex = tmpCursorIndex;
+            }
+            
+            return editableRichText.GetCursorPixelPosition(new Rect(0, 0, position.width, position.height), content, cursorPos);
         }
     }
 }
