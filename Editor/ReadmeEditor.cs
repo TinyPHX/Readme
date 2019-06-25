@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEditor;
@@ -13,34 +14,35 @@ namespace TP.Readme {
     public class TextAreaObjectField
     {
         private Rect bounds;
-        private string objectId;
+        private int objectId;
+        private int index;
         
-        private static readonly Color textBoxBackgroundColor = new Color(211, 211, 211);
+        private static readonly Color textBoxBackgroundColor = new Color(211f / 255, 211f / 255, 211f / 255);
 
-        public TextAreaObjectField(Rect bounds, string objectId)
+        public TextAreaObjectField(Rect bounds, int objectId, int index)
         {
             this.bounds = bounds;
             this.objectId = objectId;
+            this.index = index;
         }
 
         public void Draw()
         {
-            //TODO get object from objectId.
-            Object test = GameObject.FindObjectOfType<GameManager>();
-            
             EditorGUI.DrawRect(bounds, textBoxBackgroundColor);
-            EditorGUI.ObjectField(bounds, test, typeof(GameManager), false);
+            Object obj = EditorUtility.InstanceIDToObject(objectId);
+            obj = EditorGUI.ObjectField(bounds, obj, typeof(Object), true);
+            if (obj != null)
+            {
+                objectId = obj.GetInstanceID();
+            }
+            else
+            {
+                objectId = 0;
+            }
         }
 
-        public Rect Bounds
-        {
-            get { return bounds; }
-        }
-
-        public string ObjectId
-        {
-            get { return objectId; }
-        }
+        public int ObjectId { get { return objectId; } }
+        public int Index { get { return index; } }
     }
 
     [CustomEditor(typeof(Readme)), ExecuteInEditMode]
@@ -71,6 +73,7 @@ namespace TP.Readme {
         private GUIStyle editableText;
         private int textPadding = 5;
 
+        // Text area object fields
         private List<TextAreaObjectField> textAreaObjectFields = new List<TextAreaObjectField> { };
         
         public override void OnInspectorGUI()
@@ -111,9 +114,12 @@ namespace TP.Readme {
                 .GetValue(null) as TextEditor;
             
             EditorGUILayout.Space();
-            
-            DrawTextAreaObjectFields(); //Have to draw these first so they get cursor event data.
-            
+
+            if (!sourceOn)
+            {
+                DrawTextAreaObjectFields(); //Have to draw these first so they get cursor event data.
+            }
+
             if (!editing)
             {
                 if (empty)
@@ -306,44 +312,86 @@ namespace TP.Readme {
     
             CheckKeyboardShortCuts();
 
-            UpdateTextAreaObjectFields();
+
+                UpdateTextAreaObjectFieldIds();
+                UpdateTextAreaObjectFields();
+                
+            if (!sourceOn)
+            {
+                DrawTextAreaObjectFields();
+            }
         }
 
         void UpdateTextAreaObjectFields()
         {
             if (readme.RichText != null && textEditor != null)
             {
-                textAreaObjectFields.Clear();
-                foreach (Match match in Regex.Matches(readme.RichText, " <o=\"[a-z0-9]*\"></o> ", RegexOptions.None))
+                Debug.Log("UpdateTextAreaObjectFields");
+                List<TextAreaObjectField> newTextAreaObjectFields = new List<TextAreaObjectField> { };
+                string objectTagPattern = " <o=\"[-,a-zA-Z0-9]*\"></o> ";
+                foreach (Match match in Regex.Matches(readme.RichText, objectTagPattern, RegexOptions.None))
                 {
                     if (match.Success)
                     {
-                        string id = match.Value.Replace(" <o=\"", "").Replace("\"></o> ", "");
+                        string idValue = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
+                        int id = 0;
+                        bool parseSuccess = int.TryParse(idValue, out id);
                             
-                        Debug.Log("Found " + match.Value + " with id " + id + " at position " + match.Index + ".");
-                        int startIndex = match.Index;
-                        int endIndex = match.Index + match.Value.Length;
+                        int startIndex = match.Index + 1;
+                        int endIndex = match.Index + match.Value.Length - 1;
                         Rect rect = GetRect(startIndex, endIndex);
                         rect.position += textAreaRect.position;
-                        Debug.Log("rect: " + rect);
-                        
-                        textAreaObjectFields.Add(new TextAreaObjectField(rect, id));
+
+                        if (rect.x > 0 && rect.y > 0 && rect.width > 0 && rect.height > 0)
+                        {
+                            newTextAreaObjectFields.Add(new TextAreaObjectField(rect, id, startIndex));
+                        }
+                        else
+                        {
+                            return; //Abort everthing. Position is incorrect!
+                        }
                     }
                 }
 
-                DrawTextAreaObjectFields();
+                textAreaObjectFields.Clear();
+                textAreaObjectFields = newTextAreaObjectFields;
             }
         }
 
         void DrawTextAreaObjectFields()
         {
-            if (readme.RichText != null && textEditor != null)
+            foreach (TextAreaObjectField textAreaObjectField in textAreaObjectFields)
             {
-                foreach (TextAreaObjectField textAreaObjectField in textAreaObjectFields)
+                textAreaObjectField.Draw();
+            }
+        }
+
+        void UpdateTextAreaObjectFieldIds()
+        {
+            StringBuilder newRichText = new StringBuilder(readme.RichText);
+            string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
+            int startTagLength = "<o=\"".Length;
+            int endTagLength = "\"></o>".Length;
+            foreach (TextAreaObjectField textAreaObjectField in textAreaObjectFields)
+            {
+                Match match = Regex.Match(readme.RichText.Substring(textAreaObjectField.Index), objectTagPattern, RegexOptions.None);
+
+                if (match.Success)
                 {
-                    textAreaObjectField.Draw();
+                    string textAreaId = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
+                    string objectFieldId = textAreaObjectField.ObjectId.ToString();
+
+                    if (textAreaId != objectFieldId)
+                    {
+                        int idStartIndex = textAreaObjectField.Index + match.Index + startTagLength;
+                        int idLength = match.Length - startTagLength - endTagLength;
+                        newRichText.Remove(idStartIndex, idLength);
+                        newRichText.Insert(idStartIndex, objectFieldId);
+                    }
                 }
             }
+
+            readme.RichText = newRichText.ToString();
         }
 
         private Rect GetRect(int startIndex, int endIndex)
@@ -415,21 +463,24 @@ namespace TP.Readme {
 
         void UpdateStyleState()
         {
-            int index = 0;
-            int poorCursorIndex = readme.GetPoorIndex(textEditor.cursorIndex);
-            int poorSelectIndex = readme.GetPoorIndex(textEditor.selectIndex);
+            if (textEditor != null)
+            {
+                int index = 0;
+                int poorCursorIndex = readme.GetPoorIndex(textEditor.cursorIndex);
+                int poorSelectIndex = readme.GetPoorIndex(textEditor.selectIndex);
 
-            if (poorSelectIndex != poorCursorIndex)
-            {
-                index = Mathf.Max(poorCursorIndex, poorSelectIndex) - 1;
+                if (poorSelectIndex != poorCursorIndex)
+                {
+                    index = Mathf.Max(poorCursorIndex, poorSelectIndex) - 1;
+                }
+                else
+                {
+                    index = poorCursorIndex;
+                }
+
+                boldOn = readme.IsStyle("b", index);
+                italicOn = readme.IsStyle("i", index);
             }
-            else
-            {
-                index = poorCursorIndex;
-            }
-            
-            boldOn = readme.IsStyle("b", index);
-            italicOn = readme.IsStyle("i", index);
         }
         
         private void FixCursorBug()
