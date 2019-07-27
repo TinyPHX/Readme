@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace TP.Readme {
@@ -14,7 +15,7 @@ namespace TP.Readme {
         public string richText;
     }
     
-    [ExecuteInEditMode]
+    [ExecuteInEditMode, HelpURL("https://forum.unity.com/threads/wip-a-readme-component.698477/")]
     public class Readme : MonoBehaviour
     {
         //TODO add color rich text tag support and remove this.
@@ -182,30 +183,26 @@ namespace TP.Readme {
     
         public void BuildRichTextTagMap()
         {
-            richTextTagMap = Enumerable.Repeat(false, RichText.Length).ToList();
-    
-            for (int i = 0; i < RichText.Length; i++)
+            List<string> tagPatterns = new List<string>
             {
-                char character = RichText[i];
-                if (character == '<')
+                "<b>",
+                "</b>",
+                "<i>",
+                "</i>",
+                "<color=\"[#,0-9]*\">", 
+                "</color>",
+                "<o=\"[-,a-zA-Z0-9]*\">", 
+                "</o> "
+            };
+            
+            richTextTagMap = Enumerable.Repeat(false, RichText.Length).ToList();
+
+            foreach (string tagPattern in tagPatterns)
+            {
+                foreach (Match match in Regex.Matches(RichText, tagPattern, RegexOptions.None))
                 {
-                    bool endTag = RichText.Length <= i + 1 ? false : RichText[i + 1] == '/';
-                    int tagNameIndex = endTag ? i : i + 1;
-                    int richCharStart = i;
-                        
-                    foreach (string tagName in SupportedTags)
-                    {
-                        string richTextTag = (endTag ? "</" : "<") + tagName + ">";
-                            
-                        if (RichText.Length >= richCharStart + richTextTag.Length && 
-                            RichText.Substring(richCharStart, richTextTag.Length) == richTextTag)
-                        {
-                            for (int j = richCharStart; j < richCharStart + richTextTag.Length; j++)
-                            {
-                                richTextTagMap[j] = true;
-                            }
-                        }
-                    }
+                    richTextTagMap.RemoveRange(match.Index, match.Length);
+                    richTextTagMap.InsertRange(match.Index, Enumerable.Repeat(true, match.Length).ToList());
                 }
             }
         }
@@ -255,6 +252,8 @@ namespace TP.Readme {
         //TODO can optimize by building a rich to poor index map.
         public int GetPoorIndex(int richIndex)
         {
+            if (richIndex >= RichText.Length) { richIndex = RichText.Length - 1; }
+            
             int poorIndex = 0;
     
             for (int i = 0; i < richIndex; i++)
@@ -274,7 +273,7 @@ namespace TP.Readme {
     
             for (int i = 0; i < richIndex; i++)
             {
-                if (richTextTagMap[i])
+                if (i < richTextTagMap.Count && richTextTagMap[i])
                 {
                     richIndex++;
                 }
