@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEditor;
 
 namespace TP.Readme {
     
@@ -13,9 +14,10 @@ namespace TP.Readme {
     public class ReadmeData
     {
         public string richText;
+        public TextAreaObjectField[] textAreaObjectFields = new TextAreaObjectField[0];
     }
     
-    [ExecuteInEditMode, HelpURL("https://forum.unity.com/threads/wip-a-readme-component.698477/")]
+    [DisallowMultipleComponent, ExecuteInEditMode, HelpURL("https://forum.unity.com/threads/wip-a-readme-component.698477/")]
     public class Readme : MonoBehaviour
     {
         //TODO add color rich text tag support and remove this.
@@ -29,7 +31,7 @@ namespace TP.Readme {
     
         public static bool advancedOptions = false;
         
-        private static List<string> supportedTags = new List<string>() {"b", "i", "color"};
+        private static List<string> supportedTags = new List<string>() {"b", "i", "color", "size"};
         
         private string text = "";
         [SerializeField] private ReadmeData readmeData;
@@ -44,15 +46,20 @@ namespace TP.Readme {
                 {
                     readmeData.richText = "";
                 }
-                else
+                else if (value != readmeData.richText)
                 {
                     readmeData.richText = value;
+                    text = MakePoorText(readmeData.richText);
+                    BuildRichTextTagMap();
+                    RebuildStyleMaps();
                 }
-                
-                text = MakePoorText(readmeData.richText);
-                BuildRichTextTagMap();
-                RebuildStyleMaps();
             }
+        }
+        
+        public TextAreaObjectField[] TextAreaObjectFields
+        {
+            get { return readmeData.textAreaObjectFields; }
+            set { readmeData.textAreaObjectFields = value; }
         }
     
         public string Text
@@ -78,7 +85,7 @@ namespace TP.Readme {
             get { return supportedTags; }
         }
     
-        public string MakePoorText(string richText)
+        public static string MakePoorText(string richText)
         {
             return richText
                 .Replace("<b>", "")
@@ -87,6 +94,7 @@ namespace TP.Readme {
                 .Replace("</i>", "");
             
             //  <color=#00ffffff>
+            //  <size=20>
         }
 
         public bool IsStyle(string style, int index)
@@ -121,8 +129,8 @@ namespace TP.Readme {
             
             List<bool> styleMap = StyleMaps[tag];
             
-            try
-            {
+//            try
+//            {
                 bool styleFound = false;
                 bool nonStyleFound = false;
                 foreach (bool isStyle in styleMap.GetRange(startIndex, length))
@@ -144,12 +152,12 @@ namespace TP.Readme {
                 }).ToList();
                 
                 ApplyStyleMap(tag);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError(exception);
-                LoadLastSave();
-            }
+//            }
+//            catch (Exception exception)
+//            {
+//                Debug.LogError(exception);
+//                LoadLastSave();
+//            }
         }
     
         public void ApplyStyleMap(string tag)
@@ -160,7 +168,7 @@ namespace TP.Readme {
                 .Replace(Tag(tag), "")
                 .Replace(EndTag(tag), "");
     
-            // Iterate backwards through bold map so we don't have to rebuild richTextTagMap every time
+            // Iterate backwards through style map so we don't have to rebuild richTextTagMap every time
             // we insert a new tag.
             string newRichText = RichText;
             for (int i = styleMapCopy.Count; i >= 0; i--)
@@ -189,8 +197,10 @@ namespace TP.Readme {
                 "</b>",
                 "<i>",
                 "</i>",
-                "<color=\"[#,0-9]*\">", 
+                "<color=\"?[#,0-9,A-F,a-f]*\"?>", 
                 "</color>",
+                "<size=\"?[0-9]*\"?>", 
+                "</size>",
                 "<o=\"[-,a-zA-Z0-9]*\">", 
                 "</o> "
             };
@@ -252,7 +262,7 @@ namespace TP.Readme {
         //TODO can optimize by building a rich to poor index map.
         public int GetPoorIndex(int richIndex)
         {
-            if (richIndex >= RichText.Length) { richIndex = RichText.Length - 1; }
+            if (richIndex > RichText.Length) { richIndex = RichText.Length; }
             
             int poorIndex = 0;
     

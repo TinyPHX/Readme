@@ -1,0 +1,702 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 8
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.01
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 0
+  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_HaloStrength: 0.5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
+  m_DefaultReflectionMode: 0
+  m_DefaultReflectionResolution: 128
+  m_ReflectionBounces: 1
+  m_ReflectionIntensity: 1
+  m_CustomReflection: {fileID: 0}
+  m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 9
+  m_GIWorkflowMode: 0
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_TemporalCoherenceThreshold: 1
+    m_EnvironmentLightingMode: 0
+    m_EnableBakedLightmaps: 1
+    m_EnableRealtimeLightmaps: 1
+  m_LightmapEditorSettings:
+    serializedVersion: 8
+    m_Resolution: 2
+    m_BakeResolution: 40
+    m_TextureWidth: 1024
+    m_TextureHeight: 1024
+    m_AO: 0
+    m_AOMaxDistance: 1
+    m_CompAOExponent: 1
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
+    m_TextureCompression: 1
+    m_FinalGather: 0
+    m_FinalGatherFiltering: 1
+    m_FinalGatherRayCount: 256
+    m_ReflectionCompression: 2
+    m_MixedBakeMode: 3
+    m_BakeBackend: 0
+    m_PVRSampling: 1
+    m_PVRDirectSampleCount: 32
+    m_PVRSampleCount: 500
+    m_PVRBounces: 2
+    m_PVRFiltering: 0
+    m_PVRFilteringMode: 1
+    m_PVRCulling: 1
+    m_PVRFilteringGaussRadiusDirect: 1
+    m_PVRFilteringGaussRadiusIndirect: 5
+    m_PVRFilteringGaussRadiusAO: 2
+    m_PVRFilteringAtrousColorSigma: 1
+    m_PVRFilteringAtrousNormalSigma: 1
+    m_PVRFilteringAtrousPositionSigma: 1
+  m_LightingDataAsset: {fileID: 0}
+  m_ShadowMaskMode: 2
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 2
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    manualTileSize: 0
+    tileSize: 256
+    accuratePlacement: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &511163808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 511163812}
+  - component: {fileID: 511163813}
+  - component: {fileID: 511163811}
+  - component: {fileID: 511163810}
+  - component: {fileID: 511163809}
+  m_Layer: 0
+  m_Name: Cylinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &511163809
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 511163808}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!136 &511163810
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 511163808}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &511163811
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 511163808}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &511163812
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 511163808}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.09863281, y: 3.0004883, z: -2.8427734}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &511163813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 511163808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  richTextTagMap: 010101010101010101000000000000000001010101010101000000000101010000000000000000010101010000000000000000000000000001010100000000000000000001010101000000010101000000000000000000010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010100000000010101010001010101010101010101010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000010101010101010100000101010101010101010000000000000000010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010000000000000000000000000101010100000000000101010000000000000000000000000000000000000000000000000000000000000000000101010100000000010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000101010000000000000001010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010101010101010101010101010101010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010101010101010101010101010101010100000000000000000000000000000000000000000000000000000000000000010101010101010101010101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  font: {fileID: 0}
+  fontSize: 12
+  readmeData:
+    richText: "<size=20>Cylinder</size>\n\nA <b>cylinder</b> (from Greek <i>\u03BA\u03CD\u03BB\u03B9\u03BD\u03B4\u03C1\u03BF\u03C2</i>
+      \u2013 <i>kulindros</i>, \"roller, tumbler\") has traditionally been a three-dimensional
+      solid, one of the most basic of curvilinear geometric shapes. It is the idealized
+      version of a solid physical tin can having lids on top and bottom.\r\n\r\nThis
+      traditional view is still used in elementary treatments of geometry, but the
+      advanced mathematical viewpoint has shifted to the infinite curvilinear surface
+      and this is how a cylinder is now defined in various modern branches of geometry
+      and topology.\r\n\n<b>See:</b> <color=\"#0000ff\">https://en.wikipedia.org/wiki/Cylinder</color>\n\n<size=16>In
+      Unity</size>\n\nYou can create super cool cylindars with Unity 3D!\n\n<b>Context
+      Menu</b>\n\n * <i>GameObject > 3D Object > Cylinder</i>\n * <i>Right Click in
+      Sceen > 3D Object > Cylinder</i>\n\n<b>Manuall</b>\n\n 1. Create a new GameObject\n
+      2. Add the \"MeshFilter\" component\n 3. Set the MeshFilter's Mesh Property
+      to  <o=\"0000814\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
+      5. If you don't have a material use Unity's  <o=\"0000930\"></o> \n\nSee the
+      components below or  <o=\"146666\"></o>  for an example of a Unity Cylindar
+      in action!"
+    textAreaObjectFields:
+    - objectId: 814
+      objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 599
+        width: 136
+        height: 15
+      index: 963
+      length: 17
+    - objectId: 930
+      objectRef: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 641
+        width: 136
+        height: 15
+      index: 1076
+      length: 17
+    - objectId: 146666
+      objectRef: {fileID: 511163808}
+      fieldRect:
+        serializedVersion: 2
+        x: 213
+        y: 669
+        width: 132
+        height: 15
+      index: 1125
+      length: 16
+--- !u!1 &1192897485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1192897487}
+  - component: {fileID: 1192897488}
+  - component: {fileID: 1192897486}
+  m_Layer: 0
+  m_Name: Directional Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1192897486
+Light:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1192897485}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 1
+  m_Color: {r: 0.56150657, g: 0.41468424, b: 0.86764705, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1192897487
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1192897485}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1192897488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1192897485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  richTextTagMap: 0000000000010101010101010101010101010101010100000000000000000000010101010101010101010101010101010100000000000000000000000101010101010101010101010101010101000000000000000101010101010101000000000000000000000000000000000000000000000000000000000000000000
+  font: {fileID: 0}
+  fontSize: 12
+  readmeData:
+    richText: The  <o="146688"></o>  on this  <o="146686"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
+      becuase I thought it was pretty.
+    textAreaObjectFields:
+    - objectId: 146688
+      objectRef: {fileID: 1192897486}
+      fieldRect:
+        serializedVersion: 2
+        x: 47
+        y: 152
+        width: 132
+        height: 15
+      index: 5
+      length: 16
+    - objectId: 146686
+      objectRef: {fileID: 1192897485}
+      fieldRect:
+        serializedVersion: 2
+        x: 232
+        y: 152
+        width: 132
+        height: 15
+      index: 32
+      length: 16
+--- !u!1001 &1259507252
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.size
+      value: 1202
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.09863281
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 3.0004883
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -2.8427734
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].objectRef
+      value: 
+      objectReference: {fileID: 511163808}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[870]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[871]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[883]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[884]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[901]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[902]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[912]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[913]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[930]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[931]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[943]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[944]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[961]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[962]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[964]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[965]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[973]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[974]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[989]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[990]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[996]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[997]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.richText
+      value: "<size=20>Example Readme Script</size>\n\nReadme is component that allows
+        you to add any type of notes or documentation directly to a Prefab or GameObject.
+        It's usefull when a note is specific to to this object as a whole and not
+        able to be included as a file or script comment. \n\nYou can add it as plain
+        text or include styling.\n\n\n<size=16>Supported Styles</size>\n\n * <b>Bold</b>\n
+        * <i>Italics</i>\n\n<size=16>Semi-Supported Styles</size>\n\nThese are styles
+        that have to be added with tags manually but still work.\n\n * Color: <color=\"#ff0000\">Red</color>,
+        <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n * Size:
+        <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
+        references can be draged and dropeed to create inline references.\n\n * Scene:
+        \ <o=\"0022978\"></o> \n * Game Object:  <o=\"0146666\"></o> \n * Prefab:
+        \ <o=\"0146680\"></o> \n * Script:  <o=\"0002740\"></o> \n * File:  <o=\"0021658\"></o>
+        \n * Folder:  <o=\"0013684\"></o> \n\n\n<size=16>Toolbar Features</size>\n\n
+        * Change font color\n * Change font style\n * Change font size \n * Bold togle
+        button\n * Italics toggle button\n * Add object field button\n * View the
+        source for quick editing\n * Advanced tab for debugging"
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[2].objectId
+      value: 146680
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].objectId
+      value: 146666
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.y
+      value: 672
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].fieldRect.y
+      value: 688
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[2].fieldRect.y
+      value: 704
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.y
+      value: 720
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].fieldRect.y
+      value: 736
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].fieldRect.y
+      value: 752
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[840]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[853]
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &1889844768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1889844773}
+  - component: {fileID: 1889844774}
+  - component: {fileID: 1889844772}
+  - component: {fileID: 1889844771}
+  - component: {fileID: 1889844770}
+  - component: {fileID: 1889844769}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &1889844769
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889844768}
+  m_Enabled: 1
+--- !u!124 &1889844770
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889844768}
+  m_Enabled: 1
+--- !u!92 &1889844771
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889844768}
+  m_Enabled: 1
+--- !u!20 &1889844772
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889844768}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!4 &1889844773
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889844768}
+  m_LocalRotation: {x: 0.17057578, y: -0, z: -0, w: 0.98534465}
+  m_LocalPosition: {x: 0, y: 4.63, z: -7.04}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 19.643002, y: 0, z: 0}
+--- !u!114 &1889844774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889844768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontColor: {r: 0.78676474, g: 0, b: 0, a: 1}
+  richTextTagMap: 0101010000000000000000000000000000000000000000000000000000000000000000000001010101
+  font: {fileID: 0}
+  fontSize: 26
+  readmeData:
+    richText: <b>DONT CHANGE THESE CAMERA SETTINGS!</b>
+    textAreaObjectFields: []
