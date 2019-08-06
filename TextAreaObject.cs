@@ -10,6 +10,7 @@ namespace TP.Readme
     [Serializable]
     public class TextAreaObjectField : System.Object
     {
+        [SerializeField] private string name;
         [SerializeField] private int objectId;
         [SerializeField] private Object objectRef;
         [SerializeField] private Rect fieldRect;
@@ -22,10 +23,24 @@ namespace TP.Readme
         public TextAreaObjectField(Rect fieldRect, int objectId, int index, int length)
         {
             this.fieldRect = fieldRect;
-            this.objectId = objectId;
             this.index = index;
             this.length = length;
-            objectRef = EditorUtility.InstanceIDToObject(objectId);
+            
+            ObjectId = objectId;
+            ObjectRef = EditorUtility.InstanceIDToObject(ObjectId);
+            
+            name = (ObjectRef ? ObjectRef.name : "null") + " (" + ObjectId + ")";
+        }
+
+        public override bool Equals(object other)
+        {
+            TextAreaObjectField otherTextAreaObject = other as TextAreaObjectField;
+
+            return this.fieldRect == otherTextAreaObject.fieldRect &&
+                   this.index == otherTextAreaObject.index &&
+                   this.length == otherTextAreaObject.length &&
+                   this.objectId == otherTextAreaObject.ObjectId &&
+                   this.objectRef == otherTextAreaObject.ObjectRef;
         }
 
         public void Draw(TextEditor textEditor = null, int yOffset = 0)
@@ -41,10 +56,11 @@ namespace TP.Readme
             rectBounds.height -= 1;
 
             EditorGUI.DrawRect(rectBounds, textBoxBackgroundColor);
-            Object obj = EditorGUI.ObjectField(fieldBounds, objectRef, typeof(Object), true);
-            if (IdInSync)
+            Object obj = EditorGUI.ObjectField(fieldBounds, ObjectRef, typeof(Object), true);
+            
+            if (IdInSync && ObjectRef != obj)
             {
-                objectRef = obj;
+                ObjectRef = obj;
                 UpdateId();
             }
 
@@ -69,7 +85,7 @@ namespace TP.Readme
         
         public void UpdateId()
         {
-            objectId = ObjectRef == null ? 0 : ObjectRef.GetInstanceID();
+            ObjectId = ObjectRef == null ? 0 : ObjectRef.GetInstanceID();
         }
 
         public bool IdInSync
@@ -80,11 +96,13 @@ namespace TP.Readme
         public int ObjectId
         {
             get { return objectId; }
+            private set { objectId = value; }
         }
 
         public Object ObjectRef
         {
             get { return objectRef; }
+            private set { objectRef = value; }
         }
 
         public Rect FieldRect

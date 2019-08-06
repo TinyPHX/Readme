@@ -13,7 +13,7 @@ namespace TP.Readme {
     [Serializable]
     public class ReadmeData
     {
-        public string richText;
+        public string richText = "";
         public TextAreaObjectField[] textAreaObjectFields = new TextAreaObjectField[0];
     }
     
@@ -32,7 +32,8 @@ namespace TP.Readme {
         public static bool advancedOptions = false;
         
         private static List<string> supportedTags = new List<string>() {"b", "i", "color", "size"};
-        
+
+        private string previousRichText = "";
         private string text = "";
         [SerializeField] private ReadmeData readmeData;
         private string lastSavedFileName = "";
@@ -42,6 +43,8 @@ namespace TP.Readme {
             get { return readmeData.richText; }
             set
             {
+                previousRichText = readmeData.richText;
+                
                 if (value == null)
                 {
                     readmeData.richText = "";
@@ -54,6 +57,11 @@ namespace TP.Readme {
                     RebuildStyleMaps();
                 }
             }
+        }
+
+        public string PreviousRichText
+        {
+            get { return previousRichText; }
         }
         
         public TextAreaObjectField[] TextAreaObjectFields

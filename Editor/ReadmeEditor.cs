@@ -109,7 +109,6 @@ namespace TP.Readme {
             EditorGUILayout.Space();
 
             UpdateTextAreaObjectFields();
-            DrawTextAreaObjectFields();
 
             if (!editing)
             {
@@ -382,8 +381,8 @@ namespace TP.Readme {
             }
             
             CheckKeyboardShortCuts();
-            
-            DrawTextAreaObjectFields();
+
+            UpdateTextAreaObjectFields();
             DragAndDropObjectField();
             
             UpdateFocus();
@@ -533,57 +532,67 @@ namespace TP.Readme {
 
         void UpdateTextAreaObjectFields()
         {
-            if (readme.RichText != null && TextEditorActive)
+            if (readme.RichText != null)
             {
-                string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
-                MatchCollection matches = Regex.Matches(readme.RichText, objectTagPattern, RegexOptions.None);
-                TextAreaObjectField[] newTextAreaObjectFields = new TextAreaObjectField[matches.Count];
-                for (int i = matches.Count - 1; i >= 0; i--)
+                UpdateTextAreaObjectFieldArray();
+                DrawTextAreaObjectFields();
+                UpdateTextAreaObjectFieldIds();
+            }
+        }
+
+        void UpdateTextAreaObjectFieldArray()
+        {
+            string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
+            MatchCollection matches = Regex.Matches(readme.RichText, objectTagPattern, RegexOptions.None);
+            TextAreaObjectField[] newTextAreaObjectFields = new TextAreaObjectField[matches.Count];
+            for (int i = matches.Count - 1; i >= 0; i--)
+            {
+                Match match = matches[i];
+                
+                if (match.Success)
                 {
-                    Match match = matches[i];
+                    string idValue = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
+                    int objectId = 0;
+                    bool parseSuccess = int.TryParse(idValue, out objectId);
+                        
+                    int startIndex = match.Index ;
+                    int endIndex = match.Index + match.Value.Length;
                     
-                    if (match.Success)
+                    if (endIndex == readme.RichText.Length || readme.RichText[endIndex] != ' ') { readme.RichText = readme.RichText.Insert(endIndex, " "); }
+                    if (startIndex == 0 || readme.RichText[startIndex - 1] != ' ') { readme.RichText = readme.RichText.Insert(startIndex, " "); }
+                    
+                    Rect rect = GetRect(startIndex - 1, endIndex + 1);
+                    rect.position += TextAreaRect.position;
+
+                    if (rect.x > 0 && rect.y > 0 && rect.width > 0 && rect.height > 0)
                     {
-                        string idValue = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
-                        int objectId = 0;
-                        bool parseSuccess = int.TryParse(idValue, out objectId);
-                            
-                        int startIndex = match.Index ;
-                        int endIndex = match.Index + match.Value.Length;
-                        
-                        if (endIndex == readme.RichText.Length || readme.RichText[endIndex] != ' ') { readme.RichText = readme.RichText.Insert(endIndex, " "); }
-                        if (startIndex == 0 || readme.RichText[startIndex - 1] != ' ') { readme.RichText = readme.RichText.Insert(startIndex, " "); }
-                        
-                        Rect rect = GetRect(startIndex - 1, endIndex + 1);
-                        rect.position += TextAreaRect.position;
-
-                        if (rect.x > 0 && rect.y > 0 && rect.width > 0 && rect.height > 0)
+                        TextAreaObjectField matchedField = TextAreaObjectFields.FirstOrDefault(item => item.ObjectId == objectId);
+                        if (matchedField != null && !matchedField.IdInSync)
                         {
-                            TextAreaObjectField matchedField = TextAreaObjectFields.FirstOrDefault(item => item.ObjectId == objectId);
-                            if (matchedField != null && !matchedField.IdInSync)
-                            {
-                                matchedField.UpdateId();
-                                objectId = matchedField.ObjectId;
+                            matchedField.UpdateId();
+                            objectId = matchedField.ObjectId;
 
-                                int idStartIndex = match.Index + 4;
-                                readme.RichText = readme.RichText
-                                    .Remove(idStartIndex, idValue.Length)
-                                    .Insert(idStartIndex, objectId.ToString());
-                                
-                                ForceTextAreaRefresh();
-                            }
+                            int idStartIndex = match.Index + 4;
+                            readme.RichText = readme.RichText
+                                .Remove(idStartIndex, idValue.Length)
+                                .Insert(idStartIndex, objectId.ToString());
                             
-                            TextAreaObjectField newField = new TextAreaObjectField(rect, objectId, startIndex, endIndex - startIndex);
-                            
-                            newTextAreaObjectFields[i] = newField;
+                            ForceTextAreaRefresh();
                         }
-                        else
-                        {
-                            return; //Abort everything. Position is incorrect!
-                        }
+                        
+                        TextAreaObjectField newField = new TextAreaObjectField(rect, objectId, startIndex, endIndex - startIndex);
+                        
+                        newTextAreaObjectFields[i] = newField;
+                    }
+                    else
+                    {
+                        return; //Abort everything. Position is incorrect!
                     }
                 }
-                
+            }
+
+            if (!TextAreaObjectFields.SequenceEqual(newTextAreaObjectFields))
+            {
                 TextAreaObjectFields = newTextAreaObjectFields;
             }
         }
@@ -606,30 +615,29 @@ namespace TP.Readme {
                 {
                     textAreaObjectField.Draw(TextEditor);
                 }
-                UpdateTextAreaObjectFieldIds();
             }
         }
 
         void UpdateTextAreaObjectFieldIds()
         {
             StringBuilder newRichText = new StringBuilder(readme.RichText);
-            string objectTagPattern = " <o=\"[-,a-zA-Z0-9]*\"></o> ";
-            int startTagLength = " <o=\"".Length;
-            int endTagLength = "\"></o> ".Length;
+            string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
+            int startTagLength = "<o=\"".Length;
+            int endTagLength = "\"></o>".Length;
             for (int i = TextAreaObjectFields.Length - 1; i >= 0; i--)
-//            foreach (TextAreaObjectField textAreaObjectField in TextAreaObjectFields)
             {
                 TextAreaObjectField textAreaObjectField = TextAreaObjectFields[i];
-                
+
                 if (readme.RichText.Length > textAreaObjectField.Index)
                 {
-                    Match match = Regex.Match(readme.RichText.Substring(textAreaObjectField.Index - 1), objectTagPattern,
-                        RegexOptions.None);
+                    Match match =
+                        Regex.Match(readme.RichText.Substring(Mathf.Max(0, textAreaObjectField.Index - 1)),
+                            objectTagPattern, RegexOptions.None);
 
                     if (match.Success)
                     {
                         int idMaxLength = 7;
-                        string textAreaId = match.Value.Replace(" <o=\"", "").Replace("\"></o> ", "");
+                        string textAreaId = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
                         string objectFieldId;
 
                         if (textAreaObjectField.ObjectId >= 0)
@@ -647,6 +655,7 @@ namespace TP.Readme {
                             {
                                 objectFieldId = "0" + objectFieldId;
                             }
+
                             objectFieldId = "-" + objectFieldId;
                         }
 
@@ -733,10 +742,11 @@ namespace TP.Readme {
                 {
                     index = CursorIndex;
                 }
+
+                string objectString = " <o=\"" + id + "\"></o> ";
+                readme.RichText = readme.RichText.Insert(index, objectString);
                 
-                readme.RichText = readme.RichText.Insert(index, " <o=\"" + id + "\"></o> ");
-                
-                int newIndex = GetNearestPoorTextIndex(index) + 1;
+                int newIndex = GetNearestPoorTextIndex(index + objectString.Length);
                 ForceTextAreaRefresh(newIndex, newIndex);
             }
         }
