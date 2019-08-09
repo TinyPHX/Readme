@@ -1,16 +1,13 @@
 #if UNITY_EDITOR
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.Collections;
 using Object = UnityEngine.Object;
 
 namespace TP.Readme {
@@ -63,6 +60,38 @@ namespace TP.Readme {
         
         //Copy buffer fix
         private string previousCopyBuffer;
+
+        public void InitializeGuiStyles()
+        {
+            if (selectableRichText == null || editableRichText == null || editableText == null)
+            {
+                selectableRichText = new GUIStyle
+                {
+                    focused = {textColor = readme.fontColor},
+                    normal = {textColor = readme.fontColor},
+                    font = readme.font,
+                    fontSize = readme.fontSize,
+                    wordWrap = true,
+                    padding = new RectOffset(textPadding, textPadding, textPadding + 2, textPadding)
+                };
+
+                editableRichText = new GUIStyle(GUI.skin.textArea)
+                {
+                    richText = true,
+                    font = readme.font,
+                    fontSize = readme.fontSize,
+                    wordWrap = true,
+                    padding = new RectOffset(textPadding, textPadding, textPadding, textPadding)
+                };
+
+                editableText = new GUIStyle(GUI.skin.textArea)
+                {
+                    richText = false,
+                    wordWrap = true,
+                    padding = new RectOffset(textPadding, textPadding, textPadding, textPadding)
+                };
+            }
+        }
         
         public override void OnInspectorGUI()
         {
@@ -75,27 +104,9 @@ namespace TP.Readme {
             }
 
             bool empty = readme.Text == "";
-            
-            selectableRichText = new GUIStyle();
-            selectableRichText.focused.textColor = readme.fontColor;
-            selectableRichText.normal.textColor = readme.fontColor;
-            selectableRichText.font = readme.font;
-            selectableRichText.fontSize = readme.fontSize;
-            selectableRichText.wordWrap = true;
-            selectableRichText.padding = new RectOffset(textPadding, textPadding, textPadding + 2, textPadding);
-            
-            editableRichText = new GUIStyle(GUI.skin.textArea);
-            editableRichText.richText = true;
-            editableRichText.font = readme.font;
-            editableRichText.fontSize = readme.fontSize;
-            editableRichText.wordWrap = true;
-            editableRichText.padding = new RectOffset(textPadding, textPadding, textPadding, textPadding);
-            
-            editableText = new GUIStyle(GUI.skin.textArea);
-            editableText.richText = false;
-            editableText.wordWrap = true;
-            editableText.padding = new RectOffset(textPadding, textPadding, textPadding, textPadding);
-    
+
+            InitializeGuiStyles();
+
             float textAreaWidth = EditorGUIUtility.currentViewWidth - 19;
             if (TextAreaRect.width > 0)
             {
@@ -105,10 +116,9 @@ namespace TP.Readme {
             float smallButtonWidth = EditorGUIUtility.singleLineHeight * 2;
 
             UpdateTextEditor();
+            UpdateTextAreaObjectFields();
             
             EditorGUILayout.Space();
-
-            UpdateTextAreaObjectFields();
 
             if (!editing)
             {
@@ -285,6 +295,7 @@ namespace TP.Readme {
                     "textAreaRect: " + TextAreaRect + "\n" +
                     "graphicalCursorPos: " + (!TextEditorActive ? "" : TextEditor.graphicalCursorPos.ToString()) + "\n" +
                     "Calc Cursor Position: " + (Event.current.mousePosition - TextAreaRect.position) + "\n" +
+                    "Text Editor Active: " + TextEditorActive + "\n" +
                     "cursorIndex: " + (!TextEditorActive ? "" : CursorIndex.ToString()) + "\n" +
                     "selectIndex: " + (!TextEditorActive ? "" : SelectIndex.ToString()) + "\n" +
                     "cursorIndex OnTag: " + IsOnTag(CursorIndex) + "\n" +
@@ -399,42 +410,49 @@ namespace TP.Readme {
 
         private void UpdateTextEditor()
         {
-            TextEditor newTextEditor = GetTextEditor();
-            
-            if (newTextEditor == null)
+            if (readme.RichText.Length > 0)
             {
-                FocusOnInspectorWindow();
-            }
-            
-            if (newTextEditor != null)
-            {
-                if (TextEditor != newTextEditor)
-                {
-                    TextEditor = newTextEditor;
-                    if (verbose) {  Debug.Log("README: Text Editor assigned!"); }
+                TextEditor newTextEditor = GetTextEditor();
 
-                    if (TextEditorActive)
+                if (newTextEditor == null)
+                {
+                    FocusOnInspectorWindow();
+                }
+
+                if (newTextEditor != null)
+                {
+                    if (TextEditor != newTextEditor)
                     {
-                        ForceTextAreaRefresh();
+                        TextEditor = newTextEditor;
+                        if (verbose) { Debug.Log("README: Text Editor assigned!"); }
+
+                        if (TextEditorActive)
+                        {
+                            ForceTextAreaRefresh();
+                        }
                     }
                 }
-            }
-            else if (TextEditor == null)
-            {
-                if (verbose) {  Debug.Log("README: Text Editor not found!"); }
-                ForceTextAreaRefresh();
+                else if (TextEditor == null)
+                {
+                    if (verbose) { Debug.Log("README: Text Editor not found!"); }
+
+                    ForceTextAreaRefresh();
+                }
             }
         }
 
         private void FocusOnInspectorWindow()
         {
-            string currentFocusedWindow = EditorWindow.focusedWindow.titleContent.text;
-            if (EditorWindow.focusedWindow != null && currentFocusedWindow == "Hierarchy")
+            if (EditorWindow.focusedWindow != null)
             {
-                FocusEditorWindow("Inspector");
-                
-                previousFocusedWindow = currentFocusedWindow;
-                windowFocusModified = true;
+                string currentFocusedWindow = EditorWindow.focusedWindow.titleContent.text;
+                if (currentFocusedWindow == "Hierarchy")
+                {
+                    FocusEditorWindow("Inspector");
+
+                    previousFocusedWindow = currentFocusedWindow;
+                    windowFocusModified = true;
+                }
             }
         }
 
@@ -563,6 +581,9 @@ namespace TP.Readme {
                     
                     Rect rect = GetRect(startIndex - 1, endIndex + 1);
                     rect.position += TextAreaRect.position;
+                    
+                    Rect rectWithCorrectHeigh = GetRect(startIndex - 1, endIndex);
+                    rect.height = rectWithCorrectHeigh.height;
 
                     if (rect.x > 0 && rect.y > 0 && rect.width > 0 && rect.height > 0)
                     {
@@ -575,7 +596,7 @@ namespace TP.Readme {
                             int idStartIndex = match.Index + 4;
                             readme.RichText = readme.RichText
                                 .Remove(idStartIndex, idValue.Length)
-                                .Insert(idStartIndex, objectId.ToString());
+                                .Insert(idStartIndex, GetFixedLengthId(objectId.ToString()));
                             
                             ForceTextAreaRefresh();
                         }
@@ -638,26 +659,7 @@ namespace TP.Readme {
                     {
                         int idMaxLength = 7;
                         string textAreaId = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
-                        string objectFieldId;
-
-                        if (textAreaObjectField.ObjectId >= 0)
-                        {
-                            objectFieldId = textAreaObjectField.ObjectId.ToString();
-                            while (objectFieldId.Length < idMaxLength)
-                            {
-                                objectFieldId = "0" + objectFieldId;
-                            }
-                        }
-                        else
-                        {
-                            objectFieldId = Mathf.Abs(textAreaObjectField.ObjectId).ToString();
-                            while (objectFieldId.Length < idMaxLength - 1)
-                            {
-                                objectFieldId = "0" + objectFieldId;
-                            }
-
-                            objectFieldId = "-" + objectFieldId;
-                        }
+                        string objectFieldId = GetFixedLengthId(textAreaId);
 
                         if (textAreaId != objectFieldId)
                         {
@@ -670,6 +672,28 @@ namespace TP.Readme {
             }
 
             readme.RichText = newRichText.ToString();
+        }
+
+        string GetFixedLengthId(string id, int length = 7)
+        {
+            string fixedLengthId = id;
+            bool isNegative = id[0] == '-';
+            string prepend = "";
+            
+            if (isNegative)
+            {
+                prepend = "-";
+                fixedLengthId = id.Substring(1, id.Length - 1);
+            }
+
+            while (fixedLengthId.Length + prepend.Length < length)
+            {
+                fixedLengthId = "0" + fixedLengthId;
+            }
+
+            fixedLengthId = prepend + fixedLengthId;
+
+            return fixedLengthId;
         }
         
         void DragAndDropObjectField() 
@@ -743,7 +767,7 @@ namespace TP.Readme {
                     index = CursorIndex;
                 }
 
-                string objectString = " <o=\"" + id + "\"></o> ";
+                string objectString = " <o=\"" + GetFixedLengthId(id) + "\"></o> ";
                 readme.RichText = readme.RichText.Insert(index, objectString);
                 
                 int newIndex = GetNearestPoorTextIndex(index + objectString.Length);
@@ -793,7 +817,7 @@ namespace TP.Readme {
                                        objTagStart + objTagLength <= input.Length && 
                                        input.Substring(objTagStart, objTagLength) == objTag;
                     
-                    if ((charIndex == output.Length || input[charIndex] != output[charIndex]) && (IsOnTag(charIndex) || objectField))
+                    if (IsOnTag(charIndex) || objectField)
                     {
                         int nextPoorIndex = GetNearestPoorTextIndex(charIndex + direction, -1, direction);
                         bool poorCharFound = (nextPoorIndex - charIndex) * direction > 0;
@@ -1117,7 +1141,7 @@ namespace TP.Readme {
         {
             bool isOnTag = false;
     
-            if (readme != null && readme.richTextTagMap.Count > index)
+            if (readme != null &&  readme.richTextTagMap != null && readme.richTextTagMap.Count > index)
             {
                 isOnTag = readme.richTextTagMap[index];
             }

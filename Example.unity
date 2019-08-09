@@ -222,7 +222,7 @@ MonoBehaviour:
       2. Add the \"MeshFilter\" component\n 3. Set the MeshFilter's Mesh Property
       to  <o=\"0000814\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
       5. If you don't have a material use Unity's  <o=\"0000930\"></o> \n\nSee the
-      components below or  <o=\"0025618\"></o>  for an example of a Unity Cylindar
+      components below or  <o=\"0025748\"></o>  for an example of a Unity Cylindar
       in action!"
     textAreaObjectFields:
     - name: Cylinder (814)
@@ -230,9 +230,9 @@ MonoBehaviour:
       objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
       fieldRect:
         serializedVersion: 2
-        x: 20
-        y: 585
-        width: 136
+        x: 280
+        y: 543
+        width: 140
         height: 15
       index: 963
       length: 17
@@ -241,19 +241,19 @@ MonoBehaviour:
       objectRef: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
       fieldRect:
         serializedVersion: 2
-        x: 20
-        y: 627
-        width: 136
+        x: 291
+        y: 571
+        width: 140
         height: 15
       index: 1076
       length: 17
-    - name: Cylinder (25618)
-      objectId: 25618
+    - name: Cylinder (25748)
+      objectId: 25748
       objectRef: {fileID: 511163808}
       fieldRect:
         serializedVersion: 2
         x: 213
-        y: 655
+        y: 599
         width: 140
         height: 15
       index: 1125
@@ -340,11 +340,11 @@ MonoBehaviour:
   font: {fileID: 0}
   fontSize: 12
   readmeData:
-    richText: The  <o="0025632"></o>  on this  <o="0025630"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
+    richText: The  <o="0025762"></o>  on this  <o="0025760"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
       becuase I thought it was pretty.
     textAreaObjectFields:
-    - name: Directional Light (25632)
-      objectId: 25632
+    - name: Directional Light (25762)
+      objectId: 25762
       objectRef: {fileID: 1192897486}
       fieldRect:
         serializedVersion: 2
@@ -354,8 +354,8 @@ MonoBehaviour:
         height: 15
       index: 5
       length: 17
-    - name: Directional Light (25630)
-      objectId: 25630
+    - name: Directional Light (25760)
+      objectId: 25760
       objectRef: {fileID: 1192897485}
       fieldRect:
         serializedVersion: 2
@@ -375,7 +375,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: richTextTagMap.Array.size
-      value: 1202
+      value: 1203
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -542,9 +542,9 @@ Prefab:
         <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n * Size:
         <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
         references can be draged and dropeed to create inline references.\n\n * Scene:
-        \ <o=\"0023080\"></o> \n * Game Object:  <o=\"0025618\"></o> \n * Prefab:
-        \ <o=\"0012516\"></o> \n * Script:  <o=\"0002740\"></o> \n * File:  <o=\"0021760\"></o>
-        \n * Folder:  <o=\"0013786\"></o>  \n\n<size=16>Toolbar Features</size>\n\n
+        \ <o=\"0022978\"></o> \n * Game Object:  <o=\"0025748\"></o> \n * Prefab:
+        \ <o=\"0012414\"></o> \n * Script:  <o=\"0002740\"></o> \n * File:  <o=\"0021658\"></o>
+        \n * Folder:  <o=\"0013684\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
         * Change font color\n * Change font style\n * Change font size \n * Bold togle
         button\n * Italics toggle button\n * Add object field button\n * View the
         source for quick editing\n * Advanced tab for debugging"
@@ -552,12 +552,12 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].objectId
-      value: 12516
+      value: 12414
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].objectId
-      value: 25618
+      value: 25748
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -1877,7 +1877,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: richTextTagMap.Array.data[975]
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -1912,7 +1912,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: richTextTagMap.Array.data[991]
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -1937,7 +1937,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: richTextTagMap.Array.data[998]
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -2062,7 +2062,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: richTextTagMap.Array.data[966]
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3044,7 +3044,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].objectId
-      value: 21760
+      value: 21658
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3055,7 +3055,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].objectId
-      value: 13786
+      value: 13684
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3556,7 +3556,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].objectId
-      value: 23080
+      value: 22978
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4781,17 +4781,17 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].name
-      value: Example (23080)
+      value: Example (22978)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].name
-      value: Cylinder (25618)
+      value: Cylinder (25748)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].name
-      value: Readme (12516)
+      value: Readme (12414)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4801,7 +4801,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].name
-      value: README (21760)
+      value: README (21658)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4811,7 +4811,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].name
-      value: Editor (13786)
+      value: Editor (13684)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
