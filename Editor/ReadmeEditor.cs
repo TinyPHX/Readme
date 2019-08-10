@@ -61,36 +61,33 @@ namespace TP.Readme {
         //Copy buffer fix
         private string previousCopyBuffer;
 
-        public void InitializeGuiStyles()
+        public void UpdateGuiStyles()
         {
-            if (selectableRichText == null || editableRichText == null || editableText == null)
+            selectableRichText = new GUIStyle
             {
-                selectableRichText = new GUIStyle
-                {
-                    focused = {textColor = readme.fontColor},
-                    normal = {textColor = readme.fontColor},
-                    font = readme.font,
-                    fontSize = readme.fontSize,
-                    wordWrap = true,
-                    padding = new RectOffset(textPadding, textPadding, textPadding + 2, textPadding)
-                };
+                focused = {textColor = readme.fontColor},
+                normal = {textColor = readme.fontColor},
+                font = readme.font,
+                fontSize = readme.fontSize,
+                wordWrap = true,
+                padding = new RectOffset(textPadding, textPadding, textPadding + 2, textPadding)
+            };
 
-                editableRichText = new GUIStyle(GUI.skin.textArea)
-                {
-                    richText = true,
-                    font = readme.font,
-                    fontSize = readme.fontSize,
-                    wordWrap = true,
-                    padding = new RectOffset(textPadding, textPadding, textPadding, textPadding)
-                };
+            editableRichText = new GUIStyle(GUI.skin.textArea)
+            {
+                richText = true,
+                font = readme.font,
+                fontSize = readme.fontSize,
+                wordWrap = true,
+                padding = new RectOffset(textPadding, textPadding, textPadding, textPadding)
+            };
 
-                editableText = new GUIStyle(GUI.skin.textArea)
-                {
-                    richText = false,
-                    wordWrap = true,
-                    padding = new RectOffset(textPadding, textPadding, textPadding, textPadding)
-                };
-            }
+            editableText = new GUIStyle(GUI.skin.textArea)
+            {
+                richText = false,
+                wordWrap = true,
+                padding = new RectOffset(textPadding, textPadding, textPadding, textPadding)
+            };
         }
         
         public override void OnInspectorGUI()
@@ -105,7 +102,7 @@ namespace TP.Readme {
 
             bool empty = readme.Text == "";
 
-            InitializeGuiStyles();
+            UpdateGuiStyles();
 
             float textAreaWidth = EditorGUIUtility.currentViewWidth - 19;
             if (TextAreaRect.width > 0)
@@ -480,7 +477,7 @@ namespace TP.Readme {
             UpdateTextAreaObjectFields();
         }
 
-        void ForceTextAreaRefresh(int selectIndex = -1, int cursorIndex = -1, int delay = 5)
+        void ForceTextAreaRefresh(int selectIndex = -1, int cursorIndex = -1, int delay = 10)
         {
             if (!textAreaRefreshPending)
             {
@@ -658,8 +655,8 @@ namespace TP.Readme {
                     if (match.Success)
                     {
                         int idMaxLength = 7;
-                        string textAreaId = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
-                        string objectFieldId = GetFixedLengthId(textAreaId);
+                        string textAreaId = GetFixedLengthId(match.Value.Replace("<o=\"", "").Replace("\"></o>", ""));
+                        string objectFieldId = GetFixedLengthId(textAreaObjectField.ObjectId);
 
                         if (textAreaId != objectFieldId)
                         {
@@ -674,6 +671,11 @@ namespace TP.Readme {
             readme.RichText = newRichText.ToString();
         }
 
+        string GetFixedLengthId(int id, int length = 7)
+        {
+            return GetFixedLengthId(id.ToString(), length);
+        }
+        
         string GetFixedLengthId(string id, int length = 7)
         {
             string fixedLengthId = id;
@@ -708,7 +710,7 @@ namespace TP.Readme {
                     case EventType.DragPerform:
                         if (!TextAreaRect.Contains(evt.mousePosition))
                         {
-                            return; // Ignore drag and drop outside of textAread
+                            return; // Ignore drag and drop outside of textArea
                         }
 
                         foreach (TextAreaObjectField textAreaObjectField in TextAreaObjectFields)
@@ -733,14 +735,16 @@ namespace TP.Readme {
 
                 if (objectsToDrop != null)
                 {
+                    int newCursorIndex = -1;
                     if (TextEditorActive)
                     {
                         int dropIndex = GetNearestPoorTextIndex(MousePositionToIndex);
                         InsertObjectFields(objectsToDrop, dropIndex);
                         objectsToDrop = null;
+                        newCursorIndex = GetNearestPoorTextIndex(dropIndex + 1);
                     }
 
-                    ForceTextAreaRefresh();
+                    ForceTextAreaRefresh(newCursorIndex, newCursorIndex);
 
                     Undo.RecordObject(readme, "object field added");
 
@@ -826,17 +830,17 @@ namespace TP.Readme {
                         {
                             if (!poorCharFound) { nextPoorIndex = 0; }
                             finalOutput = input;
-                            ForceTextAreaRefresh(previousCursorIndex, nextPoorIndex, 1); //Highlight object field instead of deleting it
+                            ForceTextAreaRefresh(previousCursorIndex, nextPoorIndex, 2); //Highlight object field instead of deleting it
                         }
                         else if (poorCharFound)
                         {
                             finalOutput = input.Remove(nextPoorIndex, 1);
-                            ForceTextAreaRefresh(charIndex, charIndex, 1);
+                            ForceTextAreaRefresh(charIndex, charIndex, 2);
                         }
                         else //Probably at the beginning of a line
                         {
                             finalOutput = input;
-                            ForceTextAreaRefresh(previousCursorIndex, previousCursorIndex, 1);
+                            ForceTextAreaRefresh(previousCursorIndex, previousCursorIndex, 2);
                         }
                     }
                 }
