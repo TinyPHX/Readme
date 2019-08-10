@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1351242074934004}
+  m_IsPrefabParent: 1
+--- !u!1 &1351242074934004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4113731432848810}
+  - component: {fileID: 114904343803117110}
+  m_Layer: 0
+  m_Name: Readme
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4113731432848810
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1351242074934004}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.09863281, y: 3.0004883, z: -2.8427734}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114904343803117110
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1351242074934004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  richTextTagMap: 0101010101010101010000000000000000000000000000000000000000000101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010101010101010101000000000000000000000000000000000101010101010100000000000101010000000001010101000000000101010000000000000001010101000001010101010101010100000000000000000000000000000000000000000001010101010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010101010101010101010101010101010100000001010101010101010000010101010101010101010101010101010100000000000101010101010101000001010101010101010101010101010101010000000001010101010101010000000000000000000000010101010101010100000000000101010101010100010101010101010101000000010101010101010000000001010101010101010100000000000000000000000000000000000101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010101010101010101010101010101010100000000000000000000000000000000000001010101010101010101010101010101010100000000000000000000000000010101010101010101010101010101010101000000000000000000000000000101010101010101010101010101010101010000000000000000000000010101010101010101010101010101010101000000000000000000000000000101010101010101010101010101010101010000000101010101010101010000000000000000000000000000000001010101010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  font: {fileID: 0}
+  fontSize: 14
+  readmeData:
+    richText: "<size=20>Example Readme Script</size>\n\nReadme is component that allows
+      you to add any type of notes or documentation directly to a Prefab or GameObject.
+      It's usefull when a note is specific to to this object as a whole and not able
+      to be included as a file or script comment. \n\nYou can add it as plain text
+      or include styling.\n\n\n<size=16>Supported Styles</size>\n\n * <b>Bold</b>\n
+      * <i>Italics</i>\n\n<size=16>Semi-Supported Styles</size>\n\nThese are styles
+      that have to be added with tags manually but still work.\n\n * Color: <color=\"#ff0000\">Red</color>,
+      <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n * Size:
+      <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
+      references can be draged and dropeed to create inline references.\n\n * Scene:
+      \ <o=\"0022978\"></o> \n * Game Object:  <o=\"0000000\"></o> \n * Prefab:  <o=\"0012414\"></o>
+      \n * Script:  <o=\"0002740\"></o> \n * File:  <o=\"0021658\"></o> \n * Folder:
+      \ <o=\"0013684\"></o> \n\n\n<size=16>Toolbar Features</size>\n\n * Change font
+      color\n * Change font style\n * Change font size \n * Bold togle button\n *
+      Italics toggle button\n * Add object field button\n * View the source for quick
+      editing\n * Advanced tab for debugging"
+    textAreaObjectFields:
+    - objectId: 22978
+      objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 92
+        y: 652
+        width: 162
+        height: 17
+      index: 787
+      length: 17
+    - objectId: 0
+      objectRef: {fileID: 0}
+      fieldRect:
+        serializedVersion: 2
+        x: 141
+        y: 668
+        width: 162
+        height: 17
+      index: 823
+      length: 17
+    - objectId: 12414
+      objectRef: {fileID: 1351242074934004}
+      fieldRect:
+        serializedVersion: 2
+        x: 94
+        y: 684
+        width: 162
+        height: 17
+      index: 854
+      length: 17
+    - objectId: 2740
+      objectRef: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 91
+        y: 700
+        width: 162
+        height: 17
+      index: 885
+      length: 17
+    - objectId: 21658
+      objectRef: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 72
+        y: 716
+        width: 162
+        height: 17
+      index: 914
+      length: 17
+    - objectId: 13684
+      objectRef: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 93
+        y: 732
+        width: 162
+        height: 17
+      index: 945
+      length: 17
