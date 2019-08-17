@@ -32,15 +32,17 @@ namespace TP.Readme {
         private const string readmeEditorTextAreaReadonlyName = "readme_text_editor_readonly";
         private const string readmeEditorTextAreaSourceName = "readme_text_editor_source";
         private const string readmeEditorTextAreaStyleName = "readme_text_editor_style";
-        private int previousSelctIndex = -1;
         private bool selectIndexChanged = false;
-        private int previousCursorIndex = -1;
         private bool cursorIndexChanged = false;
+        private int previousCursorIndex = -1;
+        private int previousSelectIndex = -1;
+        private int currentCursorIndex = -1;
+        private int currentSelectIndex = -1;
         private Rect textAreaRect;
         private bool richTextChanged = false;
-        private bool selectAllShortcut = false;
         private string previousFocusedWindow = "";
         private bool windowFocusModified = false;
+        private bool backspaceAdjust = false;
         
         // Styles
         private GUIStyle activeTextAreaStyle;
@@ -60,6 +62,8 @@ namespace TP.Readme {
         
         //Copy buffer fix
         private string previousCopyBuffer;
+
+        private Event currentEvent;
 
         public void UpdateGuiStyles()
         {
@@ -92,7 +96,8 @@ namespace TP.Readme {
         
         public override void OnInspectorGUI()
         {
-            if (verbose) {  Debug.Log("README: OnInspectorGUI"); }
+//            if (verbose) {  Debug.Log("README: OnInspectorGUI"); }
+            currentEvent = new Event(Event.current);
 
             Readme readmeTarget = (Readme) target;
             if (readmeTarget != null)
@@ -125,9 +130,10 @@ namespace TP.Readme {
                 }
                 else
                 {
+                    String displayText = !TagsError(readme.RichText) ? readme.RichText : readme.Text;
                     readmeEditorActiveTextAreaName = readmeEditorTextAreaReadonlyName;
                     GUI.SetNextControlName(readmeEditorTextAreaReadonlyName);
-                    EditorGUILayout.SelectableLabel(!TagsError(readme.RichText) ? readme.RichText : readme.Text, selectableRichText, GUILayout.Height(textAreaHeight + 4));
+                    EditorGUILayout.SelectableLabel(displayText, selectableRichText, GUILayout.Height(textAreaHeight + 4));
                     activeTextAreaStyle = selectableRichText;
                     TextAreaRect = GUILayoutUtility.GetLastRect();
                 }
@@ -143,13 +149,27 @@ namespace TP.Readme {
                 }
                 else
                 {
+                    
+                    int inputCurosrIndex = CursorIndex;
+                    int inputSelectIndex = SelectIndex;
+                    
                     readmeEditorActiveTextAreaName = readmeEditorTextAreaStyleName;
                     GUI.SetNextControlName(readmeEditorTextAreaStyleName);
+
+                    PrepareForTextAreaChange(readme.RichText);
                     string newRichText = EditorGUILayout.TextArea(readme.RichText, editableRichText, GUILayout.Height(textAreaHeight));
-                    readme.RichText = GetTextAreaChange(readme.RichText, newRichText);
-                    TextAreaRect = GUILayoutUtility.GetLastRect();
+                    readme.RichText = GetTextAreaChange(readme.RichText, inputCurosrIndex, inputSelectIndex, newRichText, CursorIndex, SelectIndex);
+//                    if (TextEditorActive) { TextEditor.text = readme.RichText; }
+                    TextAreaChangeComplete();
                     
+                    TextAreaRect = GUILayoutUtility.GetLastRect();
                     activeTextAreaStyle = editableRichText;
+                    
+//                    int endValue = textEditor.cursorIndex;
+//                    if (startValue != endValue)
+//                    {
+//                        Debug.Log("OMG ITS HAPPENING!");
+//                    }
                 }
 
                 if (TagsError(readme.RichText))
@@ -164,7 +184,7 @@ namespace TP.Readme {
 
                 Undo.RecordObject(target, "Readme");
             }
-    
+            
             FixCursorBug();
             
             EditorGUILayout.Space();
@@ -174,7 +194,7 @@ namespace TP.Readme {
                 if (GUILayout.Button("Edit"))
                 {
                     editing = true;
-                    ForceTextAreaRefresh();
+                    ForceTextAreaRefresh(-1, -1, 2);
                 }
             }
             else
@@ -407,34 +427,31 @@ namespace TP.Readme {
 
         private void UpdateTextEditor()
         {
-            if (readme.RichText.Length > 0)
+            TextEditor newTextEditor = GetTextEditor();
+
+            if (newTextEditor == null)
             {
-                TextEditor newTextEditor = GetTextEditor();
+                FocusOnInspectorWindow();
+            }
 
-                if (newTextEditor == null)
+            if (newTextEditor != null)
+            {
+                if (TextEditor != newTextEditor)
                 {
-                    FocusOnInspectorWindow();
-                }
+                    TextEditor = newTextEditor;
+                    if (verbose) { Debug.Log("README: Text Editor assigned!"); }
 
-                if (newTextEditor != null)
-                {
-                    if (TextEditor != newTextEditor)
+                    if (TextEditorActive)
                     {
-                        TextEditor = newTextEditor;
-                        if (verbose) { Debug.Log("README: Text Editor assigned!"); }
-
-                        if (TextEditorActive)
-                        {
-                            ForceTextAreaRefresh();
-                        }
+                        ForceTextAreaRefresh();
                     }
                 }
-                else if (TextEditor == null)
-                {
-                    if (verbose) { Debug.Log("README: Text Editor not found!"); }
+            }
+            else if (TextEditor == null)
+            {
+                if (verbose) { Debug.Log("README: Text Editor not found!"); }
 
-                    ForceTextAreaRefresh();
-                }
+                ForceTextAreaRefresh();
             }
         }
 
@@ -479,15 +496,18 @@ namespace TP.Readme {
 
         void ForceTextAreaRefresh(int selectIndex = -1, int cursorIndex = -1, int delay = 10)
         {
+            delay = 3;
             if (!textAreaRefreshPending)
             {
                 if (verbose) {  Debug.Log("README: ForceTextAreaRefresh, selectIndex: " + selectIndex + " cursorIndex: " + cursorIndex); }
-                if (GUI.GetNameOfFocusedControl() != readmeEditorTextAreaReadonlyName)
+                textAreaRefreshPending = true;
+
+                string forcusedControl = GUI.GetNameOfFocusedControl();
+                if (forcusedControl != readmeEditorTextAreaReadonlyName && forcusedControl != "")
                 {
                     EditorGUI.FocusTextInControl("");
                     GUI.FocusControl("");
                 }
-                textAreaRefreshPending = true;
                 focusDelay = delay;
                 focuseSelectIndex = selectIndex == -1 && TextEditorActive ? SelectIndex : selectIndex;
                 focusCursorIndex = cursorIndex == -1 && TextEditorActive ? CursorIndex : cursorIndex;
@@ -534,8 +554,8 @@ namespace TP.Readme {
                 }
                 
                 //Stop cursor change from being detected
-                previousSelctIndex = SelectIndex;
-                previousCursorIndex = CursorIndex;
+//                previousSelectIndex = SelectIndex;
+//                previousCursorIndex = CursorIndex;
             }
 
             if (windowFocusModified && textEditor != null)
@@ -801,60 +821,201 @@ namespace TP.Readme {
             return rect;
         }
 
-        private string GetTextAreaChange(string input, string output)
+        private void PrepareForTextAreaChange(string input)
         {
-            string finalOutput = output;
+            backspaceAdjust = false;
             
             if (!TagsError(input))
             {
-                if (input.Length - output.Length == 1 && textEditor.cursorIndex == textEditor.selectIndex) // single character removed (backspace or delete)
+                if (AllTextSelected())
                 {
-                    richTextChanged = true;
-                    
-                    int charIndex = textEditor.cursorIndex;
-                    int direction = charIndex < previousCursorIndex ? -1 : 1;
-                    char removedChar = input[charIndex];
-                    string objTag = direction == 1 ? " <o=" : "</o> ";
-                    int objTagStart = direction == 1 ? charIndex : charIndex - 4;
+                    SelectIndex = previousSelectIndex;
+                    CursorIndex = previousCursorIndex;
+                }
+                
+                if (currentEvent.type == EventType.KeyDown && 
+                    new KeyCode[] {KeyCode.Backspace, KeyCode.Delete}.Contains(currentEvent.keyCode) &&
+                    CursorIndex == SelectIndex)
+                {
+                    int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 0;
+                    int charIndex = textEditor.cursorIndex + direction;
+                    string objTag = direction == 0 ? " <o=" : "</o> ";
+                    int objTagStart = direction == 0 ? charIndex - 1 : charIndex - 4;
                     int objTagLength = objTag.Length;
                     bool objectField = objTagStart > 0 && 
                                        objTagStart + objTagLength <= input.Length && 
                                        input.Substring(objTagStart, objTagLength) == objTag;
                     
-                    if (IsOnTag(charIndex) || objectField)
+                    if (objectField)
                     {
-                        int nextPoorIndex = GetNearestPoorTextIndex(charIndex + direction, -1, direction);
-                        bool poorCharFound = (nextPoorIndex - charIndex) * direction > 0;
+                        int nextPoorIndex = GetNearestPoorTextIndex(charIndex, -1, direction);
+                        bool poorCharFound = (nextPoorIndex - charIndex) * (direction == 1 ? 1 : -1) > 0;
                         
-                        if (objectField)
+                        if (!poorCharFound) { nextPoorIndex = 0; }
+//                        CursorIndex = previousCursorIndex;
+                        SelectIndex = nextPoorIndex;
+                        EndIndex -= 1;
+                        Event.current.Use();
+                        
+//                        ForceTextAreaRefresh(previousCursorIndex, nextPoorIndex, 10); //Highlight object field instead of deleting it
+//                        else if (poorCharFound)
+//                        {
+//                            finalOutput = input.Remove(nextPoorIndex, 1);
+//                            ForceTextAreaRefresh(charIndex, charIndex, 2);
+//                        }
+//                        else //Probably at the beginning of a line
+//                        {
+//                            finalOutput = input;
+//                            ForceTextAreaRefresh(previousCursorIndex, previousCursorIndex, 2);
+//                        }
+                    }
+                    else if (IsOnTag(charIndex))
+                    {
+                        CursorIndex += direction == 1 ? 1 : -1;
+                        SelectIndex += direction == 1 ? 1 : -1;
+
+                        if (CursorIndex > 0 && CursorIndex <= readme.RichText.Length)
                         {
-                            if (!poorCharFound) { nextPoorIndex = 0; }
-                            finalOutput = input;
-                            ForceTextAreaRefresh(previousCursorIndex, nextPoorIndex, 2); //Highlight object field instead of deleting it
-                        }
-                        else if (poorCharFound)
-                        {
-                            finalOutput = input.Remove(nextPoorIndex, 1);
-                            ForceTextAreaRefresh(charIndex, charIndex, 2);
-                        }
-                        else //Probably at the beginning of a line
-                        {
-                            finalOutput = input;
-                            ForceTextAreaRefresh(previousCursorIndex, previousCursorIndex, 2);
+                            PrepareForTextAreaChange(input);
+                            backspaceAdjust = true;
                         }
                     }
                 }
             }
+        }
+
+        private string GetTextAreaChange(string input, int inputCursorIndex, int inputSelectIndex, string output, int outputCursorIndex, int outputSelectIndex)
+        {
+            string finalOutput = output;
+            bool inputAllSelcted = AllTextSelected(input, inputCursorIndex, inputSelectIndex);
+            bool outputAllSelcted = AllTextSelected(output, outputCursorIndex, outputSelectIndex);
+
+            if (textAreaRefreshPending)
+            {
+                return input;
+            }
+            
+            if (inputAllSelcted)
+            {
+                return input; //ABORT THIS SHIT
+            }
+
+            if (outputAllSelcted)
+            {   
+                SelectIndex = previousSelectIndex;
+                CursorIndex = previousCursorIndex;
+                ForceGuiRedraw();
+                return input;
+//                ForceTextAreaRefresh(previousSelectIndex, previousCursorIndex, 3);
+            }
+
+            if (output == "" && inputCursorIndex != 1 && inputSelectIndex != -1)
+            {
+                Debug.Log("WHAT THE FUCK inputCursorIndex: " + inputCursorIndex + " inputSelectIndex: " + inputSelectIndex);
+                ForceTextAreaRefresh(inputCursorIndex, inputSelectIndex, 2); //Highlight object field instead of deleting it
+                return input;
+            }
+
+
+//            string objTag = direction == 1 ? " <o=" : "</o> ";
+//            int objTagStart = direction == 1 ? charIndex : charIndex - 4;
+//            int objTagLength = objTag.Length;
+//            bool objectField = objTagStart > 0 && 
+//                               objTagStart + objTagLength <= input.Length && 
+//                               input.Substring(objTagStart, objTagLength) == objTag;
+//            if (objectField)
+//            {
+//                //do nothing
+//            }
+//            else if (!TagsError(input))
+//            {
+//                if (currentEvent.type == EventType.KeyDown && 
+//                    new KeyCode[] {KeyCode.Backspace, KeyCode.Delete}.Contains(currentEvent.keyCode) &&
+//                    CursorIndex == SelectIndex)
+//                {
+//                    int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 1;
+//                    CursorIndex = GetNearestPoorTextIndex(CursorIndex, -1, -direction);
+//                    SelectIndex = GetNearestPoorTextIndex(SelectIndex, -1, -direction);
+//                    ForceGuiRedraw();
+
+//                    richTextChanged = true;
+//                    
+//                    int charIndex = textEditor.cursorIndex;
+//                    int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 1;
+//                    string objTag = direction == 1 ? " <o=" : "</o> ";
+//                    int objTagStart = direction == 1 ? charIndex : charIndex - 4;
+//                    int objTagLength = objTag.Length;
+//                    bool objectField = objTagStart > 0 && 
+//                                       objTagStart + objTagLength <= input.Length && 
+//                                       input.Substring(objTagStart, objTagLength) == objTag;
+//                    
+//                    if (IsOnTag(charIndex) || objectField)
+//                    {
+//                        int nextPoorIndex = GetNearestPoorTextIndex(charIndex + direction, -1, direction);
+//                        bool poorCharFound = (nextPoorIndex - charIndex) * direction > 0;
+//                        
+//                        if (objectField)
+//                        {
+//                            if (!poorCharFound) { nextPoorIndex = 0; }
+//                            finalOutput = input;
+//                            ForceTextAreaRefresh(previousCursorIndex, nextPoorIndex, 10); //Highlight object field instead of deleting it
+//                        }
+//                        else if (poorCharFound)
+//                        {
+//                            finalOutput = input.Remove(nextPoorIndex, 1);
+//                            ForceTextAreaRefresh(charIndex, charIndex, 2);
+//                        }
+//                        else //Probably at the beginning of a line
+//                        {
+//                            finalOutput = input;
+//                            ForceTextAreaRefresh(previousCursorIndex, previousCursorIndex, 2);
+//                        }
+//                    }
+//                }
+//            }
             
             return finalOutput;
         }
 
+        private void TextAreaChangeComplete()
+        {
+//            if (objectField)
+//            {
+//                //do nothing
+//            }
+//            else if (!TagsError(input))
+//            {
+//                if (currentEvent.type == EventType.KeyDown &&
+//                    new KeyCode[] {KeyCode.Backspace, KeyCode.Delete}.Contains(currentEvent.keyCode) &&
+//                    CursorIndex == SelectIndex)
+//                {
+//                    int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 1;
+//                    CursorIndex = GetNearestPoorTextIndex(CursorIndex, -1, -direction);
+//                    SelectIndex = GetNearestPoorTextIndex(SelectIndex, -1, -direction);
+////                    ForceGuiRedraw();
+//                }
+//            }
+
+            if (backspaceAdjust)
+            {
+                int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 1;
+                CursorIndex = GetNearestPoorTextIndex(CursorIndex, -1, -direction);
+                SelectIndex = GetNearestPoorTextIndex(SelectIndex, -1, -direction);
+            }
+            else if (IsOnTag())
+            {
+//                FixArrowCursor();
+                CursorIndex = GetNearestPoorTextIndex(CursorIndex);
+                SelectIndex = GetNearestPoorTextIndex(SelectIndex);
+            }
+        }
+
         private void CheckKeyboardShortCuts()
         {
-            Event currentEvent = Event.current;
+//            Event currentEvent = Event.current;
             
             //Alt + b for bold
-            if (currentEvent.type == EventType.KeyUp && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
+            if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
             {
                 ToggleStyle("b");
                 currentEvent.Use();
@@ -932,25 +1093,17 @@ namespace TP.Readme {
         {
             if (fixCursorBug && TextEditorActive && !TagsError(readme.RichText) && !sourceOn)
             {
-                selectIndexChanged = previousSelctIndex != SelectIndex;
+                selectIndexChanged = previousSelectIndex != SelectIndex;
                 cursorIndexChanged = previousCursorIndex != CursorIndex;
 
-                selectAllShortcut = false;
-                if (StartIndex == 0 && EndIndex == readme.RichText.Length)
-                {
-                    selectAllShortcut = true;
-                }
-                
                 if (selectIndexChanged || cursorIndexChanged || richTextChanged)
                 {
-                    if (!selectAllShortcut)
+                    if (!AllTextSelected())
                     {
                         FixMouseCursor();   
                     }
                     FixArrowCursor();
                     
-                    previousSelctIndex = SelectIndex;
-                    previousCursorIndex = CursorIndex;
                     richTextChanged = false;
                 }
             }
@@ -958,10 +1111,9 @@ namespace TP.Readme {
     
         public void FixMouseCursor()
         {
-            bool isKeyboard = new KeyCode[] {KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(Event.current.keyCode);
-            bool typing = Event.current.character != '\0' || Event.current.keyCode != KeyCode.None;
+            bool mouseEvent = new EventType[] { EventType.mouseDown, EventType.mouseDrag, EventType.mouseUp }.Contains(currentEvent.type);
             
-            if (!typing && Event.current.clickCount <= 1)
+            if (mouseEvent && Event.current.clickCount <= 1)
             {
                 int rawMousePositionIndex = MousePositionToIndex;
                 if (rawMousePositionIndex != -1)
@@ -985,7 +1137,7 @@ namespace TP.Readme {
         {
             bool isKeyboard = new KeyCode[] {KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(Event.current.keyCode);
             bool isDoubleClick = Event.current.clickCount == 2;
-            if (isKeyboard || isDoubleClick || richTextChanged || selectAllShortcut)
+            if (isKeyboard || isDoubleClick || richTextChanged || AllTextSelected())
             {
                 int direction = isDoubleClick ? 1 : 0;
     
@@ -1005,7 +1157,7 @@ namespace TP.Readme {
     
                 if (selectIndexChanged || richTextChanged)
                 {
-                    SelectIndex = GetNearestPoorTextIndex(SelectIndex, previousSelctIndex, direction);
+                    SelectIndex = GetNearestPoorTextIndex(SelectIndex, previousSelectIndex, direction);
                 }
             }
         }
@@ -1075,7 +1227,7 @@ namespace TP.Readme {
                     
                     if (index == TextEditor.text.Length)
                     {
-                        break; //end of line always not rich text.
+                        break; //end of text always not rich text.
                     }
     
                     previousIndex = index;
@@ -1316,8 +1468,55 @@ namespace TP.Readme {
             return editableRichText.GetCursorPixelPosition(new Rect(0, 0, position.width, position.height), content, cursorPos);
         }
 
-        private int StartIndex { get { return Math.Min(CursorIndex, SelectIndex); } }
-        private int EndIndex { get { return Math.Max(CursorIndex, SelectIndex); } }
+        private bool AllTextSelected(string text = "", int cursorIndex = -1, int selectIndex = -1)
+        {
+            if (String.IsNullOrEmpty(text))
+            {
+                text = readme.RichText;
+            }
+
+            int startIndex = -1;
+            int endIndex = -1;
+
+            bool defaultIndex = cursorIndex == -1 || selectIndex == -1;
+            
+            startIndex = defaultIndex ? StartIndex : Mathf.Min(cursorIndex, selectIndex);
+            endIndex = defaultIndex ? EndIndex : Mathf.Max(cursorIndex, selectIndex);
+            
+            return TextEditorActive && (startIndex == 0 && endIndex == text.Length);
+        }
+
+        private int StartIndex
+        {
+            get { return Math.Min(CursorIndex, SelectIndex); }
+            set
+            {
+                if (CursorIndex < SelectIndex)
+                {
+                    CursorIndex = value;
+                }
+                else
+                {
+                    SelectIndex = value;
+                }
+            }
+        }
+
+        private int EndIndex
+        {
+            get { return Math.Max(CursorIndex, SelectIndex); }
+            set
+            {
+                if (CursorIndex > SelectIndex)
+                {
+                    CursorIndex = value;
+                }
+                else
+                {
+                    SelectIndex = value;
+                }
+            }
+        }
 
         private int CursorIndex
         {
@@ -1325,7 +1524,12 @@ namespace TP.Readme {
             set
             {
                 if (verbose && textEditor != null) { Debug.Log("Cursor index changed: " + TextEditor.cursorIndex + " -> " + value); }
-                if (textEditor != null) { TextEditor.cursorIndex = value; };
+                if (textEditor != null)
+                {
+                    previousCursorIndex = currentCursorIndex;
+                    currentCursorIndex = value;
+                    TextEditor.cursorIndex = value;
+                };
             }
         }
 
@@ -1335,7 +1539,13 @@ namespace TP.Readme {
             set
             {
                 if (verbose && textEditor != null) { Debug.Log("Select index changed: " + TextEditor.cursorIndex + " -> " + value); }
-                if (textEditor != null) { TextEditor.selectIndex = value; };
+
+                if (textEditor != null)
+                {
+                    previousSelectIndex = currentSelectIndex;
+                    currentSelectIndex = value;
+                    TextEditor.selectIndex = value;
+                };
             }
         }
 

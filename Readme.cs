@@ -13,7 +13,7 @@ namespace TP.Readme {
     [Serializable]
     public class ReadmeData
     {
-        public string richText = "";
+        public string richText = " ";
         public TextAreaObjectField[] textAreaObjectFields = new TextAreaObjectField[0];
     }
     
@@ -51,11 +51,14 @@ namespace TP.Readme {
                 }
                 else if (value != readmeData.richText)
                 {
+//                    readmeData.richText = RemoveEmptyTags(value);
                     readmeData.richText = value;
-                    text = MakePoorText(readmeData.richText);
-                    BuildRichTextTagMap();
-                    RebuildStyleMaps();
                 }
+                
+                text = MakePoorText(readmeData.richText);
+                
+                BuildRichTextTagMap();
+                RebuildStyleMaps();
             }
         }
 
@@ -91,6 +94,15 @@ namespace TP.Readme {
         public static List<string> SupportedTags
         {
             get { return supportedTags; }
+        }
+
+        private string RemoveEmptyTags(string input)
+        {
+            string output = input
+                .Replace("<b></b>", "")
+                .Replace("<i></i>", "");
+
+            return output;
         }
     
         public static string MakePoorText(string richText)
@@ -137,8 +149,8 @@ namespace TP.Readme {
             
             List<bool> styleMap = StyleMaps[tag];
             
-//            try
-//            {
+            try
+            {
                 bool styleFound = false;
                 bool nonStyleFound = false;
                 foreach (bool isStyle in styleMap.GetRange(startIndex, length))
@@ -160,14 +172,15 @@ namespace TP.Readme {
                 }).ToList();
                 
                 ApplyStyleMap(tag);
-//            }
-//            catch (Exception exception)
-//            {
-//                Debug.LogError(exception);
-//                LoadLastSave();
-//            }
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception);
+                Debug.LogError("README: An exception occured. Attempting to load last autosave.");
+                LoadLastSave();
+            }
         }
-    
+
         public void ApplyStyleMap(string tag)
         {
             List<bool> styleMapCopy = StyleMaps[tag];

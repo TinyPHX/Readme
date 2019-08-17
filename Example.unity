@@ -108,6 +108,64 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &444526831
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 444526833}
+  - component: {fileID: 444526832}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &444526832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444526831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  richTextTagMap: 010101000101010100000000010101000000000001010101000000000000000000000000000001010100010101010101010101010101010101010101000001010101
+  font: {fileID: 0}
+  fontSize: 12
+  readmeData:
+    richText: "<b>a</b>\naaa<b>aaaaa</b>aaaaaaaaaaaa\n <b> <o=\"0025632\"></o> dw</b>"
+    textAreaObjectFields:
+    - name: Cylinder (25632)
+      objectId: 25632
+      objectRef: {fileID: 511163808}
+      fieldRect:
+        serializedVersion: 2
+        x: 24
+        y: 182
+        width: 157
+        height: 15
+      index: 42
+      length: 17
+--- !u!4 &444526833
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444526831}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.09863281, y: 3.0004883, z: -2.8427734}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &511163808
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,13 +278,13 @@ MonoBehaviour:
       Menu</b>\n\n * <i>GameObject > 3D Object > Cylinder</i>\n * <i>Right Click in
       Sceen > 3D Object > Cylinder</i>\n\n<b>Manuall</b>\n\n 1. Create a new GameObject\n
       2. Add the \"MeshFilter\" component\n 3. Set the MeshFilter's Mesh Property
-      to  <o=\"0000814\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
-      5. If you don't have a material use Unity's  <o=\"0000930\"></o> \n\nSee the
-      components below or  <o=\"0025748\"></o>  for an example of a Unity Cylindar
+      to  <o=\"0000822\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
+      5. If you don't have a material use Unity's  <o=\"0000938\"></o> \n\nSee the
+      components below or  <o=\"0061814\"></o>  for an example of a Unity Cylindar
       in action!"
     textAreaObjectFields:
     - name: Cylinder (814)
-      objectId: 814
+      objectId: 822
       objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
       fieldRect:
         serializedVersion: 2
@@ -237,7 +295,7 @@ MonoBehaviour:
       index: 963
       length: 17
     - name: Default-Material (930)
-      objectId: 930
+      objectId: 938
       objectRef: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
       fieldRect:
         serializedVersion: 2
@@ -248,7 +306,7 @@ MonoBehaviour:
       index: 1076
       length: 17
     - name: Cylinder (25748)
-      objectId: 25748
+      objectId: 61814
       objectRef: {fileID: 511163808}
       fieldRect:
         serializedVersion: 2
@@ -340,11 +398,11 @@ MonoBehaviour:
   font: {fileID: 0}
   fontSize: 12
   readmeData:
-    richText: The  <o="0025762"></o>  on this  <o="0025760"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
+    richText: The  <o="0061828"></o>  on this  <o="0061826"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
       becuase I thought it was pretty.
     textAreaObjectFields:
     - name: Directional Light (25762)
-      objectId: 25762
+      objectId: 61828
       objectRef: {fileID: 1192897486}
       fieldRect:
         serializedVersion: 2
@@ -355,7 +413,7 @@ MonoBehaviour:
       index: 5
       length: 17
     - name: Directional Light (25760)
-      objectId: 25760
+      objectId: 61826
       objectRef: {fileID: 1192897485}
       fieldRect:
         serializedVersion: 2
@@ -542,9 +600,9 @@ Prefab:
         <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n * Size:
         <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
         references can be draged and dropeed to create inline references.\n\n * Scene:
-        \ <o=\"0022978\"></o> \n * Game Object:  <o=\"0025748\"></o> \n * Prefab:
-        \ <o=\"0012414\"></o> \n * Script:  <o=\"0002740\"></o> \n * File:  <o=\"0021658\"></o>
-        \n * Folder:  <o=\"0013684\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
+        \ <o=\"0023046\"></o> \n * Game Object:  <o=\"0061814\"></o> \n * Prefab:
+        \ <o=\"0012472\"></o> \n * Script:  <o=\"0002796\"></o> \n * File:  <o=\"0021724\"></o>
+        \n * Folder:  <o=\"0013742\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
         * Change font color\n * Change font style\n * Change font size \n * Bold togle
         button\n * Italics toggle button\n * Add object field button\n * View the
         source for quick editing\n * Advanced tab for debugging"
@@ -552,12 +610,12 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].objectId
-      value: 12414
+      value: 12472
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].objectId
-      value: 25748
+      value: 61814
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3028,7 +3086,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].objectId
-      value: 2740
+      value: 2796
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3044,7 +3102,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].objectId
-      value: 21658
+      value: 21724
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3055,7 +3113,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].objectId
-      value: 13684
+      value: 13742
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3556,7 +3614,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].objectId
-      value: 22978
+      value: 23046
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4781,27 +4839,27 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].name
-      value: Example (22978)
+      value: Example (23046)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].name
-      value: Cylinder (25748)
+      value: Cylinder (61814)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].name
-      value: Readme (12414)
+      value: Readme (12472)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].name
-      value: Readme (2740)
+      value: Readme (2796)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].name
-      value: README (21658)
+      value: README (21724)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4811,7 +4869,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].name
-      value: Editor (13684)
+      value: Editor (13742)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4827,6 +4885,46 @@ Prefab:
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[7].name
       value: Readme (2740)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: fontSize
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.width
+      value: 162
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.height
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].fieldRect.height
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[2].fieldRect.height
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.height
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].fieldRect.height
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].fieldRect.height
+      value: 17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
