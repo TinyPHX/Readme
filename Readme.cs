@@ -30,6 +30,9 @@ namespace TP.Readme {
         public int fontSize = 0;
     
         public static bool advancedOptions = false;
+        public bool iconBeingUsed = true;
+        public bool useTackIcon = true;
+        public static bool neverUseTackIcon = false;
         
         private static List<string> supportedTags = new List<string>() {"b", "i", "color", "size"};
 
@@ -51,11 +54,14 @@ namespace TP.Readme {
                 }
                 else if (value != readmeData.richText)
                 {
+//                    readmeData.richText = RemoveEmptyTags(value);
                     readmeData.richText = value;
-                    text = MakePoorText(readmeData.richText);
-                    BuildRichTextTagMap();
-                    RebuildStyleMaps();
                 }
+                
+                text = MakePoorText(readmeData.richText);
+                
+                BuildRichTextTagMap();
+                RebuildStyleMaps();
             }
         }
 
@@ -91,6 +97,15 @@ namespace TP.Readme {
         public static List<string> SupportedTags
         {
             get { return supportedTags; }
+        }
+
+        public string RemoveEmptyTags(string input)
+        {
+            string output = input
+                .Replace("<b></b>", "")
+                .Replace("<i></i>", "");
+
+            return output;
         }
     
         public static string MakePoorText(string richText)
@@ -137,8 +152,8 @@ namespace TP.Readme {
             
             List<bool> styleMap = StyleMaps[tag];
             
-//            try
-//            {
+            try
+            {
                 bool styleFound = false;
                 bool nonStyleFound = false;
                 foreach (bool isStyle in styleMap.GetRange(startIndex, length))
@@ -160,14 +175,15 @@ namespace TP.Readme {
                 }).ToList();
                 
                 ApplyStyleMap(tag);
-//            }
-//            catch (Exception exception)
-//            {
-//                Debug.LogError(exception);
-//                LoadLastSave();
-//            }
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception);
+                Debug.LogError("README: An exception occured. Attempting to load last autosave.");
+                LoadLastSave();
+            }
         }
-    
+
         public void ApplyStyleMap(string tag)
         {
             List<bool> styleMapCopy = StyleMaps[tag];
@@ -227,13 +243,24 @@ namespace TP.Readme {
         
         public void RebuildStyleMaps()
         {
-            if (text.Length > 0)
+            if (text.Length == 0)
             {
                 Dictionary<string, List<bool>> updatedStyleMaps = new Dictionary<string, List<bool>>();
 
                 foreach (string tag in supportedTags)
                 {
-                    List<bool> styleMap = Enumerable.Repeat(false, text.Length).ToList();
+                    List<bool> styleMap = Enumerable.Repeat(false, text.Length + 1).ToList();
+
+                    updatedStyleMaps[tag] = styleMap;
+                }
+            }
+            else
+            {
+                Dictionary<string, List<bool>> updatedStyleMaps = new Dictionary<string, List<bool>>();
+
+                foreach (string tag in supportedTags)
+                {
+                    List<bool> styleMap = Enumerable.Repeat(false, text.Length + 1).ToList();
 
                     int lastTagIndex = 0;
                     int maxTagCount = RichText.Split('<').Length - 1;

@@ -32,15 +32,20 @@ namespace TP.Readme {
         private const string readmeEditorTextAreaReadonlyName = "readme_text_editor_readonly";
         private const string readmeEditorTextAreaSourceName = "readme_text_editor_source";
         private const string readmeEditorTextAreaStyleName = "readme_text_editor_style";
-        private int previousSelctIndex = -1;
         private bool selectIndexChanged = false;
-        private int previousCursorIndex = -1;
         private bool cursorIndexChanged = false;
+        private bool editorSelectIndexChanged = false;
+        private bool editorCursorIndexChanged = false;
+        private int previousCursorIndex = -1;
+        private int previousSelectIndex = -1;
+        private int currentCursorIndex = -1;
+        private int currentSelectIndex = -1;
         private Rect textAreaRect;
         private bool richTextChanged = false;
-        private bool selectAllShortcut = false;
         private string previousFocusedWindow = "";
         private bool windowFocusModified = false;
+        private bool mouseCaptured = false;
+        private bool allowSelectAll = false;
         
         // Styles
         private GUIStyle activeTextAreaStyle;
@@ -57,9 +62,12 @@ namespace TP.Readme {
 
         // Drag and drop object fields
         private Object[] objectsToDrop;
+        private Vector2 objectDropPosition;
         
         //Copy buffer fix
         private string previousCopyBuffer;
+
+        private Event currentEvent;
 
         public void UpdateGuiStyles()
         {
@@ -92,12 +100,29 @@ namespace TP.Readme {
         
         public override void OnInspectorGUI()
         {
-            if (verbose) {  Debug.Log("README: OnInspectorGUI"); }
+//            if (verbose) {  Debug.Log("README: OnInspectorGUI"); }
+            currentEvent = new Event(Event.current);
 
             Readme readmeTarget = (Readme) target;
             if (readmeTarget != null)
             {
                 readme = readmeTarget;
+            }
+            
+            Object selectedObject = Selection.activeObject;
+            if (selectedObject != null)
+            {
+                if (readme.useTackIcon && !Readme.neverUseTackIcon)
+                {
+                    Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>( "Assets/Packages/TP/Readme/Textures/readme_icon_22_22.png");
+                    IconManager.SetIcon(selectedObject as GameObject, icon);
+                    readme.iconBeingUsed = true;
+                }
+                else if (readme.iconBeingUsed)
+                {
+                    IconManager.RemoveIcon(selectedObject as GameObject);
+                    readme.iconBeingUsed = false;
+                }
             }
 
             bool empty = readme.Text == "";
@@ -109,7 +134,7 @@ namespace TP.Readme {
             {
                 textAreaWidth = TextAreaRect.width;
             }
-            float textAreaHeight = editableRichText.CalcHeight(new GUIContent(readme.RichText), textAreaWidth);
+            float textAreaHeight = editableRichText.CalcHeight(new GUIContent(RichText), textAreaWidth);
             float smallButtonWidth = EditorGUIUtility.singleLineHeight * 2;
 
             UpdateTextEditor();
@@ -125,9 +150,10 @@ namespace TP.Readme {
                 }
                 else
                 {
+                    String displayText = !TagsError(RichText) ? RichText : readme.Text;
                     readmeEditorActiveTextAreaName = readmeEditorTextAreaReadonlyName;
                     GUI.SetNextControlName(readmeEditorTextAreaReadonlyName);
-                    EditorGUILayout.SelectableLabel(!TagsError(readme.RichText) ? readme.RichText : readme.Text, selectableRichText, GUILayout.Height(textAreaHeight + 4));
+                    EditorGUILayout.SelectableLabel(displayText, selectableRichText, GUILayout.Height(textAreaHeight + 4));
                     activeTextAreaStyle = selectableRichText;
                     TextAreaRect = GUILayoutUtility.GetLastRect();
                 }
@@ -138,21 +164,30 @@ namespace TP.Readme {
                 {
                     readmeEditorActiveTextAreaName = readmeEditorTextAreaSourceName;
                     GUI.SetNextControlName(readmeEditorTextAreaSourceName);
-                    readme.RichText = EditorGUILayout.TextArea(readme.RichText, editableText, GUILayout.Height(textAreaHeight));
+                    RichText = EditorGUILayout.TextArea(RichText, editableText, GUILayout.Height(textAreaHeight));
                     TextAreaRect = GUILayoutUtility.GetLastRect();
                 }
                 else
                 {
                     readmeEditorActiveTextAreaName = readmeEditorTextAreaStyleName;
                     GUI.SetNextControlName(readmeEditorTextAreaStyleName);
-                    string newRichText = EditorGUILayout.TextArea(readme.RichText, editableRichText, GUILayout.Height(textAreaHeight));
-                    readme.RichText = GetTextAreaChange(readme.RichText, newRichText);
-                    TextAreaRect = GUILayoutUtility.GetLastRect();
+
+                    PrepareForTextAreaChange(RichText);
+                    string newRichText = EditorGUILayout.TextArea(RichText, editableRichText, GUILayout.Height(textAreaHeight));
+                    RichText = GetTextAreaChange(RichText, newRichText);
+                    TextAreaChangeComplete();
                     
+                    TextAreaRect = GUILayoutUtility.GetLastRect();
                     activeTextAreaStyle = editableRichText;
+                    
+//                    int endValue = textEditor.cursorIndex;
+//                    if (startValue != endValue)
+//                    {
+//                        Debug.Log("OMG ITS HAPPENING!");
+//                    }
                 }
 
-                if (TagsError(readme.RichText))
+                if (TagsError(RichText))
                 {
                     EditorGUILayout.HelpBox("Rich text error detected. Check for mismatched tags.", MessageType.Warning);
                 }
@@ -164,7 +199,7 @@ namespace TP.Readme {
 
                 Undo.RecordObject(target, "Readme");
             }
-    
+            
             FixCursorBug();
             
             EditorGUILayout.Space();
@@ -174,7 +209,6 @@ namespace TP.Readme {
                 if (GUILayout.Button("Edit"))
                 {
                     editing = true;
-                    ForceTextAreaRefresh();
                 }
             }
             else
@@ -182,7 +216,6 @@ namespace TP.Readme {
                 if (GUILayout.Button("Done"))
                 {
                     editing = false;
-                    ForceTextAreaRefresh();
                 }
                 
                 GUILayout.BeginHorizontal();
@@ -271,9 +304,11 @@ namespace TP.Readme {
                 
                 fixCursorBug = EditorGUILayout.Toggle("Cursor Correction", fixCursorBug);
                 verbose = EditorGUILayout.Toggle("Verbose", verbose);
+                readme.useTackIcon = EditorGUILayout.Toggle("Use Tack Icon", readme.useTackIcon);
+                Readme.neverUseTackIcon = EditorGUILayout.Toggle("Never Use Tack Icon", Readme.neverUseTackIcon);
                 EditorGUILayout.LabelField("Cursor Position");
-                string richTextWithCursor = readme.RichText;
-                if (TextEditorActive && SelectIndex <= readme.RichText.Length)
+                string richTextWithCursor = RichText;
+                if (TextEditorActive && SelectIndex <= RichText.Length)
                 {
                     richTextWithCursor = richTextWithCursor.Insert(Mathf.Max(SelectIndex, CursorIndex), "|");
                     if (SelectIndex != CursorIndex)
@@ -298,7 +333,7 @@ namespace TP.Readme {
                     "cursorIndex OnTag: " + IsOnTag(CursorIndex) + "\n" +
                     "selectIndex OnTag: " + IsOnTag(SelectIndex) + "\n" +
                     "position: " + (!TextEditorActive ? "" : TextEditor.position.ToString()) + "\n" +
-                    "TagsError: " + TagsError(readme.RichText) + "\n" +
+                    "TagsError: " + TagsError(RichText) + "\n" +
                     "Style Map Info: " + "\n" +
                     "\t<b> tags:" + (readme.StyleMaps.ContainsKey("b") ? readme.StyleMaps["b"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
                     "\t<i> tags:" + (readme.StyleMaps.ContainsKey("i") ? readme.StyleMaps["i"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
@@ -407,7 +442,7 @@ namespace TP.Readme {
 
         private void UpdateTextEditor()
         {
-            if (readme.RichText.Length > 0)
+            if (readme.Text.Length > 0 || editing)
             {
                 TextEditor newTextEditor = GetTextEditor();
 
@@ -421,7 +456,10 @@ namespace TP.Readme {
                     if (TextEditor != newTextEditor)
                     {
                         TextEditor = newTextEditor;
-                        if (verbose) { Debug.Log("README: Text Editor assigned!"); }
+                        if (verbose)
+                        {
+                            Debug.Log("README: Text Editor assigned!");
+                        }
 
                         if (TextEditorActive)
                         {
@@ -431,7 +469,10 @@ namespace TP.Readme {
                 }
                 else if (TextEditor == null)
                 {
-                    if (verbose) { Debug.Log("README: Text Editor not found!"); }
+                    if (verbose)
+                    {
+                        Debug.Log("README: Text Editor not found!");
+                    }
 
                     ForceTextAreaRefresh();
                 }
@@ -477,17 +518,19 @@ namespace TP.Readme {
             UpdateTextAreaObjectFields();
         }
 
-        void ForceTextAreaRefresh(int selectIndex = -1, int cursorIndex = -1, int delay = 10)
+        void ForceTextAreaRefresh(int selectIndex = -1, int cursorIndex = -1, int delay = 3)
         {
             if (!textAreaRefreshPending)
             {
                 if (verbose) {  Debug.Log("README: ForceTextAreaRefresh, selectIndex: " + selectIndex + " cursorIndex: " + cursorIndex); }
-                if (GUI.GetNameOfFocusedControl() != readmeEditorTextAreaReadonlyName)
+                textAreaRefreshPending = true;
+
+                string forcusedControl = GUI.GetNameOfFocusedControl();
+                if (forcusedControl != readmeEditorTextAreaReadonlyName && forcusedControl != "")
                 {
                     EditorGUI.FocusTextInControl("");
                     GUI.FocusControl("");
                 }
-                textAreaRefreshPending = true;
                 focusDelay = delay;
                 focuseSelectIndex = selectIndex == -1 && TextEditorActive ? SelectIndex : selectIndex;
                 focusCursorIndex = cursorIndex == -1 && TextEditorActive ? CursorIndex : cursorIndex;
@@ -532,10 +575,6 @@ namespace TP.Readme {
                     SelectIndex = focuseSelectIndex;
                     focuseSelectIndex = -1;
                 }
-                
-                //Stop cursor change from being detected
-                previousSelctIndex = SelectIndex;
-                previousCursorIndex = CursorIndex;
             }
 
             if (windowFocusModified && textEditor != null)
@@ -547,7 +586,7 @@ namespace TP.Readme {
 
         void UpdateTextAreaObjectFields()
         {
-            if (readme.RichText != null)
+            if (RichText != null)
             {
                 UpdateTextAreaObjectFieldArray();
                 DrawTextAreaObjectFields();
@@ -558,7 +597,7 @@ namespace TP.Readme {
         void UpdateTextAreaObjectFieldArray()
         {
             string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
-            MatchCollection matches = Regex.Matches(readme.RichText, objectTagPattern, RegexOptions.None);
+            MatchCollection matches = Regex.Matches(RichText, objectTagPattern, RegexOptions.None);
             TextAreaObjectField[] newTextAreaObjectFields = new TextAreaObjectField[matches.Count];
             for (int i = matches.Count - 1; i >= 0; i--)
             {
@@ -573,8 +612,8 @@ namespace TP.Readme {
                     int startIndex = match.Index ;
                     int endIndex = match.Index + match.Value.Length;
                     
-                    if (endIndex == readme.RichText.Length || readme.RichText[endIndex] != ' ') { readme.RichText = readme.RichText.Insert(endIndex, " "); }
-                    if (startIndex == 0 || readme.RichText[startIndex - 1] != ' ') { readme.RichText = readme.RichText.Insert(startIndex, " "); }
+                    if (endIndex == RichText.Length || RichText[endIndex] != ' ') { RichText = RichText.Insert(endIndex, " "); }
+                    if (startIndex == 0 || RichText[startIndex - 1] != ' ') { RichText = RichText.Insert(startIndex, " "); }
                     
                     Rect rect = GetRect(startIndex - 1, endIndex + 1);
                     rect.position += TextAreaRect.position;
@@ -591,7 +630,7 @@ namespace TP.Readme {
                             objectId = matchedField.ObjectId;
 
                             int idStartIndex = match.Index + 4;
-                            readme.RichText = readme.RichText
+                            RichText = RichText
                                 .Remove(idStartIndex, idValue.Length)
                                 .Insert(idStartIndex, GetFixedLengthId(objectId.ToString()));
                             
@@ -638,7 +677,7 @@ namespace TP.Readme {
 
         void UpdateTextAreaObjectFieldIds()
         {
-            StringBuilder newRichText = new StringBuilder(readme.RichText);
+            StringBuilder newRichText = new StringBuilder(RichText);
             string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
             int startTagLength = "<o=\"".Length;
             int endTagLength = "\"></o>".Length;
@@ -646,10 +685,10 @@ namespace TP.Readme {
             {
                 TextAreaObjectField textAreaObjectField = TextAreaObjectFields[i];
 
-                if (readme.RichText.Length > textAreaObjectField.Index)
+                if (RichText.Length > textAreaObjectField.Index)
                 {
                     Match match =
-                        Regex.Match(readme.RichText.Substring(Mathf.Max(0, textAreaObjectField.Index - 1)),
+                        Regex.Match(RichText.Substring(Mathf.Max(0, textAreaObjectField.Index - 1)),
                             objectTagPattern, RegexOptions.None);
 
                     if (match.Success)
@@ -668,7 +707,7 @@ namespace TP.Readme {
                 }
             }
 
-            readme.RichText = newRichText.ToString();
+            RichText = newRichText.ToString();
         }
 
         string GetFixedLengthId(int id, int length = 7)
@@ -728,6 +767,7 @@ namespace TP.Readme {
                             DragAndDrop.AcceptDrag();
 
                             objectsToDrop = DragAndDrop.objectReferences;
+                            objectDropPosition = currentEvent.mousePosition;
                         }
 
                         break;
@@ -735,19 +775,18 @@ namespace TP.Readme {
 
                 if (objectsToDrop != null)
                 {
-                    int newCursorIndex = -1;
-                    if (TextEditorActive)
+                    if (!TextEditorActive)
                     {
-                        int dropIndex = GetNearestPoorTextIndex(MousePositionToIndex);
+                        ForceTextAreaRefresh();
+                    }
+                    else
+                    {
+                        int dropIndex = GetNearestPoorTextIndex(PositionToIndex(objectDropPosition));
                         InsertObjectFields(objectsToDrop, dropIndex);
                         objectsToDrop = null;
-                        newCursorIndex = GetNearestPoorTextIndex(dropIndex + 1);
+                        objectDropPosition = Vector2.zero;
+                        Undo.RecordObject(readme, "object field added");
                     }
-
-                    ForceTextAreaRefresh(newCursorIndex, newCursorIndex);
-
-                    Undo.RecordObject(readme, "object field added");
-
                 }
             }
         }
@@ -772,7 +811,7 @@ namespace TP.Readme {
                 }
 
                 string objectString = " <o=\"" + GetFixedLengthId(id) + "\"></o> ";
-                readme.RichText = readme.RichText.Insert(index, objectString);
+                RichText = RichText.Insert(index, objectString);
                 
                 int newIndex = GetNearestPoorTextIndex(index + objectString.Length);
                 ForceTextAreaRefresh(newIndex, newIndex);
@@ -801,60 +840,118 @@ namespace TP.Readme {
             return rect;
         }
 
-        private string GetTextAreaChange(string input, string output)
+        private void PrepareForTextAreaChange(string input)
         {
-            string finalOutput = output;
-            
             if (!TagsError(input))
             {
-                if (input.Length - output.Length == 1 && textEditor.cursorIndex == textEditor.selectIndex) // single character removed (backspace or delete)
+                if (AllTextSelected())
                 {
-                    richTextChanged = true;
+
+                    if (currentEvent.control && currentEvent.keyCode == KeyCode.A)
+                    {
+                        allowSelectAll = true;
+                    }
                     
-                    int charIndex = textEditor.cursorIndex;
-                    int direction = charIndex < previousCursorIndex ? -1 : 1;
-                    char removedChar = input[charIndex];
-                    string objTag = direction == 1 ? " <o=" : "</o> ";
-                    int objTagStart = direction == 1 ? charIndex : charIndex - 4;
+                    if (mouseCaptured && currentEvent.type == EventType.mouseDrag) 
+                    {
+                        allowSelectAll = true;
+                    }
+                    
+                    if (!allowSelectAll && currentEvent.type != EventType.layout && currentEvent.type != EventType.repaint)
+                    {
+                        SelectIndex = previousSelectIndex;
+                        CursorIndex = previousCursorIndex;
+                    }
+                }
+                else
+                {
+                    allowSelectAll = false;
+                }
+
+                if (SelectIndex == 0 && CursorIndex == 0 && (currentCursorIndex != CursorIndex || currentSelectIndex != SelectIndex))
+                {
+                    if (!currentEvent.isMouse && !currentEvent.isKey)
+                    {
+                        SelectIndex = currentSelectIndex;
+                        CursorIndex = currentCursorIndex;
+                    }
+                }
+                
+                if (currentEvent.type == EventType.KeyDown && 
+                    new KeyCode[] {KeyCode.Backspace, KeyCode.Delete}.Contains(currentEvent.keyCode) &&
+                    CursorIndex == SelectIndex)
+                {
+                    int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 0;
+                    int charIndex = textEditor.cursorIndex + direction;
+                    string objTag = direction == 0 ? " <o=" : "</o> ";
+                    int objTagStart = direction == 0 ? charIndex : charIndex - 4;
                     int objTagLength = objTag.Length;
                     bool objectField = objTagStart > 0 && 
                                        objTagStart + objTagLength <= input.Length && 
                                        input.Substring(objTagStart, objTagLength) == objTag;
                     
-                    if (IsOnTag(charIndex) || objectField)
+                    if (objectField)
                     {
-                        int nextPoorIndex = GetNearestPoorTextIndex(charIndex + direction, -1, direction);
-                        bool poorCharFound = (nextPoorIndex - charIndex) * direction > 0;
+                        int nextPoorIndex = GetNearestPoorTextIndex(charIndex + (direction == 0 ? 1 : 0), direction);
+                        bool poorCharFound = (nextPoorIndex - charIndex) * (direction == 0 ? 1 : -1) > 0;
                         
-                        if (objectField)
+                        if (!poorCharFound) { nextPoorIndex = 0; }
+                        SelectIndex = nextPoorIndex;
+                        EndIndex -= 1;
+                        Event.current.Use();
+                    }
+                    else 
+                    {
+                        if (charIndex < 0 || CursorIndex > RichText.Length)
                         {
-                            if (!poorCharFound) { nextPoorIndex = 0; }
-                            finalOutput = input;
-                            ForceTextAreaRefresh(previousCursorIndex, nextPoorIndex, 2); //Highlight object field instead of deleting it
+                            int newIndex = GetNearestPoorTextIndex(charIndex - direction);
+                            CursorIndex = newIndex;
+                            SelectIndex = newIndex;
+                            Event.current.Use();
                         }
-                        else if (poorCharFound)
+                        else if (IsOnTag(charIndex))
                         {
-                            finalOutput = input.Remove(nextPoorIndex, 1);
-                            ForceTextAreaRefresh(charIndex, charIndex, 2);
-                        }
-                        else //Probably at the beginning of a line
-                        {
-                            finalOutput = input;
-                            ForceTextAreaRefresh(previousCursorIndex, previousCursorIndex, 2);
+                            CursorIndex += direction == 1 ? 1 : -1;
+                            SelectIndex += direction == 1 ? 1 : -1;
+                            
+                            PrepareForTextAreaChange(input);
                         }
                     }
                 }
             }
-            
-            return finalOutput;
+        }
+
+        private string GetTextAreaChange(string input, string output)
+        {
+            if (textAreaRefreshPending)
+            {
+                return input;
+            }
+
+            if (input != output)
+            {
+                richTextChanged = true;
+            }
+
+            return output;
+        }
+
+        private void TextAreaChangeComplete()
+        {
+            if (richTextChanged)
+            {
+                int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 0;
+                CursorIndex = GetNearestPoorTextIndex(CursorIndex, -direction);
+                SelectIndex = GetNearestPoorTextIndex(SelectIndex, -direction);
+            }
         }
 
         private void CheckKeyboardShortCuts()
         {
-            Event currentEvent = Event.current;
+//            Event currentEvent = Event.current;
             
             //Alt + b for bold
-            if (currentEvent.type == EventType.KeyUp && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
+            if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
             {
                 ToggleStyle("b");
                 currentEvent.Use();
@@ -877,7 +974,7 @@ namespace TP.Readme {
     
         private void ToggleStyle(string tag)
         {
-            if (TagsError(readme.RichText))
+            if (TagsError(RichText))
             {
                 Debug.LogWarning("Please fix any mismatched tags first!");
                 return;
@@ -885,24 +982,25 @@ namespace TP.Readme {
             
             if (TextEditorActive)
             {
-                int styleStartIndex = readme.GetPoorIndex(Mathf.Min(CursorIndex, SelectIndex));
-                int styleEndIndex = readme.GetPoorIndex(Mathf.Max(CursorIndex, SelectIndex));
+                int styleStartIndex = readme.GetPoorIndex(StartIndex);
+                int styleEndIndex = readme.GetPoorIndex(EndIndex);
                 int poorStyleLength = styleEndIndex - styleStartIndex;
     
                 readme.ToggleStyle(tag, styleStartIndex, poorStyleLength);
+                TextEditor.text = RichText;
     
-                if (TagsError(readme.RichText))
+                if (TagsError(RichText))
                 {
                     readme.LoadLastSave();
                     Debug.LogWarning("You can't do that!");
                 }
 
                 UpdateStyleState();
+
+                int newCursorIndex = GetNearestPoorTextIndex(readme.GetRichIndex(styleStartIndex));
+                int newSelectIndex = GetNearestPoorTextIndex(readme.GetRichIndex(styleEndIndex));
                 
-                ForceTextAreaRefresh(
-                    GetNearestPoorTextIndex(readme.GetRichIndex(styleStartIndex)), 
-                    GetNearestPoorTextIndex(readme.GetRichIndex(styleEndIndex)),
-                    4);
+                ForceTextAreaRefresh(newCursorIndex, newSelectIndex);
             }
         }
 
@@ -930,54 +1028,50 @@ namespace TP.Readme {
 
         private void FixCursorBug()
         {
-            if (fixCursorBug && TextEditorActive && !TagsError(readme.RichText) && !sourceOn)
+            if (fixCursorBug && TextEditorActive && !TagsError(RichText) && !sourceOn)
             {
-                selectIndexChanged = previousSelctIndex != SelectIndex;
-                cursorIndexChanged = previousCursorIndex != CursorIndex;
-
-                selectAllShortcut = false;
-                if (StartIndex == 0 && EndIndex == readme.RichText.Length)
-                {
-                    selectAllShortcut = true;
-                }
+                editorSelectIndexChanged = currentSelectIndex != SelectIndex;
+                editorCursorIndexChanged = currentCursorIndex != CursorIndex;
                 
-                if (selectIndexChanged || cursorIndexChanged || richTextChanged)
+                if (!AllTextSelected())
                 {
-                    if (!selectAllShortcut)
-                    {
-                        FixMouseCursor();   
-                    }
-                    FixArrowCursor();
-                    
-                    previousSelctIndex = SelectIndex;
-                    previousCursorIndex = CursorIndex;
-                    richTextChanged = false;
+                    FixMouseCursor();   
                 }
+                FixArrowCursor();
             }
         }
     
         public void FixMouseCursor()
         {
-            bool isKeyboard = new KeyCode[] {KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(Event.current.keyCode);
-            bool typing = Event.current.character != '\0' || Event.current.keyCode != KeyCode.None;
+            bool mouseEvent = new EventType[] { EventType.mouseDown, EventType.mouseDrag, EventType.mouseUp }.Contains(currentEvent.type);
             
-            if (!typing && Event.current.clickCount <= 1)
+            if (currentEvent.type == EventType.mouseDown && TextAreaRect.Contains(currentEvent.mousePosition))
+            {
+                mouseCaptured = true;
+            }
+            
+            if (mouseCaptured && mouseEvent && Event.current.clickCount <= 1)
             {
                 int rawMousePositionIndex = MousePositionToIndex;
                 if (rawMousePositionIndex != -1)
                 {
                     int mousePositionIndex = GetNearestPoorTextIndex(rawMousePositionIndex);
 
-                    if (selectIndexChanged)
+                    if (editorSelectIndexChanged)
                     {
                         SelectIndex = mousePositionIndex;
                     }
 
-                    if (cursorIndexChanged)
+                    if (editorCursorIndexChanged)
                     {
                         CursorIndex = mousePositionIndex;
                     }
                 }
+            }
+
+            if (currentEvent.type == EventType.mouseUp)
+            {
+                mouseCaptured = false;
             }
         }
     
@@ -985,34 +1079,43 @@ namespace TP.Readme {
         {
             bool isKeyboard = new KeyCode[] {KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(Event.current.keyCode);
             bool isDoubleClick = Event.current.clickCount == 2;
-            if (isKeyboard || isDoubleClick || richTextChanged || selectAllShortcut)
+            if (isKeyboard || isDoubleClick || richTextChanged || AllTextSelected())
             {
                 int direction = isDoubleClick ? 1 : 0;
-    
+                
                 if (isDoubleClick)
                 {
                     int mouseIndex = MousePositionToIndex;
                     SelectIndex = mouseIndex;
                     CursorIndex = mouseIndex;
-                    SelectIndex = WordStartIndex;
-                    CursorIndex = WordEndIndex;
+                    SelectIndex =  GetNearestPoorTextIndex(WordStartIndex, -1);
+                    CursorIndex = GetNearestPoorTextIndex(WordEndIndex, 1);
+                }
+
+                if (currentEvent.keyCode == KeyCode.LeftArrow)
+                {
+                    direction = -1;
+                }
+                else if (currentEvent.keyCode == KeyCode.RightArrow)
+                {
+                    direction = 1;
                 }
                 
-                if (cursorIndexChanged || richTextChanged)
+                if (editorSelectIndexChanged || editorCursorIndexChanged || richTextChanged)
                 {
-                    CursorIndex = GetNearestPoorTextIndex(CursorIndex, previousCursorIndex, direction);
-                }
-    
-                if (selectIndexChanged || richTextChanged)
-                {
-                    SelectIndex = GetNearestPoorTextIndex(SelectIndex, previousSelctIndex, direction);
+                    CursorIndex = GetNearestPoorTextIndex(CursorIndex, direction);
+                    SelectIndex = GetNearestPoorTextIndex(SelectIndex, direction);
+                    cursorIndexChanged = false;
+                    selectIndexChanged = false;
                 }
             }
+                
+            richTextChanged = false;
         }
 
         public void FixCopyBuffer()
         {
-            if (TextEditorActive && (!sourceOn && !TagsError(readme.RichText)))
+            if (TextEditorActive && (!sourceOn && !TagsError(RichText)))
             {
                 if (EditorGUIUtility.systemCopyBuffer != previousCopyBuffer && previousCopyBuffer != null)
                 {
@@ -1027,9 +1130,9 @@ namespace TP.Readme {
                         int textStart = StartIndex - tagPattern.Length;
                         int textLength = tagPattern.Length;
 
-                        if (textStart >= 0 && readme.RichText.Substring(textStart, textLength) == tagPattern)
+                        if (textStart >= 0 && RichText.Substring(textStart, textLength) == tagPattern)
                         {
-                            EditorGUIUtility.systemCopyBuffer = readme.RichText.Substring(textStart, EndIndex - textStart);
+                            EditorGUIUtility.systemCopyBuffer = RichText.Substring(textStart, EndIndex - textStart);
                             break;
                         }
                     }
@@ -1041,7 +1144,7 @@ namespace TP.Readme {
         public void ForceCopyBufferToPoorText()
         {
             string newCopyBuffer = EditorGUIUtility.systemCopyBuffer;
-            if (TextEditorActive && (!sourceOn && !TagsError(readme.RichText)))
+            if (TextEditorActive && (!sourceOn && !TagsError(RichText)))
             {
                 newCopyBuffer = Readme.MakePoorText(newCopyBuffer);
             }
@@ -1050,21 +1153,16 @@ namespace TP.Readme {
             previousCopyBuffer = newCopyBuffer;
         }
     
-        public int GetNearestPoorTextIndex(int index, int previousIndex = -1, int direction = 0)
+        public int GetNearestPoorTextIndex(int index, int direction = 0)
         {
             int nearestPoorTextIndex = index;
             
-            if (IsOnTag(index) && index <= readme.RichText.Length)
+            if (IsOnTag(index) && index <= RichText.Length)
             {
                 int tmpSelectIndex = SelectIndex;
                 int tmpCursorIndex = CursorIndex;
                 
                 int attempts = readme.richTextTagMap.Count * 2;
-    
-                if (direction == 0)
-                {
-                    direction = index - previousIndex;
-                }
     
                 for (int i = 0; i < attempts && IsOnTag(index); i++)
                 {
@@ -1075,10 +1173,8 @@ namespace TP.Readme {
                     
                     if (index == TextEditor.text.Length)
                     {
-                        break; //end of line always not rich text.
+                        break; //end of text always not rich text.
                     }
-    
-                    previousIndex = index;
                     if (direction >= 0)
                     {
                         TextEditor.MoveRight();
@@ -1104,10 +1200,10 @@ namespace TP.Readme {
         {
             bool tagsError = true;
 //            bool hasTags = readme.richTextTagMap.Find(isTag => isTag);
-            bool hasTags = readme.RichText.Contains("<b>") || readme.RichText.Contains("<\\b>") ||
-                           readme.RichText.Contains("<i>") || readme.RichText.Contains("<\\i>") ||
-                           readme.RichText.Contains("<size>") || readme.RichText.Contains("<\\size>") ||
-                           readme.RichText.Contains("<color") || readme.RichText.Contains("<\\color>");
+            bool hasTags = RichText.Contains("<b>") || RichText.Contains("<\\b>") ||
+                           RichText.Contains("<i>") || RichText.Contains("<\\i>") ||
+                           RichText.Contains("<size>") || RichText.Contains("<\\size>") ||
+                           RichText.Contains("<color") || RichText.Contains("<\\color>");
     
             if (!hasTags)
             {
@@ -1147,7 +1243,14 @@ namespace TP.Readme {
     
             if (readme != null &&  readme.richTextTagMap != null && readme.richTextTagMap.Count > index)
             {
-                isOnTag = readme.richTextTagMap[index];
+                try
+                {
+                    isOnTag = readme.richTextTagMap[index];
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("TRESADFSDGFSDG");
+                }
             }
     
             return isOnTag;
@@ -1157,86 +1260,72 @@ namespace TP.Readme {
         {
             get
             {
-                int index = -1;
-                Vector2 graphicalPosition = Vector2.zero;
-                int tmpCursorIndex = CursorIndex;
-                int tmpSelectIndex = SelectIndex;
-    
-                Vector2 goalPosition = Event.current.mousePosition - TextAreaRect.position;
-    
-                float cursorYOffset = activeTextAreaStyle.lineHeight;
-                
-                textEditor.cursorIndex = 0;
-                textEditor.selectIndex = 0;
-                int maxAttempts = 1000;
-                MoveCursorToNextPoorChar();
-                Vector2 currentGraphicalPosition = GetGraphicalCursorPos();
-                int attempts = 0;
-                for (int currentIndex = CursorIndex; index == -1; currentIndex = CursorIndex)
-                {
-                    attempts++;
-                    if (attempts > maxAttempts)
-                    {
-                        Debug.LogWarning("ReadmeEditor took too long to find mouse position and is giving up!");
-                        break;
-                    }
-                    
-                    //TODO: Check for end of word wrapped line.
-                    bool isEndOfLine = readme.RichText.Length > currentIndex ? readme.RichText[currentIndex] == '\n' : true;
-    
-                    if (currentGraphicalPosition.y < goalPosition.y - cursorYOffset)
-                    {
-                        TextEditor.MoveRight();
-                        MoveCursorToNextPoorChar();
-                    }
-                    else if (currentGraphicalPosition.x < goalPosition.x && !isEndOfLine)
-                    {
-                        TextEditor.MoveRight();
-                        MoveCursorToNextPoorChar();
-    
-                        if (GetGraphicalCursorPos().x < currentGraphicalPosition.x)
-                        {
-                            index = CursorIndex;
-                        }
-                    }
-                    else
-                    {
-                        index = CursorIndex;
-                    }
-    
-                    if (CursorIndex == readme.RichText.Length)
-                    {
-                        index = CursorIndex;
-                    }
-                    
-                    currentGraphicalPosition = GetGraphicalCursorPos();
-                }
-                
-                TextEditor.cursorIndex = tmpCursorIndex;
-                TextEditor.selectIndex = tmpSelectIndex;
-                
-                return index;
+                return PositionToIndex(currentEvent.mousePosition);
             }
         }
-    
-        public void MoveCursorToNextPoorChar()
+
+        public int PositionToIndex(Vector2 position)
         {
-            int previousCursorIndex = -1;
-            for (int i = CursorIndex; i < readme.RichText.Length; i++)
+            int index = -1;
+            int tmpCursorIndex = CursorIndex;
+            int tmpSelectIndex = SelectIndex;
+
+            Vector2 goalPosition = position - TextAreaRect.position;
+
+            float cursorYOffset = activeTextAreaStyle.lineHeight;
+            
+            textEditor.cursorIndex = 0;
+            textEditor.selectIndex = 0;
+            int maxAttempts = 1000;
+            textEditor.cursorIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
+            Vector2 currentGraphicalPosition = GetGraphicalCursorPos();
+            int attempts = 0;
+            for (int currentIndex = CursorIndex; index == -1; currentIndex = CursorIndex)
             {
-                if (!readme.richTextTagMap[CursorIndex])
+                attempts++;
+                if (attempts > maxAttempts)
                 {
+                    Debug.LogWarning("ReadmeEditor took too long to find mouse position and is giving up!");
                     break;
                 }
                 
-                TextEditor.MoveRight();
-                if (CursorIndex == previousCursorIndex)
+                //TODO: Check for end of word wrapped line.
+                bool isEndOfLine = RichText.Length > currentIndex ? RichText[currentIndex] == '\n' : true;
+
+                if (currentGraphicalPosition.y < goalPosition.y - cursorYOffset)
                 {
-                    CursorIndex += 1;
-                    SelectIndex += 1;
+                    TextEditor.MoveRight();
+                    textEditor.cursorIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
+                    textEditor.selectIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
                 }
-                previousCursorIndex = CursorIndex;
+                else if (currentGraphicalPosition.x < goalPosition.x && !isEndOfLine)
+                {
+                    TextEditor.MoveRight();
+                    textEditor.cursorIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
+                    textEditor.selectIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
+
+                    if (GetGraphicalCursorPos().x < currentGraphicalPosition.x)
+                    {
+                        index = CursorIndex;
+                    }
+                }
+                else
+                {
+                    index = CursorIndex;
+                }
+
+                if (CursorIndex == RichText.Length)
+                {
+                    index = CursorIndex;
+                }
+                
+                currentGraphicalPosition = GetGraphicalCursorPos();
             }
+            
+            TextEditor.cursorIndex = tmpCursorIndex;
+            TextEditor.selectIndex = tmpSelectIndex;
+            
+            return index;
         }
     
         public int WordStartIndex
@@ -1282,7 +1371,7 @@ namespace TP.Readme {
                 {
                     if (textAreaRect.width != value.width)
                     {
-                        ForceTextAreaRefresh(-1, -1, 10);
+                        ForceTextAreaRefresh();
                     }
                     
                     textAreaRect = value;
@@ -1316,16 +1405,74 @@ namespace TP.Readme {
             return editableRichText.GetCursorPixelPosition(new Rect(0, 0, position.width, position.height), content, cursorPos);
         }
 
-        private int StartIndex { get { return Math.Min(CursorIndex, SelectIndex); } }
-        private int EndIndex { get { return Math.Max(CursorIndex, SelectIndex); } }
+        private bool AllTextSelected(string text = "", int cursorIndex = -1, int selectIndex = -1)
+        {
+            if (String.IsNullOrEmpty(text))
+            {
+                text = RichText;
+            }
+
+            int startIndex = -1;
+            int endIndex = -1;
+
+            bool defaultIndex = cursorIndex == -1 || selectIndex == -1;
+            
+            startIndex = defaultIndex ? StartIndex : Mathf.Min(cursorIndex, selectIndex);
+            endIndex = defaultIndex ? EndIndex : Mathf.Max(cursorIndex, selectIndex);
+            
+            return TextEditorActive && (startIndex == 0 && endIndex == text.Length);
+        }
+
+        private int StartIndex
+        {
+            get { return Math.Min(CursorIndex, SelectIndex); }
+            set
+            {
+                if (CursorIndex < SelectIndex)
+                {
+                    CursorIndex = value;
+                }
+                else
+                {
+                    SelectIndex = value;
+                }
+            }
+        }
+
+        private int EndIndex
+        {
+            get { return Math.Max(CursorIndex, SelectIndex); }
+            set
+            {
+                if (CursorIndex > SelectIndex)
+                {
+                    CursorIndex = value;
+                }
+                else
+                {
+                    SelectIndex = value;
+                }
+            }
+        }
 
         private int CursorIndex
         {
             get { return textEditor != null ? TextEditor.cursorIndex : 0; }
             set
             {
-                if (verbose && textEditor != null) { Debug.Log("Cursor index changed: " + TextEditor.cursorIndex + " -> " + value); }
-                if (textEditor != null) { TextEditor.cursorIndex = value; };
+                if (textEditor != null)
+                {
+                    if (currentCursorIndex != value)
+                    {
+                        if (verbose) { Debug.Log("README: Cursor index changed: " + currentCursorIndex + " -> " + value); }
+
+                        cursorIndexChanged = true;
+                        previousCursorIndex = currentCursorIndex;
+                        currentCursorIndex = value;
+                    }
+
+                    TextEditor.cursorIndex = value;
+                };
             }
         }
 
@@ -1334,8 +1481,19 @@ namespace TP.Readme {
             get { return textEditor != null ? TextEditor.selectIndex : 0; }
             set
             {
-                if (verbose && textEditor != null) { Debug.Log("Select index changed: " + TextEditor.cursorIndex + " -> " + value); }
-                if (textEditor != null) { TextEditor.selectIndex = value; };
+                if (textEditor != null)
+                {
+                    if (currentSelectIndex != value)
+                    {
+                        if (verbose) { Debug.Log("README: Select index changed: " + currentSelectIndex + " -> " + value); }
+
+                        selectIndexChanged = true;
+                        previousSelectIndex = currentSelectIndex;
+                        currentSelectIndex = value;
+                    }
+
+                    TextEditor.selectIndex = value;
+                };
             }
         }
 
@@ -1347,10 +1505,20 @@ namespace TP.Readme {
                 textEditor = value;
             }
         }
+        
+        public string RichText
+        {
+            get { return readme.RichText; }
+            set
+            {
+                readme.RichText = value;
+            }
+        }
+        
 
         public bool TextEditorActive
         {
-            get { return textEditor != null && textEditor.text == readme.RichText; }
+            get { return textEditor != null && textEditor.text == RichText; }
         }
 
         public TextAreaObjectField[] TextAreaObjectFields
