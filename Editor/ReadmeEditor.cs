@@ -140,6 +140,8 @@ namespace TP.Readme {
             UpdateTextEditor();
             UpdateTextAreaObjectFields();
             
+            CheckKeyboardShortCuts();
+            
             EditorGUILayout.Space();
 
             if (!editing)
@@ -179,12 +181,6 @@ namespace TP.Readme {
                     
                     TextAreaRect = GUILayoutUtility.GetLastRect();
                     activeTextAreaStyle = editableRichText;
-                    
-//                    int endValue = textEditor.cursorIndex;
-//                    if (startValue != endValue)
-//                    {
-//                        Debug.Log("OMG ITS HAPPENING!");
-//                    }
                 }
 
                 if (TagsError(RichText))
@@ -206,7 +202,7 @@ namespace TP.Readme {
     
             if (!editing)
             {
-                if (!readme.readonlyMode && !Readme.allReadonlyMode)
+                if (!readme.readonlyMode || Readme.disableAllReadonlyMode)
                 {
                     if (GUILayout.Button("Edit"))
                     {
@@ -310,7 +306,7 @@ namespace TP.Readme {
                 readme.useTackIcon = EditorGUILayout.Toggle("Use Tack Icon", readme.useTackIcon);
                 Readme.neverUseTackIcon = EditorGUILayout.Toggle("Never Use Tack Icon", Readme.neverUseTackIcon);
                 readme.readonlyMode = EditorGUILayout.Toggle("Readonly Mode", readme.readonlyMode);
-                Readme.allReadonlyMode = EditorGUILayout.Toggle("All Readonly Mode", Readme.allReadonlyMode);
+                Readme.disableAllReadonlyMode = EditorGUILayout.Toggle("Disable All Readonly Mode", Readme.disableAllReadonlyMode);
                 EditorGUILayout.LabelField("Cursor Position");
                 string richTextWithCursor = RichText;
                 if (TextEditorActive && SelectIndex <= RichText.Length)
@@ -427,8 +423,6 @@ namespace TP.Readme {
 
                 EditorGUI.indentLevel--;
             }
-            
-            CheckKeyboardShortCuts();
 
             UpdateTextAreaObjectFields();
             DragAndDropObjectField();
@@ -953,7 +947,7 @@ namespace TP.Readme {
 
         private void CheckKeyboardShortCuts()
         {
-            //Toggle Advanced Mode
+            //Alt + a for toggle advanced mode
             if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.A)
             {
                 Readme.advancedOptions = !Readme.advancedOptions; 
