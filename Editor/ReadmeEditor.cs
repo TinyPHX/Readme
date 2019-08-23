@@ -206,9 +206,12 @@ namespace TP.Readme {
     
             if (!editing)
             {
-                if (GUILayout.Button("Edit"))
+                if (!readme.readonlyMode && !Readme.allReadonlyMode)
                 {
-                    editing = true;
+                    if (GUILayout.Button("Edit"))
+                    {
+                        editing = true;
+                    }
                 }
             }
             else
@@ -306,6 +309,8 @@ namespace TP.Readme {
                 verbose = EditorGUILayout.Toggle("Verbose", verbose);
                 readme.useTackIcon = EditorGUILayout.Toggle("Use Tack Icon", readme.useTackIcon);
                 Readme.neverUseTackIcon = EditorGUILayout.Toggle("Never Use Tack Icon", Readme.neverUseTackIcon);
+                readme.readonlyMode = EditorGUILayout.Toggle("Readonly Mode", readme.readonlyMode);
+                Readme.allReadonlyMode = EditorGUILayout.Toggle("All Readonly Mode", Readme.allReadonlyMode);
                 EditorGUILayout.LabelField("Cursor Position");
                 string richTextWithCursor = RichText;
                 if (TextEditorActive && SelectIndex <= RichText.Length)
@@ -948,27 +953,35 @@ namespace TP.Readme {
 
         private void CheckKeyboardShortCuts()
         {
-//            Event currentEvent = Event.current;
-            
-            //Alt + b for bold
-            if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
+            //Toggle Advanced Mode
+            if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.A)
             {
-                ToggleStyle("b");
-                currentEvent.Use();
+                Readme.advancedOptions = !Readme.advancedOptions; 
+                Event.current.Use();
             }
-            
-            //Alt + i for italic
-            if (currentEvent.type == EventType.KeyUp && currentEvent.alt && currentEvent.keyCode == KeyCode.I)
+
+            if (editing)
             {
-                ToggleStyle("i");
-                currentEvent.Use();
-            }
-            
-            //Alt + o for object
-            if (currentEvent.type == EventType.KeyUp && currentEvent.alt && currentEvent.keyCode == KeyCode.O)
-            {
-                AddObjectField();
-                currentEvent.Use();
+                //Alt + b for bold
+                if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
+                {
+                    ToggleStyle("b");
+                    Event.current.Use();
+                }
+
+                //Alt + i for italic
+                if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.I)
+                {
+                    ToggleStyle("i");
+                    Event.current.Use();
+                }
+
+                //Alt + o for object
+                if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.O)
+                {
+                    AddObjectField();
+                    Event.current.Use();
+                }
             }
         }
     

@@ -123,7 +123,7 @@ GameObject:
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: a80732b72f29beb4a887697d0b657e58, type: 3}
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -209,6 +209,7 @@ MonoBehaviour:
   fontSize: 12
   iconBeingUsed: 1
   useTackIcon: 1
+  readonlyMode: 0
   readmeData:
     richText: "<size=20>Cylinder</size>\n\nA <b>cylinder</b> (from Greek <i>\u03BA\u03CD\u03BB\u03B9\u03BD\u03B4\u03C1\u03BF\u03C2</i>
       \u2013 <i>kulindros</i>, \"roller, tumbler\") has traditionally been a three-dimensional
@@ -222,9 +223,9 @@ MonoBehaviour:
       Menu</b>\n\n * <i>GameObject > 3D Object > Cylinder</i>\n * <i>Right Click in
       Sceen > 3D Object > Cylinder</i>\n\n<b>Manuall</b>\n\n 1. Create a new GameObject\n
       2. Add the \"MeshFilter\" component\n 3. Set the MeshFilter's Mesh Property
-      to  <o=\"0126584\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
-      5. If you don't have a material use Unity's  <o=\"0126584\"></o> \n\nSee the
-      components below or  <o=\"0126584\"></o>  for an example of a Unity Cylindar
+      to  <o=\"0066522\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
+      5. If you don't have a material use Unity's  <o=\"0066522\"></o> \n\nSee the
+      components below or  <o=\"0066522\"></o>  for an example of a Unity Cylindar
       in action!"
     textAreaObjectFields:
     - name: null (0)
@@ -232,41 +233,41 @@ MonoBehaviour:
       objectRef: {fileID: 0}
       fieldRect:
         serializedVersion: 2
-        x: 82
-        y: 300
+        x: 341
+        y: 230
         width: 140
         height: 15
       index: 514
       length: 17
-    - name: Cylinder (126584)
-      objectId: 126584
+    - name: Cylinder (66522)
+      objectId: 66522
       objectRef: {fileID: 511163808}
       fieldRect:
         serializedVersion: 2
         x: 280
-        y: 557
+        y: 487
         width: 140
         height: 15
       index: 982
       length: 17
-    - name: Cylinder (126584)
-      objectId: 126584
+    - name: Cylinder (66522)
+      objectId: 66522
       objectRef: {fileID: 511163808}
       fieldRect:
         serializedVersion: 2
         x: 291
-        y: 585
+        y: 515
         width: 140
         height: 15
       index: 1095
       length: 17
-    - name: Cylinder (126584)
-      objectId: 126584
+    - name: Cylinder (66522)
+      objectId: 66522
       objectRef: {fileID: 511163808}
       fieldRect:
         serializedVersion: 2
         x: 213
-        y: 613
+        y: 543
         width: 140
         height: 15
       index: 1144
@@ -284,7 +285,7 @@ GameObject:
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: a80732b72f29beb4a887697d0b657e58, type: 3}
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -354,28 +355,29 @@ MonoBehaviour:
   fontSize: 12
   iconBeingUsed: 1
   useTackIcon: 1
+  readonlyMode: 0
   readmeData:
-    richText: The  <o="0126604"></o>  on this  <o="0126602"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
+    richText: The  <o="0066536"></o>  on this  <o="0066534"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
       becuase I thought it was pretty.
     textAreaObjectFields:
-    - name: Directional Light (25762)
-      objectId: 126604
+    - name: Directional Light (66536)
+      objectId: 66536
       objectRef: {fileID: 1192897486}
       fieldRect:
         serializedVersion: 2
         x: 47
-        y: 152
+        y: 96
         width: 140
         height: 15
       index: 5
       length: 17
-    - name: Directional Light (25760)
-      objectId: 126602
+    - name: Directional Light (66534)
+      objectId: 66534
       objectRef: {fileID: 1192897485}
       fieldRect:
         serializedVersion: 2
         x: 240
-        y: 152
+        y: 96
         width: 140
         height: 15
       index: 33
@@ -557,9 +559,9 @@ Prefab:
         <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n * Size:
         <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
         references can be draged and dropeed to create inline references.\n\n * Scene:
-        \ <o=\"0023178\"></o> \n * Game Object:  <o=\"0126584\"></o> \n * Prefab:
-        \ <o=\"0012596\"></o> \n * Script:  <o=\"0002810\"></o> \n * File:  <o=\"0021850\"></o>
-        \n * Folder:  <o=\"0013866\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
+        \ <o=\"0023108\"></o> \n * Game Object:  <o=\"0066522\"></o> \n * Prefab:
+        \ <o=\"0012500\"></o> \n * Script:  <o=\"0002812\"></o> \n * File:  <o=\"0021778\"></o>
+        \n * Folder:  <o=\"0013770\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
         * Change font color\n * Change font style\n * Change font size \n * Bold togle
         button\n * Italics toggle button\n * Add object field button\n * View the
         source for quick editing\n * Advanced tab for debugging"
@@ -567,42 +569,42 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].objectId
-      value: 12596
+      value: 12500
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].objectId
-      value: 126584
+      value: 66522
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.y
-      value: 672
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].fieldRect.y
-      value: 688
+      value: 616
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].fieldRect.y
-      value: 704
+      value: 632
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.y
-      value: 720
+      value: 648
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].fieldRect.y
-      value: 736
+      value: 664
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].fieldRect.y
-      value: 752
+      value: 680
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3043,7 +3045,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].objectId
-      value: 2810
+      value: 2812
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3059,7 +3061,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].objectId
-      value: 21850
+      value: 21778
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3070,7 +3072,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].objectId
-      value: 13866
+      value: 13770
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3571,7 +3573,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].objectId
-      value: 23178
+      value: 23108
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4796,27 +4798,27 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].name
-      value: Example (23046)
+      value: Example (23108)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].name
-      value: Cylinder (61814)
+      value: Cylinder (66522)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].name
-      value: Readme (12472)
+      value: Readme (12500)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].name
-      value: Readme (2796)
+      value: Readme (2812)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].name
-      value: README (21724)
+      value: README (21778)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4826,7 +4828,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].name
-      value: Editor (13742)
+      value: Editor (13770)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4886,10 +4888,50 @@ Prefab:
     - target: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: iconBeingUsed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1117]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1118]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1119]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1126]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1127]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1128]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1129]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readonlyMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4911,7 +4953,7 @@ GameObject:
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
-  m_Icon: {fileID: 2800000, guid: a80732b72f29beb4a887697d0b657e58, type: 3}
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -4997,11 +5039,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fontColor: {r: 0.78676474, g: 0, b: 0, a: 1}
-  richTextTagMap: 0101010000000000000000000000000000000000000000000000000000000000000000000001010101
+  richTextTagMap: 0101010000000000000000000000000000000000000000000000000000000000000000000001010101000101010101010101010000000000000000000000000000000000000000000000000001010101010101
   font: {fileID: 0}
   fontSize: 26
   iconBeingUsed: 1
   useTackIcon: 1
+  readonlyMode: 1
   readmeData:
-    richText: <b>DONT CHANGE THESE CAMERA SETTINGS!</b>
+    richText: '<b>DONT CHANGE THESE CAMERA SETTINGS!</b>
+
+      <size=12>This is in readonly mode!</size>'
     textAreaObjectFields: []
