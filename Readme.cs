@@ -33,6 +33,8 @@ namespace TP.Readme {
         public bool iconBeingUsed = true;
         public bool useTackIcon = true;
         public static bool neverUseTackIcon = false;
+        public bool readonlyMode = false;
+        public static bool allReadonlyMode = false;
         
         private static List<string> supportedTags = new List<string>() {"b", "i", "color", "size"};
 
