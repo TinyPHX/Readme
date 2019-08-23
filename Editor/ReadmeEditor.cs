@@ -114,7 +114,7 @@ namespace TP.Readme {
             {
                 if (readme.useTackIcon && !Readme.neverUseTackIcon)
                 {
-                    Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>( "Assets/Packages/TP/Readme/Textures/readme_icon_22_22.png");
+                    Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>( "Assets/Packages/TP/Readme/Textures/readme_icon_256_256.png");
                     IconManager.SetIcon(selectedObject as GameObject, icon);
                     readme.iconBeingUsed = true;
                 }
@@ -164,7 +164,7 @@ namespace TP.Readme {
                 {
                     readmeEditorActiveTextAreaName = readmeEditorTextAreaSourceName;
                     GUI.SetNextControlName(readmeEditorTextAreaSourceName);
-                    RichText = EditorGUILayout.TextArea(RichText, editableText, GUILayout.Height(textAreaHeight));
+                    RichText = EditorGUILayout.TextArea(RichText, editableText, new[] {GUILayout.Height(textAreaHeight), GUILayout.Width(textAreaWidth)});
                     TextAreaRect = GUILayoutUtility.GetLastRect();
                 }
                 else
