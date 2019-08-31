@@ -141,12 +141,28 @@ namespace TP.Readme
 
         private static void AddObjectIdPair(Object obj, int objId)
         {
-            if (!ObjectDict.ContainsKey(objId))
+            Object foundObject;
+            
+            if (ObjectDict.TryGetValue(objId, out foundObject))
             {
-                ObjectIdPair objectIdPair = new ObjectIdPair(objId, obj);
-                ObjectIdPairs.Add(objectIdPair);
-                AddObjectIdPairToDicts(objectIdPair);
+                if (foundObject != obj)
+                {
+                    Debug.LogWarning("Duplicate object key detected. Object ignored: " + obj);
+                }
+
+                return;
             }
+
+
+            if (obj == null)
+            {
+                Debug.LogWarning("Cannot add null object to objectIdPairs.");
+                return;
+            }
+            
+            ObjectIdPair objectIdPair = new ObjectIdPair(objId, obj);
+            ObjectIdPairs.Add(objectIdPair);
+            AddObjectIdPairToDicts(objectIdPair);
         }
 
         private static void AddObjectIdPairToDicts(ObjectIdPair objectIdPair)
@@ -175,6 +191,12 @@ namespace TP.Readme
         
         public static int GetIdFromObject(Object obj)
         {
+            if (obj == null)
+            {
+                Debug.LogWarning("Attempted to get id for null object.");
+                return 0;
+            }
+            
             int objId;
             if (!IdDict.TryGetValue(obj, out objId))
             {
