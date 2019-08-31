@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using Object = UnityEngine.Object;
@@ -8,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace TP.Readme
 {
     [Serializable]
-    public class TextAreaObjectField : System.Object
+    public class TextAreaObjectField
     {
         [SerializeField] private string name;
         [SerializeField] private int objectId;
@@ -27,9 +28,19 @@ namespace TP.Readme
             this.length = length;
             
             ObjectId = objectId;
-            ObjectRef = EditorUtility.InstanceIDToObject(ObjectId);
+            ObjectRef = GetObjectFromId();
             
             name = (ObjectRef ? ObjectRef.name : "null") + " (" + ObjectId + ")";
+        }
+
+        public int GetIdFromObject()
+        {
+            return ReadmeManager.GetIdFromObject(ObjectRef);
+        }
+
+        public Object GetObjectFromId()
+        {
+            return ReadmeManager.GetObjectFromId(ObjectId);
         }
 
         public override bool Equals(object other)
@@ -85,12 +96,12 @@ namespace TP.Readme
         
         public void UpdateId()
         {
-            ObjectId = ObjectRef == null ? 0 : ObjectRef.GetInstanceID();
+            ObjectId = ObjectRef == null ? 0 : GetIdFromObject();
         }
 
         public bool IdInSync
         {
-            get { return (ObjectId == 0 && ObjectRef == null) || EditorUtility.InstanceIDToObject(ObjectId) == ObjectRef; }
+            get { return (ObjectId == 0 && ObjectRef == null) || GetObjectFromId() == ObjectRef; }
         }
         
         public int ObjectId

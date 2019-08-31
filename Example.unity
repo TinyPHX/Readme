@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -108,6 +108,252 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &337288408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 337288410}
+  - component: {fileID: 337288409}
+  m_Layer: 0
+  m_Name: Testing
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &337288409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337288408}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  richTextTagMap: 00010101010101010101010101010101010101000001010101010101010101010101010101010100000101010101010101010101010101010101010000000101010101010101010101010101010101010000010101010101010101010101010101010101000000010101010101010101010101010101010101000000010101010101010101010101010101010101000000010101010101010101010101010101010101000000010101010101010101010101010101010101000000010101010101010101010101010101010101000000010101010101010101010101010101010101000000010101010101010101010101010101010101000001010101010101010101010101010101010100
+  font: {fileID: 0}
+  fontSize: 12
+  iconBeingUsed: 1
+  useTackIcon: 1
+  readonlyMode: 0
+  readmeData:
+    richText: " <o=\"0000001\"></o> \n <o=\"0000015\"></o> \n <o=\"0000002\"></o>
+      \n  <o=\"0000004\"></o> \n <o=\"0000014\"></o> \n\n <o=\"0000004\"></o> \n\n
+      <o=\"0000003\"></o> \n\n <o=\"0000003\"></o> \n\n <o=\"0000003\"></o> \n\n <o=\"0000001\"></o>
+      \n\n <o=\"0000013\"></o> \n\n <o=\"0000016\"></o> \n <o=\"0000002\"></o> \n"
+    textAreaObjectFields:
+    - name: Readme (1)
+      objectId: 1
+      objectRef: {fileID: 618287655}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 152
+        width: 140
+        height: 15
+      index: 1
+      length: 17
+    - name: Arrow 1 (15)
+      objectId: 15
+      objectRef: {fileID: 9100000, guid: f4c6adefda20e8a48a9d541a1ea6e667, type: 2}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 166
+        width: 140
+        height: 15
+      index: 21
+      length: 17
+    - name: Main Camera (2)
+      objectId: 2
+      objectRef: {fileID: 1889844768}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 180
+        width: 140
+        height: 15
+      index: 41
+      length: 17
+    - name: Cylinder (4)
+      objectId: 4
+      objectRef: {fileID: 511163808}
+      fieldRect:
+        serializedVersion: 2
+        x: 24
+        y: 194
+        width: 140
+        height: 15
+      index: 62
+      length: 17
+    - name: Player UI Animation Out Fast (14)
+      objectId: 14
+      objectRef: {fileID: 7400000, guid: a35484fbed23d3e4bb201f5526d4c090, type: 2}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 208
+        width: 140
+        height: 15
+      index: 82
+      length: 17
+    - name: Cylinder (4)
+      objectId: 4
+      objectRef: {fileID: 511163808}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 236
+        width: 140
+        height: 15
+      index: 103
+      length: 17
+    - name: Directional Light (3)
+      objectId: 3
+      objectRef: {fileID: 1192897485}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 264
+        width: 140
+        height: 15
+      index: 124
+      length: 17
+    - name: Directional Light (3)
+      objectId: 3
+      objectRef: {fileID: 1192897485}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 292
+        width: 140
+        height: 15
+      index: 145
+      length: 17
+    - name: Directional Light (3)
+      objectId: 3
+      objectRef: {fileID: 1192897485}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 320
+        width: 140
+        height: 15
+      index: 166
+      length: 17
+    - name: Readme (1)
+      objectId: 1
+      objectRef: {fileID: 618287655}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 348
+        width: 140
+        height: 15
+      index: 187
+      length: 17
+    - name: Panel Hurt (13)
+      objectId: 13
+      objectRef: {fileID: 7400000, guid: 29793c57ceebeb041a52885a9f38bfbd, type: 2}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 376
+        width: 140
+        height: 15
+      index: 208
+      length: 17
+    - name: Source (16)
+      objectId: 16
+      objectRef: {fileID: 102900000, guid: 5b865bf6fe1f5fa43aa26ea7a745b8a4, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 404
+        width: 140
+        height: 15
+      index: 229
+      length: 17
+    - name: Main Camera (2)
+      objectId: 2
+      objectRef: {fileID: 1889844768}
+      fieldRect:
+        serializedVersion: 2
+        x: 20
+        y: 418
+        width: 140
+        height: 15
+      index: 249
+      length: 17
+    objectIdPairs:
+    - name: Readme (UnityEngine.GameObject) (1)
+      id: 1
+      objectRef: {fileID: 618287655}
+    - name: Main Camera (UnityEngine.GameObject) (2)
+      id: 2
+      objectRef: {fileID: 1889844768}
+    - name: Directional Light (UnityEngine.GameObject) (3)
+      id: 3
+      objectRef: {fileID: 1192897485}
+    - name: Cylinder (UnityEngine.GameObject) (4)
+      id: 4
+      objectRef: {fileID: 511163808}
+    - name: Testing (UnityEngine.GameObject) (5)
+      id: 5
+      objectRef: {fileID: 337288408}
+    - name: Generic (UnityEngine.DefaultAsset) (6)
+      id: 6
+      objectRef: {fileID: 102900000, guid: e63197045ed128c469682b36a5d3f453, type: 3}
+    - name: Directional Light (UnityEngine.Light) (7)
+      id: 7
+      objectRef: {fileID: 1192897486}
+    - name: Cylinder (UnityEngine.Mesh) (8)
+      id: 8
+      objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+    - name: Editor (UnityEngine.DefaultAsset) (9)
+      id: 9
+      objectRef: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9, type: 3}
+    - name: Example (UnityEngine.SceneAsset) (10)
+      id: 10
+      objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (11)
+      id: 11
+      objectRef: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f, type: 3}
+    - name: Readme (UnityEngine.GameObject) (12)
+      id: 12
+      objectRef: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+    - name: Panel Hurt (UnityEngine.AnimationClip) (13)
+      id: 13
+      objectRef: {fileID: 7400000, guid: 29793c57ceebeb041a52885a9f38bfbd, type: 2}
+    - name: Player UI Animation Out Fast (UnityEngine.AnimationClip) (14)
+      id: 14
+      objectRef: {fileID: 7400000, guid: a35484fbed23d3e4bb201f5526d4c090, type: 2}
+    - name: Arrow 1 (UnityEngine.AnimatorController) (15)
+      id: 15
+      objectRef: {fileID: 9100000, guid: f4c6adefda20e8a48a9d541a1ea6e667, type: 2}
+    - name: Source (UnityEngine.DefaultAsset) (16)
+      id: 16
+      objectRef: {fileID: 102900000, guid: 5b865bf6fe1f5fa43aa26ea7a745b8a4, type: 3}
+--- !u!4 &337288410
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337288408}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.12402344, y: 2.46875, z: -4.9396973}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &511163808
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +444,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 511163808}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
   m_Name: 
@@ -223,44 +469,87 @@ MonoBehaviour:
       Menu</b>\n\n * <i>GameObject > 3D Object > Cylinder</i>\n * <i>Right Click in
       Sceen > 3D Object > Cylinder</i>\n\n<b>Manuall</b>\n\n 1. Create a new GameObject\n
       2. Add the \"MeshFilter\" component\n 3. Set the MeshFilter's Mesh Property
-      to  <o=\"0000822\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
-      5. If you don't have a material use Unity's  <o=\"0000938\"></o> \n\nSee the
-      components below or  <o=\"0066522\"></o>  for an example of a Unity Cylindar
+      to  <o=\"0000008\"></o> \n 4. Add a \"MeshRenderer\" and set the material. \n
+      5. If you don't have a material use Unity's  <o=\"0000008\"></o> \n\nSee the
+      components below or  <o=\"0000004\"></o>  for an example of a Unity Cylindar
       in action!"
     textAreaObjectFields:
-    - name: Cylinder (822)
-      objectId: 822
+    - name: Cylinder (8)
+      objectId: 8
       objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
       fieldRect:
         serializedVersion: 2
         x: 280
-        y: 489
+        y: 543
         width: 140
         height: 15
       index: 963
       length: 17
-    - name: Default-Material (938)
-      objectId: 938
-      objectRef: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+    - name: Cylinder (8)
+      objectId: 8
+      objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
       fieldRect:
         serializedVersion: 2
         x: 291
-        y: 517
+        y: 571
         width: 140
         height: 15
       index: 1076
       length: 17
-    - name: Cylinder (66522)
-      objectId: 66522
+    - name: Cylinder (4)
+      objectId: 4
       objectRef: {fileID: 511163808}
       fieldRect:
         serializedVersion: 2
         x: 213
-        y: 545
+        y: 599
         width: 140
         height: 15
       index: 1125
       length: 17
+    objectIdPairs:
+    - name: Readme (UnityEngine.GameObject) (1)
+      id: 1
+      objectRef: {fileID: 618287655}
+    - name: Main Camera (UnityEngine.GameObject) (2)
+      id: 2
+      objectRef: {fileID: 1889844768}
+    - name: Directional Light (UnityEngine.GameObject) (3)
+      id: 3
+      objectRef: {fileID: 1192897485}
+    - name: Cylinder (UnityEngine.GameObject) (4)
+      id: 4
+      objectRef: {fileID: 511163808}
+    - name: Testing (UnityEngine.GameObject) (5)
+      id: 5
+      objectRef: {fileID: 337288408}
+    - name: Generic (UnityEngine.DefaultAsset) (6)
+      id: 6
+      objectRef: {fileID: 102900000, guid: e63197045ed128c469682b36a5d3f453, type: 3}
+    - name: Directional Light (UnityEngine.Light) (7)
+      id: 7
+      objectRef: {fileID: 1192897486}
+    - name: Cylinder (UnityEngine.Mesh) (8)
+      id: 8
+      objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+    - name: Editor (UnityEngine.DefaultAsset) (9)
+      id: 9
+      objectRef: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9, type: 3}
+    - name: Example (UnityEngine.SceneAsset) (10)
+      id: 10
+      objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (11)
+      id: 11
+      objectRef: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f, type: 3}
+    - name: Readme (UnityEngine.GameObject) (12)
+      id: 12
+      objectRef: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+--- !u!1 &618287655 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+    type: 2}
+  m_PrefabInternal: {fileID: 1259507252}
 --- !u!1 &1192897485
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,7 +622,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1192897485}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
   m_Name: 
@@ -346,31 +635,69 @@ MonoBehaviour:
   useTackIcon: 1
   readonlyMode: 0
   readmeData:
-    richText: The  <o="0066536"></o>  on this  <o="0066534"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
+    richText: The  <o="0000007"></o>  on this  <o="0000003"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
       becuase I thought it was pretty.
     textAreaObjectFields:
-    - name: Directional Light (66536)
-      objectId: 66536
+    - name: Directional Light (8)
+      objectId: 7
       objectRef: {fileID: 1192897486}
       fieldRect:
         serializedVersion: 2
         x: 47
-        y: 96
+        y: 152
         width: 140
         height: 15
       index: 5
       length: 17
-    - name: Directional Light (66534)
-      objectId: 66534
+    - name: Directional Light (7)
+      objectId: 3
       objectRef: {fileID: 1192897485}
       fieldRect:
         serializedVersion: 2
         x: 240
-        y: 96
+        y: 152
         width: 140
         height: 15
       index: 33
       length: 17
+    objectIdPairs:
+    - name: Readme (UnityEngine.GameObject) (1)
+      id: 1
+      objectRef: {fileID: 618287655}
+    - name: Main Camera (UnityEngine.GameObject) (2)
+      id: 2
+      objectRef: {fileID: 1889844768}
+    - name: Directional Light (UnityEngine.GameObject) (3)
+      id: 3
+      objectRef: {fileID: 1192897485}
+    - name: Cylinder (UnityEngine.GameObject) (4)
+      id: 4
+      objectRef: {fileID: 511163808}
+    - name: Testing (UnityEngine.GameObject) (5)
+      id: 5
+      objectRef: {fileID: 337288408}
+    - name: Generic (UnityEngine.DefaultAsset) (6)
+      id: 6
+      objectRef: {fileID: 102900000, guid: e63197045ed128c469682b36a5d3f453, type: 3}
+    - name: Directional Light (UnityEngine.Light) (7)
+      id: 7
+      objectRef: {fileID: 1192897486}
+    - name: Cylinder (UnityEngine.Mesh) (8)
+      id: 8
+      objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+    - name: Editor (UnityEngine.DefaultAsset) (9)
+      id: 9
+      objectRef: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9, type: 3}
+    - name: Example (UnityEngine.SceneAsset) (10)
+      id: 10
+      objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (11)
+      id: 11
+      objectRef: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f, type: 3}
+    - name: Readme (UnityEngine.GameObject) (12)
+      id: 12
+      objectRef: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
 --- !u!1001 &1259507252
 Prefab:
   m_ObjectHideFlags: 0
@@ -385,8 +712,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.size
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.ObjectDictArray.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.objectDictArray.Array.size
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
       propertyPath: m_LocalPosition.x
@@ -548,9 +890,9 @@ Prefab:
         <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n * Size:
         <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
         references can be draged and dropeed to create inline references.\n\n * Scene:
-        \ <o=\"0023108\"></o> \n * Game Object:  <o=\"0066522\"></o> \n * Prefab:
-        \ <o=\"0012500\"></o> \n * Script:  <o=\"0002812\"></o> \n * File:  <o=\"0021778\"></o>
-        \n * Folder:  <o=\"0013770\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
+        \ <o=\"0000010\"></o> \n * Game Object:  <o=\"0000004\"></o> \n * Prefab:
+        \ <o=\"0000012\"></o> \n * Script:  <o=\"0000012\"></o> \n * File:  <o=\"0000011\"></o>
+        \n * Folder:  <o=\"0000009\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
         * Change font color\n * Change font style\n * Change font size \n * Bold togle
         button\n * Italics toggle button\n * Add object field button\n * View the
         source for quick editing\n * Advanced tab for debugging"
@@ -558,42 +900,42 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].objectId
-      value: 12500
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].objectId
-      value: 66522
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.y
-      value: 600
+      value: 674
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].fieldRect.y
-      value: 616
+      value: 690
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].fieldRect.y
-      value: 632
+      value: 706
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.y
-      value: 648
+      value: 722
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].fieldRect.y
-      value: 664
+      value: 738
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].fieldRect.y
-      value: 680
+      value: 754
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3034,14 +3376,14 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].objectId
-      value: 2812
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].objectRef
       value: 
-      objectReference: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47,
-        type: 3}
+      objectReference: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.width
@@ -3050,7 +3392,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].objectId
-      value: 21778
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3061,7 +3403,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].objectId
-      value: 13770
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -3562,7 +3904,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].objectId
-      value: 23108
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4787,27 +5129,27 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].name
-      value: Example (23108)
+      value: Example (10)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].name
-      value: Cylinder (66522)
+      value: Cylinder (4)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].name
-      value: Readme (12500)
+      value: Readme (12)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].name
-      value: Readme (2812)
+      value: Readme (12)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].name
-      value: README (21778)
+      value: README (11)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4817,7 +5159,7 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].name
-      value: Editor (13770)
+      value: Editor (9)
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -4923,6 +5265,254 @@ Prefab:
       propertyPath: readonlyMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.ObjectDictArray.Array.data[7]
+      value: 
+      objectReference: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.ObjectDictArray.Array.data[9]
+      value: 
+      objectReference: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.ObjectDictArray.Array.data[11]
+      value: 
+      objectReference: {fileID: 1889844768}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.ObjectDictArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 102900000, guid: f85c527cd2fe3d14f8102fb5f413becd,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.objectDictArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 102900000, guid: f85c527cd2fe3d14f8102fb5f413becd,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.objectDictArray.Array.data[4]
+      value: 
+      objectReference: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.objectDictArray.Array.data[6]
+      value: 
+      objectReference: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.objectDictArray.Array.data[7]
+      value: 
+      objectReference: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.objectDictArray.Array.data[8]
+      value: 
+      objectReference: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectLibrary.objectDictArray.Array.data[9]
+      value: 
+      objectReference: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[0].name
+      value: Readme (UnityEngine.GameObject) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[0].id
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[0].objectRef
+      value: 
+      objectReference: {fileID: 618287655}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[1].name
+      value: Main Camera (UnityEngine.GameObject) (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[1].id
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[1].objectRef
+      value: 
+      objectReference: {fileID: 1889844768}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[2].name
+      value: Directional Light (UnityEngine.GameObject) (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[2].id
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[2].objectRef
+      value: 
+      objectReference: {fileID: 1192897485}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[3].name
+      value: Cylinder (UnityEngine.GameObject) (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[3].id
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[3].objectRef
+      value: 
+      objectReference: {fileID: 511163808}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[4].name
+      value: Testing (UnityEngine.GameObject) (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[4].id
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[4].objectRef
+      value: 
+      objectReference: {fileID: 337288408}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[5].name
+      value: Generic (UnityEngine.DefaultAsset) (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[5].id
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[5].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: e63197045ed128c469682b36a5d3f453,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[6].name
+      value: Directional Light (UnityEngine.Light) (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[6].id
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[6].objectRef
+      value: 
+      objectReference: {fileID: 1192897486}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[7].name
+      value: Cylinder (UnityEngine.Mesh) (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[7].id
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[7].objectRef
+      value: 
+      objectReference: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[8].name
+      value: Editor (UnityEngine.DefaultAsset) (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[8].id
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[8].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[9].name
+      value: Example (UnityEngine.SceneAsset) (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[9].id
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[9].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[10].name
+      value: README (UnityEngine.DefaultAsset) (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[10].id
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[10].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[11].name
+      value: Readme (UnityEngine.GameObject) (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[11].id
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[11].objectRef
+      value: 
+      objectReference: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
   m_IsPrefabParent: 0
@@ -5022,7 +5612,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1889844768}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
   m_Name: 
@@ -5033,9 +5623,47 @@ MonoBehaviour:
   fontSize: 26
   iconBeingUsed: 1
   useTackIcon: 1
-  readonlyMode: 1
+  readonlyMode: 0
   readmeData:
     richText: '<b>DONT CHANGE THESE CAMERA SETTINGS!</b>
 
       <size=12>This is in readonly mode!</size>'
     textAreaObjectFields: []
+    objectIdPairs:
+    - name: Readme (UnityEngine.GameObject) (1)
+      id: 1
+      objectRef: {fileID: 618287655}
+    - name: Main Camera (UnityEngine.GameObject) (2)
+      id: 2
+      objectRef: {fileID: 1889844768}
+    - name: Directional Light (UnityEngine.GameObject) (3)
+      id: 3
+      objectRef: {fileID: 1192897485}
+    - name: Cylinder (UnityEngine.GameObject) (4)
+      id: 4
+      objectRef: {fileID: 511163808}
+    - name: Testing (UnityEngine.GameObject) (5)
+      id: 5
+      objectRef: {fileID: 337288408}
+    - name: Generic (UnityEngine.DefaultAsset) (6)
+      id: 6
+      objectRef: {fileID: 102900000, guid: e63197045ed128c469682b36a5d3f453, type: 3}
+    - name: Directional Light (UnityEngine.Light) (7)
+      id: 7
+      objectRef: {fileID: 1192897486}
+    - name: Cylinder (UnityEngine.Mesh) (8)
+      id: 8
+      objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+    - name: Editor (UnityEngine.DefaultAsset) (9)
+      id: 9
+      objectRef: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9, type: 3}
+    - name: Example (UnityEngine.SceneAsset) (10)
+      id: 10
+      objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (11)
+      id: 11
+      objectRef: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f, type: 3}
+    - name: Readme (UnityEngine.GameObject) (12)
+      id: 12
+      objectRef: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
