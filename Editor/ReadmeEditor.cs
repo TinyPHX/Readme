@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -98,6 +99,15 @@ namespace TP.Readme {
             };
         }
         
+        private string GetSettingsPath()
+        {
+            MonoScript monoScript = MonoScript.FromScriptableObject(this);
+            string path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(monoScript));
+            path = Path.Combine(path, "..");
+            path = Path.Combine(path, "Settings");
+            return path;
+        }
+        
         public override void OnInspectorGUI()
         {
 //            if (verbose) {  Debug.Log("README: OnInspectorGUI"); }
@@ -107,6 +117,11 @@ namespace TP.Readme {
             if (readmeTarget != null)
             {
                 readme = readmeTarget;
+            }
+            
+            if (!readme.SettingsLoaded) //TODO: Check if a higher priority settings file exists
+            {
+                readme.LoadSettings(GetSettingsPath());
             }
             
             Object selectedObject = Selection.activeObject;
@@ -357,7 +372,6 @@ namespace TP.Readme {
                     readme.Save();
                 }
 
-                GUIStyle loadButtonStyle = new GUIStyle(GUI.skin.button);
                 if (GUILayout.Button("Load from File", GUILayout.Width(smallButtonWidth * 4)))
                 {
                     readme.LoadLastSave();
@@ -366,6 +380,21 @@ namespace TP.Readme {
 
                 GUILayout.EndHorizontal();
 
+                GUILayout.BeginHorizontal();
+
+                if (GUILayout.Button("Save Settings", GUILayout.Width(smallButtonWidth * 4)))
+                {
+                    readme.SaveSettings(GetSettingsPath());
+                    Repaint();
+                }
+                
+                if (GUILayout.Button("Reload Settings", GUILayout.Width(smallButtonWidth * 4)))
+                {
+                    readme.LoadSettings(GetSettingsPath());
+                    Repaint();
+                }
+                
+                GUILayout.EndHorizontal();
 
                 if (editing || debugButtons)
                 {
@@ -952,6 +981,7 @@ namespace TP.Readme {
             {
                 Readme.advancedOptions = !Readme.advancedOptions; 
                 Event.current.Use();
+                Repaint();
             }
 
             if (editing)

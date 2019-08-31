@@ -16,6 +16,12 @@ namespace TP.Readme {
         public string richText = "";
         public TextAreaObjectField[] textAreaObjectFields = new TextAreaObjectField[0];
     }
+
+    [Serializable]
+    public class ReadmeSettings
+    {
+        public bool redistributable;
+    }
     
     [DisallowMultipleComponent, ExecuteInEditMode, HelpURL("https://forum.unity.com/threads/wip-a-readme-component.698477/")]
     public class Readme : MonoBehaviour
@@ -35,6 +41,11 @@ namespace TP.Readme {
         public static bool neverUseTackIcon = false;
         public bool readonlyMode = false;
         public static bool disableAllReadonlyMode = false;
+
+        [SerializeField] private ReadmeSettings readmeSettings;
+        private static string[] settingsPriority = {"Settings_Paid", "Settings_Free"};
+        private bool settingsLoaded = false;
+        private string fileNameLoaded = "";
         
         private static List<string> supportedTags = new List<string>() {"b", "i", "color", "size"};
 
@@ -99,6 +110,12 @@ namespace TP.Readme {
         public static List<string> SupportedTags
         {
             get { return supportedTags; }
+        }
+
+        public bool SettingsLoaded
+        {
+            get { return settingsLoaded; }
+            set { settingsLoaded = value; }
         }
 
         public string RemoveEmptyTags(string input)
@@ -349,6 +366,41 @@ namespace TP.Readme {
                 
                 string json = File.ReadAllText(fileToLoad);
                 RichText = JsonUtility.FromJson<ReadmeData>(json).richText;
+            }
+        }
+
+        public void SaveSettings(string path)
+        {
+            string jsonReadmeSettingsData = JsonUtility.ToJson(readmeSettings, true);
+            string fileName = path + "/Settings_New.json";
+            File.WriteAllText (fileName, jsonReadmeSettingsData);
+            Debug.Log("Settings saved to file: " + fileName);
+        }
+
+        public void LoadSettings(string directoryPath)
+        {
+            bool fileFound = false;
+            foreach (string settings in settingsPriority)
+            {
+                string fileName = settings + ".json";
+                string filePath = Path.Combine(directoryPath, fileName);
+                if (File.Exists(Path.GetFullPath(filePath)))
+                {
+                    string json = File.ReadAllText(filePath);
+                    readmeSettings = JsonUtility.FromJson<ReadmeSettings>(json);
+                    SettingsLoaded = true;
+                    fileNameLoaded = settings;
+                    fileFound = true;
+                    
+                    Debug.Log("README: Settings loaded from file: " + filePath);
+                    
+                    break;
+                }
+            }
+
+            if (!fileFound)
+            {
+                Debug.LogWarning("README: Settings file not found! Please contact the developer.");
             }
         }
     
