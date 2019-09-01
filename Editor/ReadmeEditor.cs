@@ -11,7 +11,8 @@ using UnityEngine;
 using UnityEditor;
 using Object = UnityEngine.Object;
 
-namespace TP.Readme {
+namespace TP.Readme 
+{
     [CustomEditor(typeof(Readme)), ExecuteInEditMode]
     public class ReadmeEditor : Editor
     {
@@ -64,6 +65,7 @@ namespace TP.Readme {
         // Drag and drop object fields
         private Object[] objectsToDrop;
         private Vector2 objectDropPosition;
+        private string objectIdPairListString = "";
         
         //Copy buffer fix
         private string previousCopyBuffer;
@@ -110,7 +112,6 @@ namespace TP.Readme {
         
         public override void OnInspectorGUI()
         {
-//            if (verbose) {  Debug.Log("README: OnInspectorGUI"); }
             currentEvent = new Event(Event.current);
 
             Readme readmeTarget = (Readme) target;
@@ -119,10 +120,8 @@ namespace TP.Readme {
                 readme = readmeTarget;
             }
             
-            if (!readme.SettingsLoaded) //TODO: Check if a higher priority settings file exists
-            {
-                readme.LoadSettings(GetSettingsPath());
-            }
+            readme.ConnectManager();
+            readme.UpdateSettings(GetSettingsPath());
             
             Object selectedObject = Selection.activeObject;
             if (selectedObject != null)
@@ -218,12 +217,12 @@ namespace TP.Readme {
             if (!editing)
             {
                 if (!readme.readonlyMode || Readme.disableAllReadonlyMode)
+            {
+                if (GUILayout.Button("Edit"))
                 {
-                    if (GUILayout.Button("Edit"))
-                    {
-                        editing = true;
-                    }
+                    editing = true;
                 }
+            }
             }
             else
             {
@@ -298,7 +297,7 @@ namespace TP.Readme {
                                             " <i></i>\n" + 
                                             " <color=\"#00ffff\"></color>\n" + 
                                             " <size=\"20\"></size>\n" + 
-                                            " <o=\"-01234\"></o> - uses GameObject.GetInstanceId()", 
+                                            " <o=\"0000001\"></o>", 
                         MessageType.Info);
                 }
             }
@@ -333,9 +332,25 @@ namespace TP.Readme {
                     }
                 }
                 richTextWithCursor = richTextWithCursor.Replace("\n", " \\n\n");
-                float adjustedTextAreaHeight = editableRichText.CalcHeight(new GUIContent(richTextWithCursor), textAreaWidth - 50);
-                EditorGUILayout.TextArea(richTextWithCursor, editableText, GUILayout.Height(adjustedTextAreaHeight));
+                float adjustedTextAreaHeight = editableText.CalcHeight(new GUIContent(richTextWithCursor), textAreaWidth - 50);
+                EditorGUILayout.SelectableLabel(richTextWithCursor, editableText, GUILayout.Height(adjustedTextAreaHeight));
 
+                EditorGUILayout.LabelField("Object Id Pairs");
+                float objectDictHeight = editableText.CalcHeight(new GUIContent(objectIdPairListString), textAreaWidth - 50);
+                EditorGUILayout.SelectableLabel(objectIdPairListString, editableText, GUILayout.Height(objectDictHeight));
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("Refresh Pairs", GUILayout.Width(smallButtonWidth * 4)) || objectIdPairListString == "")
+                {
+                    objectIdPairListString = ReadmeManager.GetObjectIdPairListString();
+                    Repaint();
+                }
+                if (GUILayout.Button("Clear Pairs", GUILayout.Width(smallButtonWidth * 4)))
+                {
+                    ReadmeManager.Clear();
+                    Repaint();
+                }
+                GUILayout.EndHorizontal();
+                
                 EditorGUILayout.HelpBox(
                     "mousePosition: " + Event.current.mousePosition + "\n" +
                     "FocusedWindow: " + EditorWindow.focusedWindow + "\n" +
@@ -382,15 +397,16 @@ namespace TP.Readme {
 
                 GUILayout.BeginHorizontal();
 
-                if (GUILayout.Button("Save Settings", GUILayout.Width(smallButtonWidth * 4)))
+                if (GUILayout.Button("New Settings File", GUILayout.Width(smallButtonWidth * 4)))
                 {
-                    readme.SaveSettings(GetSettingsPath());
+                    ReadmeSettings newSettings = new ReadmeSettings(GetSettingsPath());
+                    newSettings.SaveSettings();
                     Repaint();
                 }
                 
                 if (GUILayout.Button("Reload Settings", GUILayout.Width(smallButtonWidth * 4)))
                 {
-                    readme.LoadSettings(GetSettingsPath());
+                    readme.UpdateSettings(GetSettingsPath(), true);
                     Repaint();
                 }
                 
@@ -452,7 +468,7 @@ namespace TP.Readme {
 
                 EditorGUI.indentLevel--;
             }
-
+            
             UpdateTextAreaObjectFields();
             DragAndDropObjectField();
             
@@ -671,7 +687,7 @@ namespace TP.Readme {
                     }
                     else
                     {
-                        return; //Abort everything. Position is incorrect!
+                        return; //Abort everything. Position is incorrect! Probably no TextEditor found.
                     }
                 }
             }
@@ -709,6 +725,13 @@ namespace TP.Readme {
             string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
             int startTagLength = "<o=\"".Length;
             int endTagLength = "\"></o>".Length;
+            int expectedFieldCount = Regex.Matches(RichText, "<o=\"[-,a-zA-Z0-9]*\"></o>", RegexOptions.None).Count;
+
+            if (expectedFieldCount != TextAreaObjectFields.Length)
+            {
+                return;
+            }
+            
             for (int i = TextAreaObjectFields.Length - 1; i >= 0; i--)
             {
                 TextAreaObjectField textAreaObjectField = TextAreaObjectFields[i];
@@ -825,7 +848,7 @@ namespace TP.Readme {
             {
                 Object objectDragged = objects[i];
 
-                AddObjectField(index, objectDragged.GetInstanceID().ToString());
+                AddObjectField(index, ReadmeManager.GetIdFromObject(objectDragged).ToString());
             }
         }
 
@@ -983,27 +1006,27 @@ namespace TP.Readme {
                 Event.current.Use();
                 Repaint();
             }
-
+            
             if (editing)
             {
-                //Alt + b for bold
-                if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
-                {
-                    ToggleStyle("b");
+            //Alt + b for bold
+            if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.B)
+            {
+                ToggleStyle("b");
                     Event.current.Use();
-                }
-
-                //Alt + i for italic
+            }
+            
+            //Alt + i for italic
                 if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.I)
-                {
-                    ToggleStyle("i");
+            {
+                ToggleStyle("i");
                     Event.current.Use();
-                }
-
-                //Alt + o for object
+            }
+            
+            //Alt + o for object
                 if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.O)
-                {
-                    AddObjectField();
+            {
+                AddObjectField();
                     Event.current.Use();
                 }
             }

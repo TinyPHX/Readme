@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using UnityEditor;
 
 namespace TP.Readme {
     
@@ -15,6 +14,7 @@ namespace TP.Readme {
     {
         public string richText = "";
         public TextAreaObjectField[] textAreaObjectFields = new TextAreaObjectField[0];
+        public List<ObjectIdPair> objectIdPairs;
     }
 
     [Serializable]
@@ -51,8 +51,19 @@ namespace TP.Readme {
 
         private string previousRichText = "";
         private string text = "";
-        [SerializeField] private ReadmeData readmeData;
+        [SerializeField] private ReadmeData readmeData = new ReadmeData();
         private string lastSavedFileName = "";
+
+        private bool managerConnected; //This should never be serialized
+
+        public void ConnectManager()
+        {
+            if (!managerConnected)
+            {
+                ReadmeManager.AddReadme(this);
+                ObjectIdPairs = ReadmeManager.ObjectIdPairs;
+            }
+        }
     
         public string RichText
         {
@@ -76,6 +87,20 @@ namespace TP.Readme {
                 BuildRichTextTagMap();
                 RebuildStyleMaps();
             }
+        }
+    
+        public List<ObjectIdPair> ObjectIdPairs
+        {
+            get
+            {
+                if (readmeData.objectIdPairs == null)
+                {
+                    ConnectManager();
+                }
+                
+                return readmeData.objectIdPairs;
+            }
+            private set { readmeData.objectIdPairs = value; }
         }
 
         public string PreviousRichText
