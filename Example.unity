@@ -210,6 +210,36 @@ MonoBehaviour:
   iconBeingUsed: 1
   useTackIcon: 1
   readonlyMode: 0
+  activeSettings:
+    name: 
+    id: 
+    path: 
+    fileName: 
+    redistributable: 0
+    priority: 0
+    type: 
+  allSettings:
+  - name: 
+    id: 
+    path: 
+    fileName: 
+    redistributable: 0
+    priority: 0
+    type: 
+  - name: 
+    id: 
+    path: 
+    fileName: 
+    redistributable: 0
+    priority: 0
+    type: 
+  - name: 
+    id: 
+    path: 
+    fileName: 
+    redistributable: 0
+    priority: 0
+    type: 
   readmeData:
     richText: "<size=20>Cylinder</size>\n\nA <b>cylinder</b> (from Greek <i>\u03BA\u03CD\u03BB\u03B9\u03BD\u03B4\u03C1\u03BF\u03C2</i>
       \u2013 <i>kulindros</i>, \"roller, tumbler\") has traditionally been a three-dimensional
@@ -388,6 +418,15 @@ MonoBehaviour:
   iconBeingUsed: 1
   useTackIcon: 1
   readonlyMode: 0
+  activeSettings:
+    name: 
+    id: 
+    path: 
+    fileName: 
+    redistributable: 0
+    priority: 0
+    type: 
+  allSettings: []
   readmeData:
     richText: The  <o="0000007"></o>  on this  <o="0000003"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
       becuase I thought it was pretty.
@@ -5378,6 +5417,15 @@ MonoBehaviour:
   iconBeingUsed: 1
   useTackIcon: 1
   readonlyMode: 1
+  activeSettings:
+    name: 
+    id: 
+    path: 
+    fileName: 
+    redistributable: 0
+    priority: 0
+    type: 
+  allSettings: []
   readmeData:
     richText: '<b>DONT CHANGE THESE CAMERA SETTINGS!</b>
 

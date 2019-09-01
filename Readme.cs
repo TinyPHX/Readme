@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
 
 namespace TP.Readme {
@@ -15,12 +16,6 @@ namespace TP.Readme {
         public string richText = "";
         public TextAreaObjectField[] textAreaObjectFields = new TextAreaObjectField[0];
         public List<ObjectIdPair> objectIdPairs;
-    }
-
-    [Serializable]
-    public class ReadmeSettings
-    {
-        public bool redistributable;
     }
     
     [DisallowMultipleComponent, ExecuteInEditMode, HelpURL("https://forum.unity.com/threads/wip-a-readme-component.698477/")]
@@ -42,8 +37,8 @@ namespace TP.Readme {
         public bool readonlyMode = false;
         public static bool disableAllReadonlyMode = false;
 
-        [SerializeField] private ReadmeSettings readmeSettings;
-        private static string[] settingsPriority = {"Settings_Paid", "Settings_Free"};
+        [SerializeField] private ReadmeSettings activeSettings;
+        [SerializeField] private List<ReadmeSettings> allSettings = new List<ReadmeSettings> {};
         private bool settingsLoaded = false;
         private string fileNameLoaded = "";
         
@@ -137,12 +132,35 @@ namespace TP.Readme {
             get { return supportedTags; }
         }
 
-        public bool SettingsLoaded
+        public void UpdateSettings(string directory, bool force = false)
         {
-            get { return settingsLoaded; }
-            set { settingsLoaded = value; }
-        }
+            if (!settingsLoaded || force)
+            {
+                allSettings.Clear();
+                bool settingsFound = false;
+                
+                DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+                FileInfo[] fileInfos = directoryInfo.GetFiles();
+                foreach (FileInfo fileInfo in fileInfos)
+                {
+                    if (fileInfo.Extension == "." + ReadmeSettings.DEFAULT_TYPE && 
+                        fileInfo.Name.Substring(0, ReadmeSettings.FILE_TAG.Length) == ReadmeSettings.FILE_TAG)
+                    {
+                        allSettings.Add(ReadmeSettings.LoadSettings(directory, fileInfo.Name));
+                        settingsFound = true;
+                    }
+                }
 
+                if (settingsFound)
+                {
+                    activeSettings = allSettings.OrderBy(setting => setting.priority).FirstOrDefault();
+                    settingsLoaded = true;
+
+                    readonlyMode = activeSettings.redistributable;
+                }
+            }
+        }
+        
         public string RemoveEmptyTags(string input)
         {
             string output = input
@@ -391,41 +409,6 @@ namespace TP.Readme {
                 
                 string json = File.ReadAllText(fileToLoad);
                 RichText = JsonUtility.FromJson<ReadmeData>(json).richText;
-            }
-        }
-
-        public void SaveSettings(string path)
-        {
-            string jsonReadmeSettingsData = JsonUtility.ToJson(readmeSettings, true);
-            string fileName = path + "/Settings_New.json";
-            File.WriteAllText (fileName, jsonReadmeSettingsData);
-            Debug.Log("Settings saved to file: " + fileName);
-        }
-
-        public void LoadSettings(string directoryPath)
-        {
-            bool fileFound = false;
-            foreach (string settings in settingsPriority)
-            {
-                string fileName = settings + ".json";
-                string filePath = Path.Combine(directoryPath, fileName);
-                if (File.Exists(Path.GetFullPath(filePath)))
-                {
-                    string json = File.ReadAllText(filePath);
-                    readmeSettings = JsonUtility.FromJson<ReadmeSettings>(json);
-                    SettingsLoaded = true;
-                    fileNameLoaded = settings;
-                    fileFound = true;
-                    
-                    Debug.Log("README: Settings loaded from file: " + filePath);
-                    
-                    break;
-                }
-            }
-
-            if (!fileFound)
-            {
-                Debug.LogWarning("README: Settings file not found! Please contact the developer.");
             }
         }
     
