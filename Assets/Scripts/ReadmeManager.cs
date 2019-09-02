@@ -42,7 +42,7 @@ namespace TP.Readme
 
         public static string GetObjectIdPairListString()
         {
-            return string.Join("\n", ObjectIdPairs.Select(x => x.Id + " = " + GetObjectString(x.ObjectRef)).ToArray());
+            return string.Join("\n", ObjectIdPairs.OrderBy(x => x.Id).Select(x => x.Id + " = " + GetObjectString(x.ObjectRef)).ToArray());
         }
 
         public static string GetObjectString(Object obj)
@@ -139,20 +139,50 @@ namespace TP.Readme
             }
         }
 
+        private static void RebuildObjectPairList()
+        {
+            Clear();
+            
+            foreach (Readme readme in readmes)
+            {
+                foreach (TextAreaObjectField textAreaObjectField in readme.TextAreaObjectFields)
+                {
+                    AddObjectIdPair(textAreaObjectField.ObjectRef, textAreaObjectField.ObjectId);
+                }
+            }
+        }
+        
+
         private static void AddObjectIdPair(Object obj, int objId)
         {
             Object foundObject;
+            int foundId;
             
             if (ObjectDict.TryGetValue(objId, out foundObject))
             {
                 if (foundObject != obj)
                 {
-                    Debug.LogWarning("Duplicate object key detected. Object ignored: " + obj);
+                    Debug.LogWarning("Duplicate ids detected. Object ignored: " + obj);
+                }
+
+                return;
+            }
+            
+            if (IdDict.TryGetValue(obj, out foundId))
+            {
+                if (foundId != objId)
+                {
+                    Debug.LogWarning("Duplicate objects detected. Object ignored: " + obj);
                 }
 
                 return;
             }
 
+            if (obj == null)
+            {
+                Debug.LogWarning("Cannot add null object to objectIdPairs.");
+                return;
+            }
 
             if (obj == null)
             {
@@ -167,8 +197,15 @@ namespace TP.Readme
 
         private static void AddObjectIdPairToDicts(ObjectIdPair objectIdPair)
         {
-            ObjectDict.Add(objectIdPair.Id, objectIdPair.ObjectRef);
-            IdDict.Add(objectIdPair.ObjectRef, objectIdPair.Id);
+            if (!objectDict.ContainsKey(objectIdPair.Id))
+            {
+                ObjectDict.Add(objectIdPair.Id, objectIdPair.ObjectRef);
+            }
+
+            if (!IdDict.ContainsKey(objectIdPair.ObjectRef))
+            {
+                IdDict.Add(objectIdPair.ObjectRef, objectIdPair.Id);
+            }
         }
 
         public static void Clear()
@@ -181,13 +218,39 @@ namespace TP.Readme
         public static Object GetObjectFromId(int id)
         {
             Object objFound = null;
-            if (!ObjectDict.TryGetValue(id, out objFound))
+            bool found;
+            if (id != 0)
             {
-                Debug.LogWarning("Problem finding object in dictionary");
+                found = ObjectDict.TryGetValue(id, out objFound);
+                
+                if (!found)
+                {
+                    SyncDictsWithList();
+                    found = ObjectDict.TryGetValue(id, out objFound);
+                }
+                
+                if (!found)
+                {
+                    RebuildObjectPairList();
+                    found = ObjectDict.TryGetValue(id, out objFound);
+                }
+
+                if (!found)
+                {
+                    Debug.LogWarning("Problem finding object with id: " + id + ".");
+                }
             }
 
             return objFound;
         }
+        
+
+//        private static bool IsPrefab(GameObject gameObject)
+//        {
+//            bool isPrefab = gameObject != null && (gameObject.scene.name == null || gameObject.gameObject != null && gameObject.gameObject.scene.name == null);
+//
+//            return isPrefab;
+//        }
         
         public static int GetIdFromObject(Object obj)
         {
