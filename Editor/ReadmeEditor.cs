@@ -162,7 +162,20 @@ namespace TP.Readme
             {
                 if (empty)
                 {
-                    EditorGUILayout.HelpBox("Click edit to add your readme!", MessageType.Info);
+                    if (readme.readonlyMode && readme.ActiveSettings.redistributable == true)
+                    {
+                        string message = "You are using the readonly version of Readme. If you'd like to create and " +
+                                         "edit readme files you can purchase a copy of Readme from the Unity Asset" +
+                                         "Store.";
+                        string website = "https://assetstore.unity.com/packages/slug/152336";
+                        EditorGUILayout.HelpBox(message, MessageType.Warning);
+                        
+                        EditorGUILayout.SelectableLabel(website, GUILayout.Height(textAreaHeight + 4));
+                    }
+                    else
+                    {
+                        EditorGUILayout.HelpBox("Click edit to add your readme!", MessageType.Info);
+                    }
                 }
                 else
                 {

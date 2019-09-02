@@ -211,35 +211,35 @@ MonoBehaviour:
   useTackIcon: 1
   readonlyMode: 0
   activeSettings:
-    name: 
-    id: 
-    path: 
-    fileName: 
+    name: Settings_Paid
+    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Settings_Paid
     redistributable: 0
-    priority: 0
-    type: 
+    priority: 5
+    type: json
   allSettings:
-  - name: 
-    id: 
-    path: 
-    fileName: 
+  - name: New
+    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: New
+    redistributable: 1
+    priority: 1000
+    type: json
+  - name: Settings_Free
+    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Settings_Free
+    redistributable: 1
+    priority: 10
+    type: json
+  - name: Settings_Paid
+    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Settings_Paid
     redistributable: 0
-    priority: 0
-    type: 
-  - name: 
-    id: 
-    path: 
-    fileName: 
-    redistributable: 0
-    priority: 0
-    type: 
-  - name: 
-    id: 
-    path: 
-    fileName: 
-    redistributable: 0
-    priority: 0
-    type: 
+    priority: 5
+    type: json
   readmeData:
     richText: "<size=20>Cylinder</size>\n\nA <b>cylinder</b> (from Greek <i>\u03BA\u03CD\u03BB\u03B9\u03BD\u03B4\u03C1\u03BF\u03C2</i>
       \u2013 <i>kulindros</i>, \"roller, tumbler\") has traditionally been a three-dimensional
@@ -264,7 +264,7 @@ MonoBehaviour:
       fieldRect:
         serializedVersion: 2
         x: 280
-        y: 545
+        y: 543
         width: 140
         height: 15
       index: 963
@@ -275,7 +275,7 @@ MonoBehaviour:
       fieldRect:
         serializedVersion: 2
         x: 291
-        y: 573
+        y: 571
         width: 140
         height: 15
       index: 1076
@@ -286,7 +286,7 @@ MonoBehaviour:
       fieldRect:
         serializedVersion: 2
         x: 213
-        y: 601
+        y: 599
         width: 140
         height: 15
       index: 1125
@@ -419,14 +419,35 @@ MonoBehaviour:
   useTackIcon: 1
   readonlyMode: 0
   activeSettings:
-    name: 
-    id: 
-    path: 
-    fileName: 
+    name: Free
+    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Free
+    redistributable: 1
+    priority: 1
+    type: json
+  allSettings:
+  - name: New
+    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: New
+    redistributable: 1
+    priority: 1000
+    type: json
+  - name: Paid
+    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Paid
     redistributable: 0
-    priority: 0
-    type: 
-  allSettings: []
+    priority: 5
+    type: json
+  - name: Free
+    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Free
+    redistributable: 1
+    priority: 1
+    type: json
   readmeData:
     richText: The  <o="0000007"></o>  on this  <o="0000003"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
       becuase I thought it was pretty.
@@ -498,6 +519,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: richTextTagMap.Array.size
@@ -703,32 +729,32 @@ Prefab:
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.y
-      value: 658
+      value: 656
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[1].fieldRect.y
-      value: 674
+      value: 672
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[2].fieldRect.y
-      value: 690
+      value: 688
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.y
-      value: 706
+      value: 704
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[4].fieldRect.y
-      value: 722
+      value: 720
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.textAreaObjectFields.Array.data[5].fieldRect.y
-      value: 738
+      value: 736
       objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
@@ -5306,6 +5332,146 @@ Prefab:
       value: 
       objectReference: {fileID: 1351242074934004, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: activeSettings.name
+      value: Free
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: activeSettings.id
+      value: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: activeSettings.path
+      value: Assets/Packages/TP/Readme/Editor\..\Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: activeSettings.fileName
+      value: Free
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: activeSettings.priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: activeSettings.type
+      value: json
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[0].name
+      value: New
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[0].id
+      value: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[0].path
+      value: Assets/Packages/TP/Readme/Editor\..\Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[0].fileName
+      value: New
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[0].redistributable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[0].priority
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[0].type
+      value: json
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[1].name
+      value: Paid
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[1].id
+      value: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[1].path
+      value: Assets/Packages/TP/Readme/Editor\..\Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[1].fileName
+      value: Paid
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[1].redistributable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[1].priority
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[1].type
+      value: json
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[2].name
+      value: Free
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[2].id
+      value: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[2].path
+      value: Assets/Packages/TP/Readme/Editor\..\Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[2].fileName
+      value: Free
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[2].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[2].type
+      value: json
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: activeSettings.redistributable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: allSettings.Array.data[2].redistributable
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
   m_IsPrefabParent: 0
@@ -5418,14 +5584,35 @@ MonoBehaviour:
   useTackIcon: 1
   readonlyMode: 1
   activeSettings:
-    name: 
-    id: 
-    path: 
-    fileName: 
+    name: Paid
+    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Paid
     redistributable: 0
-    priority: 0
-    type: 
-  allSettings: []
+    priority: 5
+    type: json
+  allSettings:
+  - name: New
+    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: New
+    redistributable: 1
+    priority: 1000
+    type: json
+  - name: Paid
+    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Paid
+    redistributable: 0
+    priority: 5
+    type: json
+  - name: Free
+    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Free
+    redistributable: 1
+    priority: 10
+    type: json
   readmeData:
     richText: '<b>DONT CHANGE THESE CAMERA SETTINGS!</b>
 

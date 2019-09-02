@@ -132,6 +132,11 @@ namespace TP.Readme {
             get { return supportedTags; }
         }
 
+        public ReadmeSettings ActiveSettings
+        {
+            get { return activeSettings; }
+        }
+
         public void UpdateSettings(string directory, bool force = false)
         {
             if (!settingsLoaded || force)
@@ -156,7 +161,10 @@ namespace TP.Readme {
                     activeSettings = allSettings.OrderBy(setting => setting.priority).FirstOrDefault();
                     settingsLoaded = true;
 
-                    readonlyMode = activeSettings.redistributable;
+                    if (!readonlyMode && ActiveSettings.redistributable)
+                    {
+                        readonlyMode = true;
+                    }
                 }
             }
         }
