@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
 
 namespace TP.Readme {
@@ -35,6 +36,11 @@ namespace TP.Readme {
         public static bool neverUseTackIcon = false;
         public bool readonlyMode = false;
         public static bool disableAllReadonlyMode = false;
+
+        [SerializeField] private ReadmeSettings activeSettings;
+        [SerializeField] private List<ReadmeSettings> allSettings = new List<ReadmeSettings> {};
+        private bool settingsLoaded = false;
+        private string fileNameLoaded = "";
         
         private static List<string> supportedTags = new List<string>() {"b", "i", "color", "size"};
 
@@ -126,6 +132,43 @@ namespace TP.Readme {
             get { return supportedTags; }
         }
 
+        public ReadmeSettings ActiveSettings
+        {
+            get { return activeSettings; }
+        }
+
+        public void UpdateSettings(string directory, bool force = false)
+        {
+            if (!settingsLoaded || force)
+            {
+                allSettings.Clear();
+                bool settingsFound = false;
+                
+                DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+                FileInfo[] fileInfos = directoryInfo.GetFiles();
+                foreach (FileInfo fileInfo in fileInfos)
+                {
+                    if (fileInfo.Extension == "." + ReadmeSettings.DEFAULT_TYPE && 
+                        fileInfo.Name.Substring(0, ReadmeSettings.FILE_TAG.Length) == ReadmeSettings.FILE_TAG)
+                    {
+                        allSettings.Add(ReadmeSettings.LoadSettings(directory, fileInfo.Name));
+                        settingsFound = true;
+                    }
+                }
+
+                if (settingsFound)
+                {
+                    activeSettings = allSettings.OrderBy(setting => setting.priority).FirstOrDefault();
+                    settingsLoaded = true;
+
+                    if (!readonlyMode && ActiveSettings.redistributable)
+                    {
+                        readonlyMode = true;
+                    }
+                }
+            }
+        }
+        
         public string RemoveEmptyTags(string input)
         {
             string output = input

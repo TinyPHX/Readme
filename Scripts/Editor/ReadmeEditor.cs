@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,7 +11,8 @@ using UnityEngine;
 using UnityEditor;
 using Object = UnityEngine.Object;
 
-namespace TP.Readme {
+namespace TP.Readme 
+{
     [CustomEditor(typeof(Readme)), ExecuteInEditMode]
     public class ReadmeEditor : Editor
     {
@@ -99,9 +101,17 @@ namespace TP.Readme {
             };
         }
         
+        private string GetSettingsPath()
+        {
+            MonoScript monoScript = MonoScript.FromScriptableObject(this);
+            string path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(monoScript));
+            path = Path.Combine(path, "..");
+            path = Path.Combine(path, "Settings");
+            return path;
+        }
+        
         public override void OnInspectorGUI()
         {
-//            if (verbose) {  Debug.Log("README: OnInspectorGUI"); }
             currentEvent = new Event(Event.current);
 
             Readme readmeTarget = (Readme) target;
@@ -111,6 +121,7 @@ namespace TP.Readme {
             }
             
             readme.ConnectManager();
+            readme.UpdateSettings(GetSettingsPath());
             
             Object selectedObject = Selection.activeObject;
             if (selectedObject != null)
@@ -151,7 +162,20 @@ namespace TP.Readme {
             {
                 if (empty)
                 {
-                    EditorGUILayout.HelpBox("Click edit to add your readme!", MessageType.Info);
+                    if (readme.readonlyMode && readme.ActiveSettings.redistributable == true)
+                    {
+                        string message = "You are using the readonly version of Readme. If you'd like to create and " +
+                                         "edit readme files you can purchase a copy of Readme from the Unity Asset" +
+                                         "Store.";
+                        string website = "https://assetstore.unity.com/packages/slug/152336";
+                        EditorGUILayout.HelpBox(message, MessageType.Warning);
+                        
+                        EditorGUILayout.SelectableLabel(website, GUILayout.Height(textAreaHeight + 4));
+                    }
+                    else
+                    {
+                        EditorGUILayout.HelpBox("Click edit to add your readme!", MessageType.Info);
+                    }
                 }
                 else
                 {
@@ -376,7 +400,6 @@ namespace TP.Readme {
                     readme.Save();
                 }
 
-                GUIStyle loadButtonStyle = new GUIStyle(GUI.skin.button);
                 if (GUILayout.Button("Load from File", GUILayout.Width(smallButtonWidth * 4)))
                 {
                     readme.LoadLastSave();
@@ -385,6 +408,22 @@ namespace TP.Readme {
 
                 GUILayout.EndHorizontal();
 
+                GUILayout.BeginHorizontal();
+
+                if (GUILayout.Button("New Settings File", GUILayout.Width(smallButtonWidth * 4)))
+                {
+                    ReadmeSettings newSettings = new ReadmeSettings(GetSettingsPath());
+                    newSettings.SaveSettings();
+                    Repaint();
+                }
+                
+                if (GUILayout.Button("Reload Settings", GUILayout.Width(smallButtonWidth * 4)))
+                {
+                    readme.UpdateSettings(GetSettingsPath(), true);
+                    Repaint();
+                }
+                
+                GUILayout.EndHorizontal();
 
                 if (editing || debugButtons)
                 {
@@ -978,6 +1017,7 @@ namespace TP.Readme {
             {
                 Readme.advancedOptions = !Readme.advancedOptions; 
                 Event.current.Use();
+                Repaint();
             }
             
             if (editing)
