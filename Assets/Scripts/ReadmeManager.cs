@@ -168,7 +168,7 @@ namespace TP.Readme
                 return;
             }
             
-            if (IdDict.TryGetValue(obj, out foundId))
+            if (obj != null && IdDict.TryGetValue(obj, out foundId))
             {
                 if (foundId != objId)
                 {
@@ -264,16 +264,15 @@ namespace TP.Readme
             if (!IdDict.TryGetValue(obj, out objId))
             {
                 objId = GenerateId();
+                AddObjectIdPair(obj, objId);
             }
-
-            AddObjectIdPair(obj, objId);
 
             return objId;
         }
 
         private static int GenerateId()
         {
-            return ObjectIdPairs.Count + 1;
+            return objectDict.Keys.Max() + 1;
         }
 
         public void OnBeforeSerialize()
