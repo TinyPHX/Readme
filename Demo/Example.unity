@@ -505,6 +505,21 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.size
+      value: 1204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.size
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4113731432848810, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0.09863281
@@ -546,17 +561,812 @@ Prefab:
         type: 2}
       propertyPath: readmeData.objectIdPairs.Array.data[1].objectRef
       value: 
-      objectReference: {fileID: 511163808}
+      objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.objectIdPairs.Array.data[6].objectRef
       value: 
-      objectReference: {fileID: 1192897486}
+      objectReference: {fileID: 0}
     - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
         type: 2}
       propertyPath: readmeData.objectIdPairs.Array.data[7].objectRef
       value: 
-      objectReference: {fileID: 1192897485}
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[2].name
+      value: Readme (UnityEngine.GameObject) (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[2].id
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[2].objectRef
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[10].name
+      value: 01 (UnityEngine.DefaultAsset) (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[10].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: acdd7565260fd5d48a130abc409ffe8e,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[11].name
+      value: Main Camera (UnityEngine.GameObject) (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[11].id
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[11].objectRef
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.richText
+      value: "<size=20>Example Readme Script</size>\n\nReadme is component that allows
+        you to add any type of notes or documentation directly to a Prefab or GameObject.
+        It's usefull when a note is specific to to this object as a whole and not
+        able to be included as a file or script comment. \n\nYou can add it as plain
+        text or include styling.\n\n\n<size=16>Supported Styles</size>\n\n * <b>Bold</b>\n
+        * <i>Italics</i>\n\n<size=16>Semi-Supported Styles</size>\n\nThese are styles
+        that have to be added with tags manually but still work.\n\n * Color: <color=\"#ff0000\">Red</color>,
+        <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n * Size:
+        <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
+        references can be draged and dropeed to create inline references.\n\n * Scene:
+        \ <o=\"0000006\"></o> \n * Game Object:  <o=\"0000015\"></o> \n * Prefab:
+        \ <o=\"0000014\"></o>  \n * Script:  <o=\"0000004\"></o> \n * File:  <o=\"0000002\"></o>
+        \n * Folder:  <o=\"0000001\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n
+        * Change font color\n * Change font style\n * Change font size \n * Bold togle
+        button\n * Italics toggle button\n * Add object field button\n * View the
+        source for quick editing\n * Advanced tab for debugging"
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[2].objectId
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[12].name
+      value: Readme (UnityEngine.GameObject) (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[12].id
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[12].objectRef
+      value: 
+      objectReference: {fileID: 618287655}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].objectId
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[13].name
+      value: Cylinder (UnityEngine.GameObject) (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[13].id
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[13].objectRef
+      value: 
+      objectReference: {fileID: 511163808}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.y
+      value: 602
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].name
+      value: Cylinder (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].fieldRect.y
+      value: 618
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[2].name
+      value: Readme (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[2].fieldRect.y
+      value: 634
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.y
+      value: 650
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].fieldRect.y
+      value: 666
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].fieldRect.y
+      value: 682
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[873]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[874]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[875]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[876]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[877]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[878]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[879]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[880]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[881]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[882]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[883]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[884]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[891]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[892]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[893]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[894]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[895]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[896]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[897]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[898]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[899]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[900]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[901]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[902]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[904]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[905]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[906]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[907]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[908]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[909]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[910]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[911]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[912]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[913]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[922]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[923]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[924]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[925]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[926]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[927]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[928]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[929]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[930]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[931]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[933]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[934]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[935]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[936]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[937]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[938]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[939]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[940]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[941]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[942]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[943]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[944]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[951]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[952]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[953]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[954]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[955]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[956]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[957]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[958]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[959]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[960]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[961]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[962]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[964]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[965]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[966]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[976]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[977]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[978]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[979]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[980]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[981]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[986]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[987]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[988]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[989]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[990]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[991]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[995]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[996]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[997]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[998]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1011]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1012]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1013]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1014]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1015]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1016]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[1017]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[14].name
+      value: Main Camera (UnityEngine.GameObject) (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[14].id
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[14].objectRef
+      value: 
+      objectReference: {fileID: 1889844768}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].name
+      value: Editor (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].objectId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].fieldRect.x
+      value: 93
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].fieldRect.y
+      value: 682
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].fieldRect.width
+      value: 162
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].fieldRect.height
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].index
+      value: 964
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[6].length
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].name
+      value: Readme (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].objectId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].objectRef
+      value: 
+      objectReference: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].fieldRect.x
+      value: 91
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[3].index
+      value: 886
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].name
+      value: README (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].objectId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].fieldRect.x
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[4].index
+      value: 915
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].name
+      value: Editor (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].objectId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].objectRef
+      value: 
+      objectReference: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9,
+        type: 3}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].fieldRect.x
+      value: 93
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[5].index
+      value: 946
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[885]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[903]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[914]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[932]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[945]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[963]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[967]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[992]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114904343803117110, guid: 1702efc17146dc24c8b286d174d75ddc,
+        type: 2}
+      propertyPath: richTextTagMap.Array.data[999]
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1702efc17146dc24c8b286d174d75ddc, type: 2}
   m_IsPrefabParent: 0
@@ -709,10 +1519,10 @@ MonoBehaviour:
       objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
     - name: Cylinder (UnityEngine.GameObject) (5)
       id: 5
-      objectRef: {fileID: 511163808}
-    - name: Readme (UnityEngine.GameObject) (3)
-      id: 3
-      objectRef: {fileID: 618287655}
+      objectRef: {fileID: 0}
+    - name: Readme (UnityEngine.GameObject) (12)
+      id: 12
+      objectRef: {fileID: 0}
     - name: Readme (UnityEngine.MonoScript) (4)
       id: 4
       objectRef: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
@@ -724,13 +1534,28 @@ MonoBehaviour:
       objectRef: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9, type: 3}
     - name: Directional Light (UnityEngine.Light) (8)
       id: 8
-      objectRef: {fileID: 1192897486}
+      objectRef: {fileID: 0}
     - name: Directional Light (UnityEngine.GameObject) (7)
       id: 7
-      objectRef: {fileID: 1192897485}
+      objectRef: {fileID: 0}
     - name: Cylinder (UnityEngine.Mesh) (10)
       id: 10
       objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
     - name: Default-Material (UnityEngine.Material) (9)
       id: 9
       objectRef: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+    - name: 01 (UnityEngine.DefaultAsset) (11)
+      id: 11
+      objectRef: {fileID: 102900000, guid: acdd7565260fd5d48a130abc409ffe8e, type: 3}
+    - name: Main Camera (UnityEngine.GameObject) (13)
+      id: 13
+      objectRef: {fileID: 0}
+    - name: Readme (UnityEngine.GameObject) (14)
+      id: 14
+      objectRef: {fileID: 618287655}
+    - name: Cylinder (UnityEngine.GameObject) (15)
+      id: 15
+      objectRef: {fileID: 511163808}
+    - name: Main Camera (UnityEngine.GameObject) (16)
+      id: 16
+      objectRef: {fileID: 1889844768}
