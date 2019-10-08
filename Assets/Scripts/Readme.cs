@@ -55,6 +55,7 @@ namespace TP.Readme {
         {
             if (!managerConnected)
             {
+                managerConnected = true;
                 ReadmeManager.AddReadme(this);
                 ObjectIdPairs = ReadmeManager.ObjectIdPairs;
             }
