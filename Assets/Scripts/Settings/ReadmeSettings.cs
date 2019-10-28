@@ -15,19 +15,21 @@ namespace TP.Readme
         public string path;
         public string fileName;
         public bool redistributable;
+        public bool lite;
         public float priority;
         public string type;
         
         public static string FILE_TAG = "Settings_";
         public static string DEFAULT_TYPE = "json";
 
-        public ReadmeSettings(string path, string fileName = "New", bool redistributable = true, int priority = 1000)
+        public ReadmeSettings(string path, string fileName = "New", bool redistributable = true, bool lite = true, int priority = 1000)
         {
             name = fileName;
             id = Guid.NewGuid().ToString();
             this.path = path;
             this.fileName = fileName;
             this.redistributable = redistributable;
+            this.lite = lite;
             this.priority = priority;
             type = DEFAULT_TYPE;
         }

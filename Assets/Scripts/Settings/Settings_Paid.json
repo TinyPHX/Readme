@@ -4,6 +4,7 @@
     "path": "Assets/Packages/TP/Readme/Editor\\..\\Settings",
     "fileName": "Paid",
     "redistributable": false,
+    "lite": false,
     "priority": 5.0,
     "type": "json"
 }

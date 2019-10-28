@@ -178,17 +178,6 @@ namespace TP.Readme
                 return;
             }
 
-            if (obj == null)
-            {
-                Debug.LogWarning("Cannot add null object to objectIdPairs.");
-                return;
-            }
-
-            if (obj == null)
-            {
-                Debug.LogWarning("Cannot add null object to objectIdPairs.");
-                return;
-            }
             
             ObjectIdPair objectIdPair = new ObjectIdPair(objId, obj);
             ObjectIdPairs.Add(objectIdPair);
@@ -215,29 +204,32 @@ namespace TP.Readme
             ObjectDict.Clear();
         }
         
-        public static Object GetObjectFromId(int id)
+        public static Object GetObjectFromId(int id, bool autoSync = true)
         {
             Object objFound = null;
             bool found;
             if (id != 0)
             {
                 found = ObjectDict.TryGetValue(id, out objFound);
-                
-                if (!found)
-                {
-                    SyncDictsWithList();
-                    found = ObjectDict.TryGetValue(id, out objFound);
-                }
-                
-                if (!found)
-                {
-                    RebuildObjectPairList();
-                    found = ObjectDict.TryGetValue(id, out objFound);
-                }
 
-                if (!found)
+                if (autoSync)
                 {
-                    Debug.LogWarning("Problem finding object with id: " + id + ".");
+                    if (!found)
+                    {
+                        SyncDictsWithList();
+                        found = ObjectDict.TryGetValue(id, out objFound);
+                    }
+
+                    if (!found)
+                    {
+                        RebuildObjectPairList();
+                        found = ObjectDict.TryGetValue(id, out objFound);
+                    }
+
+                    if (!found)
+                    {
+                        Debug.LogWarning("Problem finding object with id: " + id + ".");
+                    }
                 }
             }
 
@@ -264,15 +256,21 @@ namespace TP.Readme
             if (!IdDict.TryGetValue(obj, out objId))
             {
                 objId = GenerateId();
-                AddObjectIdPair(obj, objId);
             }
+
+            AddObjectIdPair(obj, objId);
 
             return objId;
         }
 
         private static int GenerateId()
         {
-            return objectDict.Keys.Max() + 1;
+            int largestId = 0;
+            if (objectDict != null && objectDict.Count > 0)
+            {
+                largestId = objectDict.Keys.Max();
+            }
+            return largestId + 1;
         }
 
         public void OnBeforeSerialize()

@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEditor;
+using Application = UnityEngine.Application;
 using Object = UnityEngine.Object;
 
 namespace TP.Readme 
@@ -20,6 +21,7 @@ namespace TP.Readme
 
         private bool verbose = false;
         private bool debugButtons = false;
+        private bool liteEditor;
         
         // State
         private bool editing = false;
@@ -109,10 +111,11 @@ namespace TP.Readme
             path = Path.Combine(path, "Settings");
             return path;
         }
-        
+
         public override void OnInspectorGUI()
         {
             currentEvent = new Event(Event.current);
+            bool textChanged = false;
 
             Readme readmeTarget = (Readme) target;
             if (readmeTarget != null)
@@ -120,8 +123,11 @@ namespace TP.Readme
                 readme = readmeTarget;
             }
             
+            readme.Initialize();
             readme.ConnectManager();
             readme.UpdateSettings(GetSettingsPath());
+            
+            liteEditor = readme.ActiveSettings.lite;
             
             Object selectedObject = Selection.activeObject;
             if (selectedObject != null)
@@ -193,7 +199,13 @@ namespace TP.Readme
                 {
                     readmeEditorActiveTextAreaName = readmeEditorTextAreaSourceName;
                     GUI.SetNextControlName(readmeEditorTextAreaSourceName);
-                    RichText = EditorGUILayout.TextArea(RichText, editableText, new[] {GUILayout.Height(textAreaHeight), GUILayout.Width(textAreaWidth)});
+                    string newRichText = EditorGUILayout.TextArea(RichText, editableText, new[] {GUILayout.Height(textAreaHeight), GUILayout.Width(textAreaWidth)});
+                    if (newRichText != RichText)
+                    {
+                        textChanged = true;
+                        SetTargetDirty();
+                    }
+                    RichText = newRichText;
                     TextAreaRect = GUILayoutUtility.GetLastRect();
                 }
                 else
@@ -203,6 +215,11 @@ namespace TP.Readme
 
                     PrepareForTextAreaChange(RichText);
                     string newRichText = EditorGUILayout.TextArea(RichText, editableRichText, GUILayout.Height(textAreaHeight));
+                    if (newRichText != RichText)
+                    {
+                        textChanged = true;
+                        SetTargetDirty();
+                    }
                     RichText = GetTextAreaChange(RichText, newRichText);
                     TextAreaChangeComplete();
                     
@@ -219,8 +236,6 @@ namespace TP.Readme
                 {
                     UpdateStyleState();
                 }
-
-                Undo.RecordObject(target, "Readme");
             }
             
             FixCursorBug();
@@ -245,9 +260,10 @@ namespace TP.Readme
                 }
                 
                 GUILayout.BeginHorizontal();
+
+                SetFontColor(EditorGUILayout.ColorField(readme.fontColor, GUILayout.Width(smallButtonWidth)));
                 
-                readme.fontColor = EditorGUILayout.ColorField(readme.fontColor, GUILayout.Width(smallButtonWidth));
-                readme.font = EditorGUILayout.ObjectField(readme.font, typeof(Font)) as Font;
+                SetFontStyle(EditorGUILayout.ObjectField(readme.font, typeof(Font), true) as Font);
                 
                 string[] options = new string[]
                 {
@@ -259,7 +275,8 @@ namespace TP.Readme
                     selected = 4;
                 }
                 selected = EditorGUILayout.Popup(selected, options, GUILayout.Width(smallButtonWidth));
-                readme.fontSize = int.Parse(options[selected]);
+                int fontSize = int.Parse(options[selected]);
+                SetFontSize(fontSize);
                 
                 GUIStyle boldButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
                 boldButtonStyle.fontStyle = FontStyle.Normal;
@@ -298,7 +315,14 @@ namespace TP.Readme
                 }
                 if (GUILayout.Button(sourceButtonContent, sourceButtonStyle, GUILayout.Width(smallButtonWidth)))
                 {
-                    sourceOn = !sourceOn;
+                    if (!sourceOn && liteEditor)
+                    {
+                        ShowLiteVersionDialog();
+                    }
+                    else
+                    {
+                        sourceOn = !sourceOn;                        
+                    }
                 }
                 
                 GUILayout.EndHorizontal();
@@ -419,7 +443,7 @@ namespace TP.Readme
                 
                 if (GUILayout.Button("Reload Settings", GUILayout.Width(smallButtonWidth * 4)))
                 {
-                    readme.UpdateSettings(GetSettingsPath(), true);
+                    readme.UpdateSettings(GetSettingsPath(), true, verbose);
                     Repaint();
                 }
                 
@@ -488,6 +512,11 @@ namespace TP.Readme
             UpdateFocus();
             
             FixCopyBuffer();
+
+            if (textChanged)
+            {
+                SetTargetDirty();
+            }
         }
 
         private TextEditor GetTextEditor()
@@ -568,10 +597,21 @@ namespace TP.Readme
             return editorWindow;
         }
 
+        public void SetTargetDirty()
+        {
+            if (!Application.isPlaying)
+            {
+                Undo.RegisterCompleteObjectUndo(target, "Readme edited");
+
+                if (PrefabUtility.GetPrefabAssetType(target) != PrefabAssetType.NotAPrefab)
+                {
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+                }
+            }
+        }
+
         void ForceGuiRedraw()
         {
-            Undo.RecordObject(readme, "Force update!");
-            EditorUtility.SetDirty(readme);
             UpdateTextAreaObjectFields();
         }
 
@@ -757,7 +797,6 @@ namespace TP.Readme
 
                     if (match.Success)
                     {
-                        int idMaxLength = 7;
                         string textAreaId = GetFixedLengthId(match.Value.Replace("<o=\"", "").Replace("\"></o>", ""));
                         string objectFieldId = GetFixedLengthId(textAreaObjectField.ObjectId);
 
@@ -799,6 +838,20 @@ namespace TP.Readme
             fixedLengthId = prepend + fixedLengthId;
 
             return fixedLengthId;
+        }
+
+        void ShowLiteVersionDialog(string feature = "")
+        {
+            string title = "Paid Feature Only";
+            string message = "This is a paid feature. To use this feature please purchase a copy of Readme from the Unity Asset Store.";
+            string ok = "Go to Asset Store";
+            string cancel = "Nevermind";
+            bool result = EditorUtility.DisplayDialog(title, message, ok, cancel);
+
+            if (result)
+            {
+                Application.OpenURL("https://assetstore.unity.com/packages/slug/152336");
+            }
         }
         
         void DragAndDropObjectField() 
@@ -867,6 +920,12 @@ namespace TP.Readme
 
         void AddObjectField(int index = -1, string id = "0000000")
         {
+            if (liteEditor)
+            {
+                ShowLiteVersionDialog();
+                return;
+            }
+            
             if (TextEditorActive)
             {
                 if (index == -1)
@@ -916,12 +975,12 @@ namespace TP.Readme
                         allowSelectAll = true;
                     }
                     
-                    if (mouseCaptured && currentEvent.type == EventType.mouseDrag) 
+                    if (mouseCaptured && currentEvent.type == EventType.MouseDrag) 
                     {
                         allowSelectAll = true;
                     }
                     
-                    if (!allowSelectAll && currentEvent.type != EventType.layout && currentEvent.type != EventType.repaint)
+                    if (!allowSelectAll && currentEvent.type != EventType.Layout && currentEvent.type != EventType.Repaint)
                     {
                         SelectIndex = previousSelectIndex;
                         CursorIndex = previousCursorIndex;
@@ -1030,23 +1089,86 @@ namespace TP.Readme
             }
             
             //Alt + i for italic
-                if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.I)
+            if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.I)
             {
                 ToggleStyle("i");
                     Event.current.Use();
             }
             
             //Alt + o for object
-                if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.O)
+            if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.O)
             {
                 AddObjectField();
                     Event.current.Use();
                 }
             }
+            
+            //Ctrl + v for paste
+            if (currentEvent.type == EventType.KeyDown && currentEvent.control && currentEvent.keyCode == KeyCode.V)
+            {
+
+            }
+        }
+
+        private void SetFontColor(Color color)
+        {
+            if (color == readme.fontColor)
+            {
+                return;
+            }
+            
+            if (liteEditor)
+            {
+                ShowLiteVersionDialog();
+                return;
+            }
+
+            readme.fontColor = color;
+        }
+
+        private void SetFontStyle(Font font)
+        {
+            if (font == readme.font)
+            {
+                return;
+            }
+            
+            if (liteEditor)
+            {
+                ShowLiteVersionDialog();
+                return;
+            }
+
+            readme.font = font;
+        }
+
+        private void SetFontSize(int size)
+        {
+            if (readme.fontSize != 0)
+            {
+                if (size == readme.fontSize)
+                {
+                    return;
+                }
+
+                if (liteEditor)
+                {
+                    ShowLiteVersionDialog();
+                    return;
+                }
+            }
+
+            readme.fontSize = size;
         }
     
         private void ToggleStyle(string tag)
         {
+            if (liteEditor)
+            {
+                ShowLiteVersionDialog();
+                return;
+            }
+            
             if (TagsError(RichText))
             {
                 Debug.LogWarning("Please fix any mismatched tags first!");
@@ -1116,9 +1238,9 @@ namespace TP.Readme
     
         public void FixMouseCursor()
         {
-            bool mouseEvent = new EventType[] { EventType.mouseDown, EventType.mouseDrag, EventType.mouseUp }.Contains(currentEvent.type);
+            bool mouseEvent = new EventType[] { EventType.MouseDown, EventType.MouseDrag, EventType.MouseUp }.Contains(currentEvent.type);
             
-            if (currentEvent.type == EventType.mouseDown && TextAreaRect.Contains(currentEvent.mousePosition))
+            if (currentEvent.type == EventType.MouseDown && TextAreaRect.Contains(currentEvent.mousePosition))
             {
                 mouseCaptured = true;
             }
@@ -1142,7 +1264,7 @@ namespace TP.Readme
                 }
             }
 
-            if (currentEvent.type == EventType.mouseUp)
+            if (currentEvent.type == EventType.MouseUp)
             {
                 mouseCaptured = false;
             }
@@ -1320,9 +1442,9 @@ namespace TP.Readme
                 {
                     isOnTag = readme.richTextTagMap[index];
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    Debug.Log("TRESADFSDGFSDG");
+                    Debug.Log("Issue checking for tag: " + exception);
                 }
             }
     
