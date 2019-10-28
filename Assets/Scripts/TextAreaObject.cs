@@ -17,8 +17,8 @@ namespace TP.Readme
         [SerializeField] private Rect fieldRect;
         [SerializeField] private int index;
         [SerializeField] private int length;
-
-        private static readonly Color textBoxBackgroundColor = new Color(211f / 255, 211f / 255, 211f / 255);
+        
+        private static Color textBoxBackgroundColor;
         private static readonly Color selectedColor = new Color(0f / 255, 130f / 255, 255f / 255, .6f);
 
         public TextAreaObjectField(Rect fieldRect, int objectId, int index, int length)
@@ -38,9 +38,9 @@ namespace TP.Readme
             return ReadmeManager.GetIdFromObject(ObjectRef);
         }
 
-        public Object GetObjectFromId()
+        public Object GetObjectFromId(bool autoSync = true)
         {
-            return ReadmeManager.GetObjectFromId(ObjectId);
+            return ReadmeManager.GetObjectFromId(ObjectId, autoSync);
         }
 
         public override bool Equals(object other)
@@ -65,6 +65,8 @@ namespace TP.Readme
             Rect rectBounds = fieldBounds;
             rectBounds.y += 1;
             rectBounds.height -= 1;
+
+            textBoxBackgroundColor = EditorGUIUtility.isProSkin ? Readme.darkBackgroundColor : Readme.lightBackgroundColor;
 
             EditorGUI.DrawRect(rectBounds, textBoxBackgroundColor);
             Object obj = EditorGUI.ObjectField(fieldBounds, ObjectRef, typeof(Object), true);
@@ -101,7 +103,7 @@ namespace TP.Readme
 
         public bool IdInSync
         {
-            get { return (ObjectId == 0 && ObjectRef == null) || GetObjectFromId() == ObjectRef; }
+            get { return (ObjectId == 0 && ObjectRef == null) || GetObjectFromId(false) == ObjectRef; }
         }
         
         public int ObjectId

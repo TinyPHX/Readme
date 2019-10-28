@@ -20,7 +20,15 @@ namespace TP.Readme {
     
     [DisallowMultipleComponent, ExecuteInEditMode, HelpURL("https://forum.unity.com/threads/wip-a-readme-component.698477/")]
     public class Readme : MonoBehaviour
-    {
+    {        
+        public static readonly Color selectedColor = new Color(0f / 255, 130f / 255, 255f / 255, .6f);
+        public static readonly Color lightBackgroundColor = new Color(211f / 255, 211f / 255, 211f / 255);
+        public static readonly Color darkBackgroundColor = new Color(0.22f, 0.22f, 0.22f);
+        public static readonly Color lightFontColor = new Color(0f / 255, 130f / 255, 255f / 255, .6f);
+        public static readonly Color darkFontColor = new Color(0.82f, 0.82f, 0.82f, 0.6f);
+        
+        private bool initialized = false;
+        
         //TODO add color rich text tag support and remove this.
         public Color fontColor = Color.black;
     
@@ -51,6 +59,16 @@ namespace TP.Readme {
 
         private bool managerConnected; //This should never be serialized
 
+        public void Initialize()
+        {
+            if (!initialized)
+            {
+                initialized = true;
+
+                fontColor = EditorGUIUtility.isProSkin ? darkFontColor : lightFontColor;
+            }
+        }
+        
         public void ConnectManager()
         {
             if (!managerConnected)
@@ -138,7 +156,7 @@ namespace TP.Readme {
             get { return activeSettings; }
         }
 
-        public void UpdateSettings(string directory, bool force = false)
+        public void UpdateSettings(string directory, bool force = false, bool verbose = false)
         {
             if (!settingsLoaded || force)
             {
@@ -165,6 +183,11 @@ namespace TP.Readme {
                     if (!readonlyMode && ActiveSettings.redistributable)
                     {
                         readonlyMode = true;
+                    }
+
+                    if (verbose)
+                    {
+                        Debug.Log("Settings loaded: " + activeSettings.name);
                     }
                 }
             }
