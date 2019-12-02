@@ -1,15 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1351242074934004
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1554221016812988}
+  m_IsPrefabParent: 1
+--- !u!1 &1554221016812988
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
   m_Component:
-  - component: {fileID: 4113731432848810}
-  - component: {fileID: 114904343803117110}
+  - component: {fileID: 4656881794928542}
+  - component: {fileID: 114594496955201752}
   m_Layer: 0
   m_Name: Readme
   m_TagString: Untagged
@@ -17,36 +27,34 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4113731432848810
+--- !u!4 &4656881794928542
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351242074934004}
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1554221016812988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09863281, y: 3.0004883, z: -2.8427734}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114904343803117110
+--- !u!114 &114594496955201752
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351242074934004}
-  m_Enabled: 0
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1554221016812988}
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fontColor: {r: 0.82, g: 0.82, b: 0.82, a: 0.6}
-  richTextTagMap: 010101010101010101000000000000000000000000000000000000000000010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010101010101010100000000000000000000000000000000010101010101010000000001010100000000010101010000000101010000000000000001010101000001010101010101010100000000000000000000000000000000000000000001010101010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010101010101010101010101010101010100000001010101010101010000010101010101010101010101010101010100000000000101010101010101000001010101010101010101010101010101010000000001010101010101010000000000000000000001010101010101010000000000010101010101010001010101010101010100000001010101010101000000000101010101010101010000000000000000000000000000000000010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010101010101010101010101010101010000000000000000000000000000000000000101010101010101010101010101010101010000000000000000000000000001010101010101010101010101010101010100000000000000000000000000010101010101010101010101010101010101000000000000000000000001010101010101010101010101010101010100000000000000000000000000010101010101010101010101010101010101000000000101010101010101010000000000000000000000000000000001010101010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  richTextTagMap: 01010101010101010100000000000000000000000000000000000000000001010101010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010000000001010101000000000000000000000000000000000000000000000101010101010101010000000000000000000000000000000001010101010101000000000101010000000001010101000000010101000000000000000101010100000101010101010101010000000000000000000000000000000000000000000101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010101010101010101010101010101000000010101010101010100000101010101010101010101010101010101000000000001010101010101010000010101010101010101010101010101010100000000010101010101010100000000000000000000010101010101010100000000000101010101010100010101010101010101000000010101010101010000000001010101010101010100000000000000000000000000000000000101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010101010101010101010101010101010000000000000000000000000000000000000101010101010101010101010101010101010000000000000000000000000001010101010101010101010101010101010100000000000000000000000000010101010101010101010101010101010101000000000000000000000001010101010101010101010101010101010100000000000000000000000001010101010101010101010101010101010100000001010101010101010100000000000000000000000000000000010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   font: {fileID: 0}
-  fontSize: 14
+  fontSize: 12
   iconBeingUsed: 1
   useTackIcon: 1
   readonlyMode: 0
@@ -56,21 +64,32 @@ MonoBehaviour:
     path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
+    lite: 0
     priority: 5
     type: json
   allSettings:
   - name: Free
     id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    path: Assets/Packages/TP/Readme/Settings
     fileName: Free
     redistributable: 1
+    lite: 0
     priority: 10
+    type: json
+  - name: Lite
+    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
+    path: Assets/Packages/TP/Readme/Settings
+    fileName: Lite
+    redistributable: 0
+    lite: 1
+    priority: 7
     type: json
   - name: New
     id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    path: Assets/Packages/TP/Readme/Settings
     fileName: New
-    redistributable: 1
+    redistributable: 0
+    lite: 0
     priority: 1000
     type: json
   - name: Paid
@@ -78,132 +97,132 @@ MonoBehaviour:
     path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
+    lite: 0
     priority: 5
     type: json
   readmeData:
-    richText: "<size=20>Example Readme Script</size>\n\nReadme is component that
-      allows you to add any type of notes or documentation directly to a Prefab or
-      GameObject. It's usefull when a note is specific to to this object as a whole
-      and not able to be included as a file or script comment. \n\nYou can add it
-      as plain text or include styling.\n\n\n<size=16>Supported Styles</size>\n\n*
-      <b>Bold</b>\n* <i>Italics</i>\n\n<size=16>Semi-Supported Styles</size>\n\nThese
-      are styles that have to be added with tags manually but still work.\n\n * Color:
-      <color=\"#ff0000\">Red</color>, <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n*
-      Size: <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
-      references can be draged and dropeed to create inline references.\n\n * Scene: 
-      <o=\"0000006\"></o> \n * Game Object:  <o=\"0000005\"></o> \n * Prefab:  <o=\"0000009\"></o>
-      \n * Script:  <o=\"0000010\"></o> \n * File:  <o=\"0000011\"></o> \n * Folder: 
-      <o=\"0000012\"></o>  \n\n\n<size=16>Toolbar Features</size>\n\n * Change font
-      color\n * Change font style\n * Change font size \n * Bold togle button\n *
-      Italics toggle button\n * Add object field button\n * View the source for quick
-      editing\n * Advanced tab for debugging"
+    richText: "<size=20>Example Readme Script</size>\n\nReadme is component that allows
+      you to add any type of notes or documentation directly to a Prefab or GameObject.
+      It's usefull when a note is specific to to this object as a whole and not able
+      to be included as a file or script comment. \n\nYou can add it as plain <b>text</b>
+      or include styling.\n\n<size=16>Supported Styles</size>\n\n* <b>Bold</b>\n*
+      <i>Italics</i>\n\n<size=16>Semi-Supported Styles</size>\n\nThese are styles
+      that have to be added with tags manually but still work.\n\n* Color: <color=\"#ff0000\">Red</color>,
+      <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n* Size:
+      <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
+      references can be draged and dropeed to create inline references.\n\n* Scene:
+      \ <o=\"0000016\"></o> \n* Game Object:   <o=\"0000018\"></o> \n* Prefab:   <o=\"0000019\"></o>
+      \n* Script:   <o=\"0000020\"></o> \n* File:   <o=\"0000021\"></o> \n* Folder:
+      \ <o=\"0000017\"></o> \n\n\n<size=16>Toolbar Features</size>\n\n* Change font
+      color\n* Change font style\n* Change font size \n* Bold togle button\n* Italics
+      toggle button\n* Add object field button\n* View the source for quick editing\n*
+      Advanced tab for debugging "
     textAreaObjectFields:
-    - name: Example (6)
-      objectId: 6
-      objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
+    - name: Example (16)
+      objectId: 16
+      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 96
-        y: 463
-        width: 162
-        height: 17
-      index: 784
+        x: 79
+        y: 608
+        width: 140
+        height: 15
+      index: 788
       length: 17
-    - name: Cylinder (5)
-      objectId: 5
+    - name: Cylinder (18)
+      objectId: 18
       objectRef: {fileID: 0}
       fieldRect:
         serializedVersion: 2
-        x: 145
-        y: 479
-        width: 162
-        height: 17
-      index: 820
+        x: 126
+        y: 622
+        width: 140
+        height: 15
+      index: 824
       length: 17
-    - name: Readme (9)
-      objectId: 9
-      objectRef: {fileID: 1351242074934004}
+    - name: Readme (19)
+      objectId: 19
+      objectRef: {fileID: 1554221016812988}
       fieldRect:
         serializedVersion: 2
-        x: 98
-        y: 495
-        width: 162
-        height: 17
-      index: 851
+        x: 86
+        y: 636
+        width: 140
+        height: 15
+      index: 855
       length: 17
-    - name: TextAreaObject (10)
-      objectId: 10
-      objectRef: {fileID: 11500000, guid: f356563d88654ac1972355c269103585, type: 3}
+    - name: ReadmeManager (20)
+      objectId: 20
+      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 95
-        y: 511
-        width: 162
-        height: 17
-      index: 882
+        x: 80
+        y: 650
+        width: 140
+        height: 15
+      index: 886
       length: 17
-    - name: README (11)
-      objectId: 11
+    - name: README (21)
+      objectId: 21
       objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 76
-        y: 527
-        width: 162
-        height: 17
-      index: 911
+        x: 66
+        y: 664
+        width: 140
+        height: 15
+      index: 915
       length: 17
-    - name: Documentation (12)
-      objectId: 12
+    - name: Documentation (17)
+      objectId: 17
       objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 97
-        y: 543
-        width: 162
-        height: 17
-      index: 942
+        x: 80
+        y: 678
+        width: 140
+        height: 15
+      index: 945
       length: 17
     objectIdPairs:
-    - name: Example (UnityEngine.SceneAsset) (6)
-      id: 6
-      objectRef: {fileID: 102900000, guid: ac57d88d6a7f16641a6e6cc68cb144e1, type: 3}
-    - name: Cylinder (UnityEngine.GameObject) (5)
-      id: 5
-      objectRef: {fileID: 0}
-    - name: Readme (UnityEngine.GameObject) (3)
-      id: 3
-      objectRef: {fileID: 0}
-    - name: Readme (UnityEngine.MonoScript) (4)
-      id: 4
-      objectRef: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
-    - name: README (UnityEngine.DefaultAsset) (2)
-      id: 2
-      objectRef: {fileID: 102900000, guid: ea70950c9f0f11c448aa05724236c91f, type: 3}
-    - name: Editor (UnityEngine.DefaultAsset) (1)
-      id: 1
-      objectRef: {fileID: 102900000, guid: 5e54f943f8ff1104f9bc0f2f07c283f9, type: 3}
-    - name: Directional Light (UnityEngine.Light) (8)
-      id: 8
-      objectRef: {fileID: 0}
-    - name: Directional Light (UnityEngine.GameObject) (7)
-      id: 7
-      objectRef: {fileID: 0}
-    - name: Cylinder (UnityEngine.Mesh) (10)
-      id: 10
-      objectRef: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 3}
-    - name: Default-Material (UnityEngine.Material) (9)
-      id: 9
-      objectRef: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 3}
-    - name: Readme (UnityEngine.GameObject) (11)
-      id: 11
-      objectRef: {fileID: 1351242074934004}
-    - name: Cylinder (UnityEngine.GameObject) (12)
+    - name: None (12)
       id: 12
+      objectRef: {fileID: 33827298954600600, guid: 7c8a1c835b158a34ba26c442672cfc60,
+        type: 2}
+    - name: None (0)
+      id: 0
       objectRef: {fileID: 0}
-    - name: '# Readme
-
-        Readme component for Unity, attachable to any GameObject
-        to document what you can''t in a s (13)'
+    - name: None (9)
+      id: 9
+      objectRef: {fileID: 1350507670389894, guid: 7c8a1c835b158a34ba26c442672cfc60,
+        type: 2}
+    - name: Directional Light (UnityEngine.Light) (14)
+      id: 14
+      objectRef: {fileID: 0}
+    - name: Directional Light (UnityEngine.GameObjec... (13)
       id: 13
-      objectRef: {fileID: 4900000, guid: ea70950c9f0f11c448aa05724236c91f, type: 3}
+      objectRef: {fileID: 0}
+    - name: Assets (UnityEngine.DefaultAsset) (15)
+      id: 15
+      objectRef: {fileID: 102900000, guid: d9d75b32554482147852c176f3b3ac19, type: 3}
+    - name: Demo (UnityEngine.DefaultAsset) (1)
+      id: 1
+      objectRef: {fileID: 102900000, guid: e2dcc7397f3c7f5478bf2e2b87af728f, type: 3}
+    - name: Example (UnityEngine.SceneAsset) (16)
+      id: 16
+      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
+    - name: Documentation (UnityEngine.DefaultAsset) (17)
+      id: 17
+      objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
+    - name: Cylinder (UnityEngine.GameObject) (18)
+      id: 18
+      objectRef: {fileID: 0}
+    - name: Readme (UnityEngine.GameObject) (19)
+      id: 19
+      objectRef: {fileID: 0}
+    - name: ReadmeManager (UnityEngine.MonoScript) (20)
+      id: 20
+      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (21)
+      id: 21
+      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}

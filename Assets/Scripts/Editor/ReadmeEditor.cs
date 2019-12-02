@@ -11,6 +11,9 @@ using UnityEngine;
 using UnityEditor;
 using Application = UnityEngine.Application;
 using Object = UnityEngine.Object;
+using TheArtOfDev.HtmlRenderer.PdfSharp;
+using PdfSharp;
+using PdfSharp.Pdf;
 
 namespace TP.Readme 
 {
@@ -20,7 +23,6 @@ namespace TP.Readme
         private Readme readme;
 
         private bool verbose = false;
-        private bool debugButtons = false;
         private bool liteEditor;
         
         // State
@@ -50,6 +52,12 @@ namespace TP.Readme
         private bool windowFocusModified = false;
         private bool mouseCaptured = false;
         private bool allowSelectAll = false;
+        
+        private static bool showDebugButtons = false;
+        private static bool showAdvancedOptions = false;
+        private static bool showCursorPosition = false;
+        private static bool showObjectIdPairs = false;
+        private static bool showDebugInfo = false;
         
         // Styles
         private GUIStyle activeTextAreaStyle;
@@ -245,12 +253,32 @@ namespace TP.Readme
             if (!editing)
             {
                 if (!readme.readonlyMode || Readme.disableAllReadonlyMode)
-            {
-                if (GUILayout.Button("Edit"))
                 {
-                    editing = true;
+                    if (GUILayout.Button("Edit"))
+                    {
+                        editing = true;
+                    }
+    
+                    if (IsPrefab(readmeTarget.gameObject))
+                    {
+                        if (GUILayout.Button("Export To PDF"))
+                        {
+                            string currentPath = AssetDatabase.GetAssetPath(readmeTarget);
+                            string pdfSavePath = EditorUtility.SaveFilePanel(
+                                "Save Readme",
+                                Path.GetDirectoryName(currentPath),
+                                readme.gameObject.name + ".pdf",
+                                "pdf");
+    
+                            if (pdfSavePath != "")
+                            {
+                                PdfDocument pdf = PdfGenerator.GeneratePdf(readme.HtmlText, PageSize.A4);
+                                pdf.Save(pdfSavePath);
+                                AssetDatabase.Refresh();
+                            }
+                        }
+                    }
                 }
-            }
             }
             else
             {
@@ -339,12 +367,12 @@ namespace TP.Readme
                 }
             }
 
-            if (editing || Readme.advancedOptions)
+            if (editing || showAdvancedOptions)
             {
-                Readme.advancedOptions = EditorGUILayout.Foldout(Readme.advancedOptions, "Advanced");
+                showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "Advanced");
             }
 
-            if (Readme.advancedOptions)
+            if (showAdvancedOptions)
             {
                 EditorGUI.indentLevel++;
                 GUI.enabled = false;
@@ -352,155 +380,179 @@ namespace TP.Readme
                 EditorGUILayout.PropertyField(prop, true, new GUILayoutOption[0]);
                 GUI.enabled = true;
                 
-                fixCursorBug = EditorGUILayout.Toggle("Cursor Correction", fixCursorBug);
+                GUIContent fixCursorBugTooltip = new GUIContent(
+                    "Cursor Correction",
+                    "Override Unity text box cursor placement.");
+                fixCursorBug = EditorGUILayout.Toggle(fixCursorBugTooltip, fixCursorBug);
                 verbose = EditorGUILayout.Toggle("Verbose", verbose);
                 readme.useTackIcon = EditorGUILayout.Toggle("Use Tack Icon", readme.useTackIcon);
                 Readme.neverUseTackIcon = EditorGUILayout.Toggle("Never Use Tack Icon", Readme.neverUseTackIcon);
                 readme.readonlyMode = EditorGUILayout.Toggle("Readonly Mode", readme.readonlyMode);
-                Readme.disableAllReadonlyMode = EditorGUILayout.Toggle("Disable All Readonly Mode", Readme.disableAllReadonlyMode);
-                EditorGUILayout.LabelField("Cursor Position");
-                string richTextWithCursor = RichText;
-                if (TextEditorActive && SelectIndex <= RichText.Length)
+                GUIContent disableAllReadonlyModeTooltip = new GUIContent(
+                    "Disable All Readonly Mode",
+                    "Global setting to enable editing without changing each readonly readme.");
+                Readme.disableAllReadonlyMode = EditorGUILayout.Toggle(disableAllReadonlyModeTooltip, Readme.disableAllReadonlyMode);
+                
+                showCursorPosition = EditorGUILayout.Foldout(showCursorPosition, "Cursor Position");
+                if (showCursorPosition)
                 {
-                    richTextWithCursor = richTextWithCursor.Insert(Mathf.Max(SelectIndex, CursorIndex), "|");
-                    if (SelectIndex != CursorIndex)
+                    EditorGUI.indentLevel++;
+                    string richTextWithCursor = RichText;
+                    if (TextEditorActive && SelectIndex <= RichText.Length)
                     {
-                        richTextWithCursor = richTextWithCursor.Insert(Mathf.Min(SelectIndex, CursorIndex), "|");
+                        richTextWithCursor = richTextWithCursor.Insert(Mathf.Max(SelectIndex, CursorIndex), "|");
+                        if (SelectIndex != CursorIndex)
+                        {
+                            richTextWithCursor = richTextWithCursor.Insert(Mathf.Min(SelectIndex, CursorIndex), "|");
+                        }
                     }
-                }
-                richTextWithCursor = richTextWithCursor.Replace("\n", " \\n\n");
-                float adjustedTextAreaHeight = editableText.CalcHeight(new GUIContent(richTextWithCursor), textAreaWidth - 50);
-                EditorGUILayout.SelectableLabel(richTextWithCursor, editableText, GUILayout.Height(adjustedTextAreaHeight));
 
-                EditorGUILayout.LabelField("Object Id Pairs");
-                float objectDictHeight = editableText.CalcHeight(new GUIContent(objectIdPairListString), textAreaWidth - 50);
-                EditorGUILayout.SelectableLabel(objectIdPairListString, editableText, GUILayout.Height(objectDictHeight));
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Refresh Pairs", GUILayout.Width(smallButtonWidth * 4)) || objectIdPairListString == "")
-                {
-                    objectIdPairListString = ReadmeManager.GetObjectIdPairListString();
-                    Repaint();
-                }
-                if (GUILayout.Button("Clear Pairs", GUILayout.Width(smallButtonWidth * 4)))
-                {
-                    ReadmeManager.Clear();
-                    Repaint();
-                }
-                GUILayout.EndHorizontal();
-                
-                EditorGUILayout.HelpBox(
-                    "mousePosition: " + Event.current.mousePosition + "\n" +
-                    "FocusedWindow: " + EditorWindow.focusedWindow + "\n" +
-                    "FocusedControlName: " + GUI.GetNameOfFocusedControl() + "\n" +
-                    "textAreaRect: " + TextAreaRect + "\n" +
-                    "graphicalCursorPos: " + (!TextEditorActive ? "" : TextEditor.graphicalCursorPos.ToString()) + "\n" +
-                    "Calc Cursor Position: " + (Event.current.mousePosition - TextAreaRect.position) + "\n" +
-                    "Text Editor Active: " + TextEditorActive + "\n" +
-                    "cursorIndex: " + (!TextEditorActive ? "" : CursorIndex.ToString()) + "\n" +
-                    "selectIndex: " + (!TextEditorActive ? "" : SelectIndex.ToString()) + "\n" +
-                    "cursorIndex OnTag: " + IsOnTag(CursorIndex) + "\n" +
-                    "selectIndex OnTag: " + IsOnTag(SelectIndex) + "\n" +
-                    "position: " + (!TextEditorActive ? "" : TextEditor.position.ToString()) + "\n" +
-                    "TagsError: " + TagsError(RichText) + "\n" +
-                    "Style Map Info: " + "\n" +
-                    "\t<b> tags:" + (readme.StyleMaps.ContainsKey("b") ? readme.StyleMaps["b"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
-                    "\t<i> tags:" + (readme.StyleMaps.ContainsKey("i") ? readme.StyleMaps["i"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
-                    ""
-                    , MessageType.Info);
-
-                MessageType messageType = TextEditor != null ? MessageType.Info : MessageType.Warning;
-                EditorGUILayout.HelpBox("Text Editor Found: " + (TextEditor != null ? "Yes" : "No"), messageType);
-                
-                EditorGUILayout.HelpBox("Shortcuts: \n" + 
-                    "\tBold: alt+b\n" +
-                    "\tItalic: alt+i" +
-                    "\tAdd Obj: alt+o"
-                    , MessageType.Info);
-                
-                GUILayout.BeginHorizontal();
-
-                if (GUILayout.Button("Save to File", GUILayout.Width(smallButtonWidth * 4)))
-                {
-                    readme.Save();
-                }
-
-                if (GUILayout.Button("Load from File", GUILayout.Width(smallButtonWidth * 4)))
-                {
-                    readme.LoadLastSave();
-                    Repaint();
-                }
-
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-
-                if (GUILayout.Button("New Settings File", GUILayout.Width(smallButtonWidth * 4)))
-                {
-                    ReadmeSettings newSettings = new ReadmeSettings(GetSettingsPath());
-                    newSettings.SaveSettings();
-                    Repaint();
+                    richTextWithCursor = richTextWithCursor.Replace("\n", " \\n\n");
+                    float adjustedTextAreaHeight =
+                        editableText.CalcHeight(new GUIContent(richTextWithCursor), textAreaWidth - 50);
+                    EditorGUILayout.SelectableLabel(richTextWithCursor, editableText,
+                        GUILayout.Height(adjustedTextAreaHeight));
+                    EditorGUI.indentLevel--;
                 }
                 
-                if (GUILayout.Button("Reload Settings", GUILayout.Width(smallButtonWidth * 4)))
+                showObjectIdPairs = EditorGUILayout.Foldout(showObjectIdPairs, "Master Object Field Dictionary");
+                if (showObjectIdPairs)
                 {
-                    readme.UpdateSettings(GetSettingsPath(), true, verbose);
-                    Repaint();
-                }
-                
-                GUILayout.EndHorizontal();
-
-                if (editing || debugButtons)
-                {
-                    debugButtons = EditorGUILayout.Foldout(debugButtons, "Debug Buttons");
-                }
-
-                if (debugButtons)
-                {
-                    float debugButtonWidth = smallButtonWidth * 6;
-                    if (GUILayout.Button("ForceTextAreaRefresh", GUILayout.Width(debugButtonWidth)))
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.LabelField("Object Id Pairs");
+                    float objectDictHeight = editableText.CalcHeight(new GUIContent(objectIdPairListString), textAreaWidth - 50);
+                    EditorGUILayout.SelectableLabel(objectIdPairListString, editableText, GUILayout.Height(objectDictHeight));
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button("Refresh Pairs", GUILayout.Width(smallButtonWidth * 4)) || objectIdPairListString == "")
                     {
-                        ForceTextAreaRefresh();
-                    }
-
-                    if (GUILayout.Button("GUI.FocusControl", GUILayout.Width(debugButtonWidth)))
-                    {
-                        GUI.FocusControl(readmeEditorActiveTextAreaName);
-                    }
-
-                    if (GUILayout.Button("OnGui", GUILayout.Width(debugButtonWidth)))
-                    {
-                        EditorUtility.SetDirty(readmeTarget.gameObject);
-                    }
-
-                    if (GUILayout.Button("AssignTextEditor", GUILayout.Width(debugButtonWidth)))
-                    {
-                        UpdateTextEditor();
-                    }
-
-                    if (GUILayout.Button("SetDirty", GUILayout.Width(debugButtonWidth)))
-                    {
-                        EditorUtility.SetDirty(readme);
-                    }
-
-                    if (GUILayout.Button("Repaint", GUILayout.Width(debugButtonWidth)))
-                    {
+                        objectIdPairListString = ReadmeManager.GetObjectIdPairListString();
                         Repaint();
                     }
-
-                    if (GUILayout.Button("RecordObject", GUILayout.Width(debugButtonWidth)))
+                    if (GUILayout.Button("Clear Pairs", GUILayout.Width(smallButtonWidth * 4)))
                     {
-                        Undo.RecordObject(readme, "Force update!");
+                        ReadmeManager.Clear();
+                        Repaint();
                     }
-
-                    if (GUILayout.Button("FocusTextInControl", GUILayout.Width(debugButtonWidth)))
+                    GUILayout.EndHorizontal();
+                    EditorGUI.indentLevel--;
+                }
+                
+                showDebugInfo = EditorGUILayout.Foldout(showDebugInfo, "Debug Info");
+                if (showDebugInfo)
+                {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.HelpBox(
+                        "mousePosition: " + Event.current.mousePosition + "\n" +
+                        "FocusedWindow: " + EditorWindow.focusedWindow + "\n" +
+                        "FocusedControlName: " + GUI.GetNameOfFocusedControl() + "\n" +
+                        "textAreaRect: " + TextAreaRect + "\n" +
+                        "graphicalCursorPos: " + (!TextEditorActive ? "" : TextEditor.graphicalCursorPos.ToString()) + "\n" +
+                        "Calc Cursor Position: " + (Event.current.mousePosition - TextAreaRect.position) + "\n" +
+                        "Text Editor Active: " + TextEditorActive + "\n" +
+                        "cursorIndex: " + (!TextEditorActive ? "" : CursorIndex.ToString()) + "\n" +
+                        "selectIndex: " + (!TextEditorActive ? "" : SelectIndex.ToString()) + "\n" +
+                        "cursorIndex OnTag: " + IsOnTag(CursorIndex) + "\n" +
+                        "selectIndex OnTag: " + IsOnTag(SelectIndex) + "\n" +
+                        "position: " + (!TextEditorActive ? "" : TextEditor.position.ToString()) + "\n" +
+                        "TagsError: " + TagsError(RichText) + "\n" +
+                        "Style Map Info: " + "\n" +
+                        "\t<b> tags:" + (readme.StyleMaps.ContainsKey("b") ? readme.StyleMaps["b"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
+                        "\t<i> tags:" + (readme.StyleMaps.ContainsKey("i") ? readme.StyleMaps["i"].FindAll(isStyle => isStyle).Count.ToString() : "0") + "\n" + 
+                        ""
+                        , MessageType.Info);
+    
+                    MessageType messageType = TextEditor != null ? MessageType.Info : MessageType.Warning;
+                    EditorGUILayout.HelpBox("Text Editor Found: " + (TextEditor != null ? "Yes" : "No"), messageType);
+                    
+                    EditorGUILayout.HelpBox( 
+                        "Toggle Bold: alt+b\n" +
+                        "Toggle Italic: alt+i\n" +
+                        "Add Object: alt+o\n" +
+                        "Show Advanced Options: alt+a\n"
+                        , MessageType.Info);
+                    
+                    GUILayout.BeginHorizontal();
+    
+                    if (GUILayout.Button("Save to File", GUILayout.Width(smallButtonWidth * 4)))
                     {
-                        EditorGUI.FocusTextInControl(readmeEditorActiveTextAreaName);
+                        readme.Save();
                     }
-
-                    if (GUILayout.Button("Un-FocusTextInControl", GUILayout.Width(debugButtonWidth)))
+    
+                    if (GUILayout.Button("Load from File", GUILayout.Width(smallButtonWidth * 4)))
                     {
-                        EditorGUI.FocusTextInControl("");
+                        readme.LoadLastSave();
+                        Repaint();
                     }
+    
+                    GUILayout.EndHorizontal();
+    
+                    GUILayout.BeginHorizontal();
+    
+                    if (GUILayout.Button("New Settings File", GUILayout.Width(smallButtonWidth * 4)))
+                    {
+                        ReadmeSettings newSettings = new ReadmeSettings(GetSettingsPath());
+                        newSettings.SaveSettings();
+                        Repaint();
+                    }
+                    
+                    if (GUILayout.Button("Reload Settings", GUILayout.Width(smallButtonWidth * 4)))
+                    {
+                        readme.UpdateSettings(GetSettingsPath(), true, verbose);
+                        Repaint();
+                    }
+                    
+                    GUILayout.EndHorizontal();
+    
+                    showDebugButtons = EditorGUILayout.Foldout(showDebugButtons, "Debug Buttons");
+                    if (showDebugButtons)
+                    {
+                        float debugButtonWidth = smallButtonWidth * 6;
+                        if (GUILayout.Button("ForceTextAreaRefresh", GUILayout.Width(debugButtonWidth)))
+                        {
+                            ForceTextAreaRefresh();
+                        }
+    
+                        if (GUILayout.Button("GUI.FocusControl", GUILayout.Width(debugButtonWidth)))
+                        {
+                            GUI.FocusControl(readmeEditorActiveTextAreaName);
+                        }
+    
+                        if (GUILayout.Button("OnGui", GUILayout.Width(debugButtonWidth)))
+                        {
+                            EditorUtility.SetDirty(readmeTarget.gameObject);
+                        }
+    
+                        if (GUILayout.Button("AssignTextEditor", GUILayout.Width(debugButtonWidth)))
+                        {
+                            UpdateTextEditor();
+                        }
+    
+                        if (GUILayout.Button("SetDirty", GUILayout.Width(debugButtonWidth)))
+                        {
+                            EditorUtility.SetDirty(readme);
+                        }
+    
+                        if (GUILayout.Button("Repaint", GUILayout.Width(debugButtonWidth)))
+                        {
+                            Repaint();
+                        }
+    
+                        if (GUILayout.Button("RecordObject", GUILayout.Width(debugButtonWidth)))
+                        {
+                            Undo.RecordObject(readme, "Force update!");
+                        }
+    
+                        if (GUILayout.Button("FocusTextInControl", GUILayout.Width(debugButtonWidth)))
+                        {
+                            EditorGUI.FocusTextInControl(readmeEditorActiveTextAreaName);
+                        }
+    
+                        if (GUILayout.Button("Un-FocusTextInControl", GUILayout.Width(debugButtonWidth)))
+                        {
+                            EditorGUI.FocusTextInControl("");
+                        }
+                    }
+                    EditorGUI.indentLevel--;
                 }
 
                 EditorGUI.indentLevel--;
@@ -601,11 +653,11 @@ namespace TP.Readme
         {
             if (!Application.isPlaying)
             {
-                Undo.RegisterCompleteObjectUndo(target, "Readme edited");
-
-                if (PrefabUtility.GetPrefabAssetType(target) != PrefabAssetType.NotAPrefab)
+                Undo.RegisterCompleteObjectUndo(readme.gameObject, "Readme edited");
+                
+                if (IsPrefab(readme.gameObject))
                 {
-                    PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(readme.gameObject);
                 }
             }
         }
@@ -1074,7 +1126,7 @@ namespace TP.Readme
             //Alt + a for toggle advanced mode
             if (currentEvent.type == EventType.KeyDown && currentEvent.alt && currentEvent.keyCode == KeyCode.A)
             {
-                Readme.advancedOptions = !Readme.advancedOptions; 
+                showAdvancedOptions = !showAdvancedOptions; 
                 Event.current.Use();
                 Repaint();
             }
@@ -1616,6 +1668,13 @@ namespace TP.Readme
             endIndex = defaultIndex ? EndIndex : Mathf.Max(cursorIndex, selectIndex);
             
             return TextEditorActive && (startIndex == 0 && endIndex == text.Length);
+        }
+        
+        private static bool IsPrefab(GameObject gameObject)
+        {
+            bool isPrefab = gameObject != null && (gameObject.scene.name == null || gameObject.gameObject != null && gameObject.gameObject.scene.name == null);
+
+            return isPrefab;
         }
 
         private int StartIndex
