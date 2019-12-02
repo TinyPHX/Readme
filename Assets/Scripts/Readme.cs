@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using Object = System.Object;
 
 namespace TP.Readme {
     
@@ -24,8 +25,8 @@ namespace TP.Readme {
         public static readonly Color selectedColor = new Color(0f / 255, 130f / 255, 255f / 255, .6f);
         public static readonly Color lightBackgroundColor = new Color(211f / 255, 211f / 255, 211f / 255);
         public static readonly Color darkBackgroundColor = new Color(0.22f, 0.22f, 0.22f);
-        public static readonly Color lightFontColor = new Color(0f / 255, 130f / 255, 255f / 255, .6f);
-        public static readonly Color darkFontColor = new Color(0.82f, 0.82f, 0.82f, 0.6f);
+        public static readonly Color lightFontColor = new Color(0, 0, 0);
+        public static readonly Color darkFontColor = new Color(0.82f, 0.82f, 0.82f);
         
         private bool initialized = false;
         
@@ -38,7 +39,7 @@ namespace TP.Readme {
         public Font font;
         public int fontSize = 0;
     
-        public static bool advancedOptions = false;
+        //Editor Fields
         public bool iconBeingUsed = true;
         public bool useTackIcon = true;
         public static bool neverUseTackIcon = false;
@@ -57,7 +58,7 @@ namespace TP.Readme {
         [SerializeField] private ReadmeData readmeData = new ReadmeData();
         private string lastSavedFileName = "";
 
-        private bool managerConnected; //This should never be serialized
+        private bool managerConnected = false; //This should never be serialized
 
         public void Initialize()
         {
@@ -71,6 +72,13 @@ namespace TP.Readme {
         
         public void ConnectManager()
         {
+            bool isPrefab = gameObject != null && (gameObject.scene.name == null || gameObject.gameObject != null && gameObject.gameObject.scene.name == null);
+
+            if (isPrefab)
+            {
+                //do nothing
+            }
+            
             if (!managerConnected)
             {
                 managerConnected = true;
@@ -100,6 +108,42 @@ namespace TP.Readme {
                 
                 BuildRichTextTagMap();
                 RebuildStyleMaps();
+            }
+        }
+    
+        public string HtmlText
+        {
+            get
+            {
+                string htmlText = readmeData.richText;
+                
+                //Line Returns
+                htmlText = htmlText.Replace("\n", "<br>");
+
+                //Font Size
+                htmlText = Regex.Replace(htmlText, "<size=([0-9]*)>", "<span style=\"font-size:$1px>");
+                htmlText = htmlText.Replace("</size>", "</span>");
+                
+                //Color
+                htmlText = Regex.Replace(htmlText, "<color=\"#([0-9A-Fa-f]*)\">", "<span style=\"color:#$1>");
+                htmlText = htmlText.Replace("</size>", "</span>");
+                
+                //Object
+                ReadmeManager.RebuildObjectPairList();
+                ObjectIdPairs.ForEach(pair =>
+                {
+                    string replacement = ReadmeManager.GetObjectString(pair.ObjectRef);
+                    htmlText = Regex.Replace(htmlText, "<o=\"[0]*" + pair.Id + "\">", replacement);
+                    htmlText = htmlText.Replace("</o>", "");
+                    Debug.Log("pair: " + pair.Id);
+                });
+
+                if (String.IsNullOrEmpty(htmlText))
+                {
+                    htmlText = "<p></p>";
+                }
+                
+                return htmlText;
             }
         }
     

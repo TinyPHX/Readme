@@ -47,20 +47,25 @@ namespace TP.Readme
 
         public static string GetObjectString(Object obj)
         {
-            string value = obj.ToString();
-            
-            if (obj.GetType() == typeof(UnityEditor.MonoScript))
+            string value = "None";
+
+            if (obj != null)
             {
-                UnityEditor.MonoScript monoScriptObject = obj as UnityEditor.MonoScript;
-                value = "(UnityEngine.MonoScript)";
-                if (monoScriptObject != null)
+                value = obj.ToString();
+
+                if (obj.GetType() == typeof(UnityEditor.MonoScript))
                 {
-                    value = monoScriptObject.name + " " + value;
+                    UnityEditor.MonoScript monoScriptObject = obj as UnityEditor.MonoScript;
+                    value = "(UnityEngine.MonoScript)";
+                    if (monoScriptObject != null)
+                    {
+                        value = monoScriptObject.name + " " + value;
+                    }
                 }
-            }
-            else if (value.Length > 100)
-            {
-                value = value.Substring(0, 100);
+                else if (value.Length > 40)
+                {
+                    value = value.Substring(0, 40).Replace("\n", " ") + "...";
+                }
             }
 
             return value;
@@ -139,7 +144,7 @@ namespace TP.Readme
             }
         }
 
-        private static void RebuildObjectPairList()
+        public static void RebuildObjectPairList()
         {
             Clear();
             
@@ -178,7 +183,6 @@ namespace TP.Readme
                 return;
             }
 
-            
             ObjectIdPair objectIdPair = new ObjectIdPair(objId, obj);
             ObjectIdPairs.Add(objectIdPair);
             AddObjectIdPairToDicts(objectIdPair);
@@ -191,7 +195,7 @@ namespace TP.Readme
                 ObjectDict.Add(objectIdPair.Id, objectIdPair.ObjectRef);
             }
 
-            if (!IdDict.ContainsKey(objectIdPair.ObjectRef))
+            if (objectIdPair.ObjectRef != null && !IdDict.ContainsKey(objectIdPair.ObjectRef))
             {
                 IdDict.Add(objectIdPair.ObjectRef, objectIdPair.Id);
             }
