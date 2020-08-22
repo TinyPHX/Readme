@@ -23,7 +23,7 @@ GameObject:
   m_Layer: 0
   m_Name: Readme
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -111,118 +111,93 @@ MonoBehaviour:
       <color=\"#00ff00\">Green</color>, <color=\"#0000ff\">Blue</color>!\n* Size:
       <size=8>small</size> <size=18>BIG</size> \n\n\n<size=16>Object References</size>\n\nObject
       references can be draged and dropeed to create inline references.\n\n* Scene:
-      \ <o=\"0000016\"></o> \n* Game Object:   <o=\"0000018\"></o> \n* Prefab:   <o=\"0000019\"></o>
-      \n* Script:   <o=\"0000020\"></o> \n* File:   <o=\"0000021\"></o> \n* Folder:
-      \ <o=\"0000017\"></o> \n\n\n<size=16>Toolbar Features</size>\n\n* Change font
+      \ <o=\"0000005\"></o> \n* Game Object:   <o=\"0000006\"></o> \n* Prefab:   <o=\"0000007\"></o>
+      \n* Script:   <o=\"0000003\"></o> \n* File:   <o=\"0000002\"></o> \n* Folder:
+      \ <o=\"0000001\"></o> \n\n\n<size=16>Toolbar Features</size>\n\n* Change font
       color\n* Change font style\n* Change font size \n* Bold togle button\n* Italics
       toggle button\n* Add object field button\n* View the source for quick editing\n*
       Advanced tab for debugging "
     textAreaObjectFields:
-    - name: Example (16)
-      objectId: 16
+    - name: Example (5)
+      objectId: 5
       objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
       fieldRect:
         serializedVersion: 2
         x: 79
-        y: 608
+        y: 580
         width: 140
         height: 15
       index: 788
       length: 17
-    - name: Cylinder (18)
-      objectId: 18
+    - name: Cylinder (6)
+      objectId: 6
       objectRef: {fileID: 0}
       fieldRect:
         serializedVersion: 2
         x: 126
-        y: 622
+        y: 594
         width: 140
         height: 15
       index: 824
       length: 17
-    - name: Readme (19)
-      objectId: 19
+    - name: Readme (7)
+      objectId: 7
       objectRef: {fileID: 1554221016812988}
       fieldRect:
         serializedVersion: 2
         x: 86
-        y: 636
+        y: 608
         width: 140
         height: 15
       index: 855
       length: 17
-    - name: ReadmeManager (20)
-      objectId: 20
+    - name: ReadmeManager (3)
+      objectId: 3
       objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 80
+        y: 622
+        width: 140
+        height: 15
+      index: 886
+      length: 17
+    - name: README (2)
+      objectId: 2
+      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 66
+        y: 636
+        width: 140
+        height: 15
+      index: 915
+      length: 17
+    - name: Documentation (1)
+      objectId: 1
+      objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
       fieldRect:
         serializedVersion: 2
         x: 80
         y: 650
         width: 140
         height: 15
-      index: 886
-      length: 17
-    - name: README (21)
-      objectId: 21
-      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
-      fieldRect:
-        serializedVersion: 2
-        x: 66
-        y: 664
-        width: 140
-        height: 15
-      index: 915
-      length: 17
-    - name: Documentation (17)
-      objectId: 17
-      objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
-      fieldRect:
-        serializedVersion: 2
-        x: 80
-        y: 678
-        width: 140
-        height: 15
       index: 945
       length: 17
     objectIdPairs:
-    - name: None (12)
-      id: 12
-      objectRef: {fileID: 33827298954600600, guid: 7c8a1c835b158a34ba26c442672cfc60,
-        type: 2}
-    - name: None (0)
-      id: 0
-      objectRef: {fileID: 0}
-    - name: None (9)
-      id: 9
-      objectRef: {fileID: 1350507670389894, guid: 7c8a1c835b158a34ba26c442672cfc60,
-        type: 2}
-    - name: Directional Light (UnityEngine.Light) (14)
-      id: 14
-      objectRef: {fileID: 0}
-    - name: Directional Light (UnityEngine.GameObjec... (13)
-      id: 13
-      objectRef: {fileID: 0}
-    - name: Assets (UnityEngine.DefaultAsset) (15)
-      id: 15
-      objectRef: {fileID: 102900000, guid: d9d75b32554482147852c176f3b3ac19, type: 3}
-    - name: Demo (UnityEngine.DefaultAsset) (1)
+    - name: Directional Light (UnityEngine.GameObjec... (1)
       id: 1
-      objectRef: {fileID: 102900000, guid: e2dcc7397f3c7f5478bf2e2b87af728f, type: 3}
-    - name: Example (UnityEngine.SceneAsset) (16)
-      id: 16
-      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
-    - name: Documentation (UnityEngine.DefaultAsset) (17)
-      id: 17
+      objectRef: {fileID: 0}
+    - name: Directional Light (UnityEngine.Light) (2)
+      id: 2
+      objectRef: {fileID: 0}
+    - name: Cylinder (UnityEngine.GameObject) (3)
+      id: 3
+      objectRef: {fileID: 0}
+    - name: Cylinder (UnityEngine.MeshFilter) (4)
+      id: 4
+      objectRef: {fileID: 0}
+    - name: Documentation (UnityEngine.DefaultAsset) (5)
+      id: 5
       objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
-    - name: Cylinder (UnityEngine.GameObject) (18)
-      id: 18
-      objectRef: {fileID: 0}
-    - name: Readme (UnityEngine.GameObject) (19)
-      id: 19
-      objectRef: {fileID: 0}
-    - name: ReadmeManager (UnityEngine.MonoScript) (20)
-      id: 20
-      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
-    - name: README (UnityEngine.DefaultAsset) (21)
-      id: 21
-      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
+  managerConnected: 1

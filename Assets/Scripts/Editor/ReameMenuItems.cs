@@ -52,6 +52,18 @@ namespace TP.Readme
             #endif
 
         }
+        
+        [MenuItem("CONTEXT/Readme/Copy as Plain Text", false, 0)]
+        static void CopyPlainText()
+        {
+            ReadmeEditor.ActiveReadmeEditor.CopyPlainText();
+        }
+        
+        [MenuItem("CONTEXT/Readme/Copy as Rich Text", false, 1)]
+        static void CopyRichText()
+        {
+            ReadmeEditor.ActiveReadmeEditor.CopyRichText();
+        }
 
         [MenuItem("GameObject/Readme", false, 20)]
         public static void CreateReadmeGameObject()

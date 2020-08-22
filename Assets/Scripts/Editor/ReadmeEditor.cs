@@ -20,6 +20,8 @@ namespace TP.Readme
     [CustomEditor(typeof(Readme)), ExecuteInEditMode]
     public class ReadmeEditor : Editor
     {
+        public static ReadmeEditor ActiveReadmeEditor;
+        
         private Readme readme;
 
         private bool verbose = false;
@@ -75,7 +77,7 @@ namespace TP.Readme
         // Drag and drop object fields
         private Object[] objectsToDrop;
         private Vector2 objectDropPosition;
-        private string objectIdPairListString = "";
+        private string objectIdPairListString = null;
         
         //Copy buffer fix
         private string previousCopyBuffer;
@@ -129,6 +131,7 @@ namespace TP.Readme
             if (readmeTarget != null)
             {
                 readme = readmeTarget;
+                ActiveReadmeEditor = this;
             }
             
             readme.Initialize();
@@ -142,7 +145,7 @@ namespace TP.Readme
             {
                 if (readme.useTackIcon && !Readme.neverUseTackIcon)
                 {
-                    Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>( "Assets/Packages/TP/Readme/Textures/readme_icon_256_256.png");
+                    Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Packages/TP/Readme/Assets/Textures/readme_icon_256_256.png");
                     IconManager.SetIcon(selectedObject as GameObject, icon);
                     readme.iconBeingUsed = true;
                 }
@@ -263,19 +266,7 @@ namespace TP.Readme
                     {
                         if (GUILayout.Button("Export To PDF"))
                         {
-                            string currentPath = AssetDatabase.GetAssetPath(readmeTarget);
-                            string pdfSavePath = EditorUtility.SaveFilePanel(
-                                "Save Readme",
-                                Path.GetDirectoryName(currentPath),
-                                readme.gameObject.name + ".pdf",
-                                "pdf");
-    
-                            if (pdfSavePath != "")
-                            {
-                                PdfDocument pdf = PdfGenerator.GeneratePdf(readme.HtmlText, PageSize.A4);
-                                pdf.Save(pdfSavePath);
-                                AssetDatabase.Refresh();
-                            }
+                            ExportToPdf();
                         }
                     }
                 }
@@ -343,14 +334,7 @@ namespace TP.Readme
                 }
                 if (GUILayout.Button(sourceButtonContent, sourceButtonStyle, GUILayout.Width(smallButtonWidth)))
                 {
-                    if (!sourceOn && liteEditor)
-                    {
-                        ShowLiteVersionDialog();
-                    }
-                    else
-                    {
-                        sourceOn = !sourceOn;                        
-                    }
+                    sourceOn = !sourceOn;   
                 }
                 
                 GUILayout.EndHorizontal();
@@ -385,8 +369,8 @@ namespace TP.Readme
                     "Override Unity text box cursor placement.");
                 fixCursorBug = EditorGUILayout.Toggle(fixCursorBugTooltip, fixCursorBug);
                 verbose = EditorGUILayout.Toggle("Verbose", verbose);
-                readme.useTackIcon = EditorGUILayout.Toggle("Use Tack Icon", readme.useTackIcon);
-                Readme.neverUseTackIcon = EditorGUILayout.Toggle("Never Use Tack Icon", Readme.neverUseTackIcon);
+                readme.useTackIcon = EditorGUILayout.Toggle("Use Tack Gizmo", readme.useTackIcon);
+                Readme.neverUseTackIcon = EditorGUILayout.Toggle("Never Use Tack Gizmo", Readme.neverUseTackIcon);
                 readme.readonlyMode = EditorGUILayout.Toggle("Readonly Mode", readme.readonlyMode);
                 GUIContent disableAllReadonlyModeTooltip = new GUIContent(
                     "Disable All Readonly Mode",
@@ -419,18 +403,21 @@ namespace TP.Readme
                 if (showObjectIdPairs)
                 {
                     EditorGUI.indentLevel++;
+                    EditorGUILayout.Toggle("Manager Connected", readmeTarget.managerConnected);
                     EditorGUILayout.LabelField("Object Id Pairs");
                     float objectDictHeight = editableText.CalcHeight(new GUIContent(objectIdPairListString), textAreaWidth - 50);
-                    EditorGUILayout.SelectableLabel(objectIdPairListString, editableText, GUILayout.Height(objectDictHeight));
+                    EditorGUILayout.LabelField(objectIdPairListString, editableText, GUILayout.Height(objectDictHeight));
                     GUILayout.BeginHorizontal();
-                    if (GUILayout.Button("Refresh Pairs", GUILayout.Width(smallButtonWidth * 4)) || objectIdPairListString == "")
+                    if (GUILayout.Button("Refresh Pairs", GUILayout.Width(smallButtonWidth * 4)) || objectIdPairListString == null)
                     {
                         objectIdPairListString = ReadmeManager.GetObjectIdPairListString();
+                        ForceTextAreaRefresh();
                         Repaint();
                     }
                     if (GUILayout.Button("Clear Pairs", GUILayout.Width(smallButtonWidth * 4)))
                     {
                         ReadmeManager.Clear();
+                        ForceTextAreaRefresh();
                         Repaint();
                     }
                     GUILayout.EndHorizontal();
@@ -500,6 +487,8 @@ namespace TP.Readme
                         readme.UpdateSettings(GetSettingsPath(), true, verbose);
                         Repaint();
                     }
+
+                    Readme.overrideSettings = EditorGUILayout.ObjectField(Readme.overrideSettings, typeof(Object), false);
                     
                     GUILayout.EndHorizontal();
     
@@ -757,6 +746,11 @@ namespace TP.Readme
                     string idValue = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
                     int objectId = 0;
                     bool parseSuccess = int.TryParse(idValue, out objectId);
+
+                    if (!parseSuccess && verbose)
+                    {
+                        Debug.Log("Unable to parse id: " + idValue);
+                    }
                         
                     int startIndex = match.Index ;
                     int endIndex = match.Index + match.Value.Length;
@@ -892,10 +886,10 @@ namespace TP.Readme
             return fixedLengthId;
         }
 
-        void ShowLiteVersionDialog(string feature = "")
+        void ShowLiteVersionDialog(string feature = "This")
         {
             string title = "Paid Feature Only";
-            string message = "This is a paid feature. To use this feature please purchase a copy of Readme from the Unity Asset Store.";
+            string message = feature + " is a paid feature. To use this feature please purchase a copy of Readme from the Unity Asset Store.";
             string ok = "Go to Asset Store";
             string cancel = "Nevermind";
             bool result = EditorUtility.DisplayDialog(title, message, ok, cancel);
@@ -962,6 +956,12 @@ namespace TP.Readme
 
         void InsertObjectFields(Object[] objects, int index)
         {
+            if (liteEditor)
+            {
+                ShowLiteVersionDialog("Dragging and dropping object fields");
+                return;
+            }
+            
             for (int i = objects.Length - 1; i >= 0; i--)
             {
                 Object objectDragged = objects[i];
@@ -972,12 +972,6 @@ namespace TP.Readme
 
         void AddObjectField(int index = -1, string id = "0000000")
         {
-            if (liteEditor)
-            {
-                ShowLiteVersionDialog();
-                return;
-            }
-            
             if (TextEditorActive)
             {
                 if (index == -1)
@@ -1057,7 +1051,7 @@ namespace TP.Readme
                     CursorIndex == SelectIndex)
                 {
                     int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 0;
-                    int charIndex = textEditor.cursorIndex + direction;
+                    int charIndex = CursorIndex + direction;
                     string objTag = direction == 0 ? " <o=" : "</o> ";
                     int objTagStart = direction == 0 ? charIndex : charIndex - 4;
                     int objTagLength = objTag.Length;
@@ -1171,7 +1165,7 @@ namespace TP.Readme
             
             if (liteEditor)
             {
-                ShowLiteVersionDialog();
+                ShowLiteVersionDialog("Setting the font color");
                 return;
             }
 
@@ -1187,7 +1181,7 @@ namespace TP.Readme
             
             if (liteEditor)
             {
-                ShowLiteVersionDialog();
+                ShowLiteVersionDialog("Setting the font style");
                 return;
             }
 
@@ -1205,7 +1199,7 @@ namespace TP.Readme
 
                 if (liteEditor)
                 {
-                    ShowLiteVersionDialog();
+                    ShowLiteVersionDialog("Setting the font size");
                     return;
                 }
             }
@@ -1217,7 +1211,7 @@ namespace TP.Readme
         {
             if (liteEditor)
             {
-                ShowLiteVersionDialog();
+                ShowLiteVersionDialog("Rich text shortcuts");
                 return;
             }
             
@@ -1273,6 +1267,30 @@ namespace TP.Readme
             }
         }
 
+        private void ExportToPdf()
+        {
+            if (liteEditor)
+            {
+                ShowLiteVersionDialog("Export to PDF");
+                return;
+            }
+                            
+            UpdateTextAreaObjectFields();
+            string currentPath = AssetDatabase.GetAssetPath(readme);
+            string pdfSavePath = EditorUtility.SaveFilePanel(
+                "Save Readme",
+                Path.GetDirectoryName(currentPath),
+                readme.gameObject.name + ".pdf",
+                "pdf");
+    
+            if (pdfSavePath != "")
+            {
+                PdfDocument pdf = PdfGenerator.GeneratePdf(readme.HtmlText, PageSize.A4);
+                pdf.Save(pdfSavePath);
+                AssetDatabase.Refresh();
+            }            
+        }
+
         private void FixCursorBug()
         {
             if (fixCursorBug && TextEditorActive && !TagsError(RichText) && !sourceOn)
@@ -1286,6 +1304,8 @@ namespace TP.Readme
                 }
                 FixArrowCursor();
             }
+                
+            richTextChanged = false;
         }
     
         public void FixMouseCursor()
@@ -1356,34 +1376,52 @@ namespace TP.Readme
                     selectIndexChanged = false;
                 }
             }
-                
-            richTextChanged = false;
+        }
+        
+        public void CopyRichText()
+        {
+            if (TextEditor != null)
+            {
+                string textToCopy = TextEditor.SelectedText.Length > 0 ? TextEditor.SelectedText : readme.RichText;
+                EditorGUIUtility.systemCopyBuffer = textToCopy;
+                FixCopyBuffer();
+            }
+        }
+        
+        public void CopyPlainText()
+        {
+            CopyRichText();
+            ForceCopyBufferToPoorText();
         }
 
         public void FixCopyBuffer()
         {
-            if (TextEditorActive && (!sourceOn && !TagsError(RichText)))
+            if ((!(editing && sourceOn) && !TagsError(RichText)))
             {
                 if (EditorGUIUtility.systemCopyBuffer != previousCopyBuffer && previousCopyBuffer != null)
                 {
-                    List<string> tagPatterns = new List<string>
+                    if (TextEditorActive)
                     {
-                        "<b>",
-                        "<i>",
-                    };
-
-                    foreach (string tagPattern in tagPatterns)
-                    {
-                        int textStart = StartIndex - tagPattern.Length;
-                        int textLength = tagPattern.Length;
-
-                        if (textStart >= 0 && RichText.Substring(textStart, textLength) == tagPattern)
+                        List<string> tagPatterns = new List<string>
                         {
-                            EditorGUIUtility.systemCopyBuffer = RichText.Substring(textStart, EndIndex - textStart);
-                            break;
+                            "<b>",
+                            "<i>",
+                        };
+
+                        foreach (string tagPattern in tagPatterns)
+                        {
+                            int textStart = StartIndex - tagPattern.Length;
+                            int textLength = tagPattern.Length;
+
+                            if (textStart >= 0 && RichText.Substring(textStart, textLength) == tagPattern)
+                            {
+                                EditorGUIUtility.systemCopyBuffer = RichText.Substring(textStart, EndIndex - textStart);
+                                break;
+                            }
                         }
                     }
                 }
+
                 previousCopyBuffer = EditorGUIUtility.systemCopyBuffer;
             }
         }
@@ -1449,7 +1487,7 @@ namespace TP.Readme
 //            bool hasTags = readme.richTextTagMap.Find(isTag => isTag);
             bool hasTags = RichText.Contains("<b>") || RichText.Contains("<\\b>") ||
                            RichText.Contains("<i>") || RichText.Contains("<\\i>") ||
-                           RichText.Contains("<size>") || RichText.Contains("<\\size>") ||
+                           RichText.Contains("<size") || RichText.Contains("<\\size>") ||
                            RichText.Contains("<color") || RichText.Contains("<\\color>");
     
             if (!hasTags)
@@ -1524,7 +1562,7 @@ namespace TP.Readme
             textEditor.cursorIndex = 0;
             textEditor.selectIndex = 0;
             int maxAttempts = 1000;
-            textEditor.cursorIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
+            textEditor.cursorIndex = GetNearestPoorTextIndex(CursorIndex);
             Vector2 currentGraphicalPosition = GetGraphicalCursorPos();
             int attempts = 0;
             for (int currentIndex = CursorIndex; index == -1; currentIndex = CursorIndex)
@@ -1542,14 +1580,14 @@ namespace TP.Readme
                 if (currentGraphicalPosition.y < goalPosition.y - cursorYOffset)
                 {
                     TextEditor.MoveRight();
-                    textEditor.cursorIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
-                    textEditor.selectIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
+                    textEditor.cursorIndex = GetNearestPoorTextIndex(CursorIndex);
+                    textEditor.selectIndex = GetNearestPoorTextIndex(CursorIndex);
                 }
                 else if (currentGraphicalPosition.x < goalPosition.x && !isEndOfLine)
                 {
                     TextEditor.MoveRight();
-                    textEditor.cursorIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
-                    textEditor.selectIndex = GetNearestPoorTextIndex(textEditor.cursorIndex);
+                    textEditor.cursorIndex = GetNearestPoorTextIndex(CursorIndex);
+                    textEditor.selectIndex = GetNearestPoorTextIndex(CursorIndex);
 
                     if (GetGraphicalCursorPos().x < currentGraphicalPosition.x)
                     {

@@ -46,10 +46,10 @@ namespace TP.Readme {
         public bool readonlyMode = false;
         public static bool disableAllReadonlyMode = false;
 
+        [System.NonSerialized] public static UnityEngine.Object overrideSettings;
         [SerializeField] private ReadmeSettings activeSettings;
         [SerializeField] private List<ReadmeSettings> allSettings = new List<ReadmeSettings> {};
         private bool settingsLoaded = false;
-        private string fileNameLoaded = "";
         
         private static List<string> supportedTags = new List<string>() {"b", "i", "color", "size"};
 
@@ -58,8 +58,8 @@ namespace TP.Readme {
         [SerializeField] private ReadmeData readmeData = new ReadmeData();
         private string lastSavedFileName = "";
 
-        private bool managerConnected = false; //This should never be serialized
-
+        public bool managerConnected = false; //This should never be serialized
+        
         public void Initialize()
         {
             if (!initialized)
@@ -129,8 +129,7 @@ namespace TP.Readme {
                 htmlText = htmlText.Replace("</size>", "</span>");
                 
                 //Object
-                ReadmeManager.RebuildObjectPairList();
-                ObjectIdPairs.ForEach(pair =>
+                ReadmeManager.ObjectIdPairs.ForEach(pair =>
                 {
                     string replacement = ReadmeManager.GetObjectString(pair.ObjectRef);
                     htmlText = Regex.Replace(htmlText, "<o=\"[0]*" + pair.Id + "\">", replacement);
@@ -158,7 +157,10 @@ namespace TP.Readme {
                 
                 return readmeData.objectIdPairs;
             }
-            private set { readmeData.objectIdPairs = value; }
+            private set
+            {
+                readmeData.objectIdPairs = value;
+            }
         }
 
         public string PreviousRichText
@@ -221,7 +223,15 @@ namespace TP.Readme {
 
                 if (settingsFound)
                 {
-                    activeSettings = allSettings.OrderBy(setting => setting.priority).FirstOrDefault();
+                    if (Readme.overrideSettings != null)
+                    {
+                        activeSettings = allSettings.Find(setting => "Settings_" + setting.fileName == overrideSettings.name);
+                    }
+                    else
+                    {
+                        activeSettings = allSettings.OrderBy(setting => setting.priority).FirstOrDefault();   
+                    }
+                    
                     settingsLoaded = true;
 
                     if (!readonlyMode && ActiveSettings.redistributable)

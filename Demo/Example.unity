@@ -124,7 +124,7 @@ GameObject:
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -256,64 +256,61 @@ MonoBehaviour:
       Unity</size>\n\nYou can create super cool cylindars with Unity 3D!\n\n<b>Context
       Menu</b>\n\n* <i>GameObject > 3D Object > Cylinder</i>\n* <i>Right Click in
       Sceen > 3D Object > Cylinder</i>\n\n<b>Manuall</b>\n\n1. Create a new GameObject\n2.
-      Add the \"MeshFilter\" component\n3. Set the MeshFilter's Mesh Property to <o=\"0000010\"></o>
+      Add the \"MeshFilter\" component\n3. Set the MeshFilter's Mesh Property to <o=\"0000002\"></o>
       \n4. Add a \"MeshRenderer\" and set the material. \n\nSee the components below
-      or  <o=\"0000007\"></o>  for an example of a Unity Cylindar in action!"
+      or  <o=\"0000001\"></o>  for an example of a Unity Cylindar in action!"
     textAreaObjectFields:
-    - name: Cylinder (10)
-      objectId: 10
+    - name: Cylinder (6)
+      objectId: 2
       objectRef: {fileID: 212527736}
       fieldRect:
         serializedVersion: 2
-        x: 20
-        y: 605
-        width: 136
+        x: 272
+        y: 563
+        width: 140
         height: 15
       index: 957
       length: 17
-    - name: Cylinder (7)
-      objectId: 7
+    - name: Cylinder (5)
+      objectId: 1
       objectRef: {fileID: 212527733}
       fieldRect:
         serializedVersion: 2
         x: 213
-        y: 647
+        y: 605
         width: 140
         height: 15
       index: 1053
       length: 17
     objectIdPairs:
+    - name: Example (UnityEngine.SceneAsset) (16)
+      id: 16
+      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
+    - name: Cylinder (UnityEngine.GameObject) (18)
+      id: 18
+      objectRef: {fileID: 212527733}
+    - name: Readme (UnityEngine.GameObject) (19)
+      id: 19
+      objectRef: {fileID: 0}
+    - name: ReadmeManager (UnityEngine.MonoScript) (20)
+      id: 20
+      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (21)
+      id: 21
+      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
     - name: Documentation (UnityEngine.DefaultAsset) (1)
       id: 1
       objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
-    - name: README (UnityEngine.DefaultAsset) (2)
-      id: 2
-      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
-    - name: ReadmeManager (UnityEngine.MonoScript) (3)
-      id: 3
-      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
-    - name: Readme (UnityEngine.GameObject) (4)
-      id: 4
-      objectRef: {fileID: 1554221016812988, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
-        type: 2}
-    - name: Example (UnityEngine.SceneAsset) (5)
-      id: 5
-      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
-    - name: Readme (UnityEngine.GameObject) (6)
-      id: 6
-      objectRef: {fileID: 1992065491}
-    - name: Cylinder (UnityEngine.GameObject) (7)
-      id: 7
-      objectRef: {fileID: 212527733}
-    - name: Directional Light (UnityEngine.GameObjec... (8)
-      id: 8
-      objectRef: {fileID: 465482173}
     - name: Directional Light (UnityEngine.Light) (9)
       id: 9
       objectRef: {fileID: 465482174}
-    - name: Cylinder (UnityEngine.MeshFilter) (10)
-      id: 10
+    - name: Directional Light (UnityEngine.GameObjec... (8)
+      id: 8
+      objectRef: {fileID: 465482173}
+    - name: Cylinder (UnityEngine.MeshFilter) (2)
+      id: 2
       objectRef: {fileID: 212527736}
+  managerConnected: 1
 --- !u!4 &212527738
 Transform:
   m_ObjectHideFlags: 0
@@ -388,7 +385,7 @@ GameObject:
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -491,11 +488,11 @@ MonoBehaviour:
     priority: 5
     type: json
   readmeData:
-    richText: The  <o="0000009"></o>  on this  <o="0000008"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
+    richText: The  <o="0000008"></o>  on this  <o="0000007"></o>  Is set to <color="#8F6ADD">#8F6ADD</color>
       becuase I thought it was pretty.
     textAreaObjectFields:
     - name: Directional Light (14)
-      objectId: 9
+      objectId: 8
       objectRef: {fileID: 465482174}
       fieldRect:
         serializedVersion: 2
@@ -506,7 +503,7 @@ MonoBehaviour:
       index: 5
       length: 17
     - name: Directional Light (13)
-      objectId: 8
+      objectId: 7
       objectRef: {fileID: 465482173}
       fieldRect:
         serializedVersion: 2
@@ -517,37 +514,34 @@ MonoBehaviour:
       index: 33
       length: 17
     objectIdPairs:
+    - name: Example (UnityEngine.SceneAsset) (16)
+      id: 16
+      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
+    - name: Cylinder (UnityEngine.GameObject) (18)
+      id: 18
+      objectRef: {fileID: 212527733}
+    - name: Readme (UnityEngine.GameObject) (19)
+      id: 19
+      objectRef: {fileID: 0}
+    - name: ReadmeManager (UnityEngine.MonoScript) (20)
+      id: 20
+      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (21)
+      id: 21
+      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
     - name: Documentation (UnityEngine.DefaultAsset) (1)
       id: 1
       objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
-    - name: README (UnityEngine.DefaultAsset) (2)
-      id: 2
-      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
-    - name: ReadmeManager (UnityEngine.MonoScript) (3)
-      id: 3
-      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
-    - name: Readme (UnityEngine.GameObject) (4)
-      id: 4
-      objectRef: {fileID: 1554221016812988, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
-        type: 2}
-    - name: Example (UnityEngine.SceneAsset) (5)
-      id: 5
-      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
-    - name: Readme (UnityEngine.GameObject) (6)
-      id: 6
-      objectRef: {fileID: 1992065491}
-    - name: Cylinder (UnityEngine.GameObject) (7)
-      id: 7
-      objectRef: {fileID: 212527733}
-    - name: Directional Light (UnityEngine.GameObjec... (8)
-      id: 8
-      objectRef: {fileID: 465482173}
     - name: Directional Light (UnityEngine.Light) (9)
       id: 9
       objectRef: {fileID: 465482174}
-    - name: Cylinder (UnityEngine.MeshFilter) (10)
-      id: 10
+    - name: Directional Light (UnityEngine.GameObjec... (8)
+      id: 8
+      objectRef: {fileID: 465482173}
+    - name: Cylinder (UnityEngine.MeshFilter) (2)
+      id: 2
       objectRef: {fileID: 212527736}
+  managerConnected: 1
 --- !u!4 &465482176
 Transform:
   m_ObjectHideFlags: 0
@@ -647,6 +641,26 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114152855338115494, guid: 7c8a1c835b158a34ba26c442672cfc60,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[0].name
+      value: Cylinder (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114152855338115494, guid: 7c8a1c835b158a34ba26c442672cfc60,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[0].fieldRect.y
+      value: 565
+      objectReference: {fileID: 0}
+    - target: {fileID: 114152855338115494, guid: 7c8a1c835b158a34ba26c442672cfc60,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].name
+      value: Cylinder (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114152855338115494, guid: 7c8a1c835b158a34ba26c442672cfc60,
+        type: 2}
+      propertyPath: readmeData.textAreaObjectFields.Array.data[1].fieldRect.y
+      value: 607
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7c8a1c835b158a34ba26c442672cfc60, type: 2}
   m_IsPrefabParent: 0
@@ -696,17 +710,27 @@ Prefab:
       objectReference: {fileID: 212527733}
     - target: {fileID: 114594496955201752, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
         type: 2}
-      propertyPath: readmeData.objectIdPairs.Array.data[10].objectRef
+      propertyPath: readmeData.objectIdPairs.Array.data[0].objectRef
       value: 
-      objectReference: {fileID: 1992065491}
+      objectReference: {fileID: 0}
+    - target: {fileID: 114594496955201752, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[1].objectRef
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114594496955201752, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[2].objectRef
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114594496955201752, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
+        type: 2}
+      propertyPath: readmeData.objectIdPairs.Array.data[3].objectRef
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 21e0be3a2c0fa8e4da0586919fb26d36, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1992065491 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1554221016812988, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
-    type: 2}
-  m_PrefabInternal: {fileID: 1992065490}
 --- !u!1 &1992527147
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +747,7 @@ GameObject:
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -847,37 +871,34 @@ MonoBehaviour:
       <size=12>This is in readonly mode!</size>'
     textAreaObjectFields: []
     objectIdPairs:
+    - name: Example (UnityEngine.SceneAsset) (16)
+      id: 16
+      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
+    - name: Cylinder (UnityEngine.GameObject) (18)
+      id: 18
+      objectRef: {fileID: 212527733}
+    - name: Readme (UnityEngine.GameObject) (19)
+      id: 19
+      objectRef: {fileID: 0}
+    - name: ReadmeManager (UnityEngine.MonoScript) (20)
+      id: 20
+      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
+    - name: README (UnityEngine.DefaultAsset) (21)
+      id: 21
+      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
     - name: Documentation (UnityEngine.DefaultAsset) (1)
       id: 1
       objectRef: {fileID: 102900000, guid: b61ea80bb3631c344b90b1eacc32da4a, type: 3}
-    - name: README (UnityEngine.DefaultAsset) (2)
-      id: 2
-      objectRef: {fileID: 102900000, guid: 9f51b8cdf8b0f0142b8e8b03a8f847b2, type: 3}
-    - name: ReadmeManager (UnityEngine.MonoScript) (3)
-      id: 3
-      objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
-    - name: Readme (UnityEngine.GameObject) (4)
-      id: 4
-      objectRef: {fileID: 1554221016812988, guid: 21e0be3a2c0fa8e4da0586919fb26d36,
-        type: 2}
-    - name: Example (UnityEngine.SceneAsset) (5)
-      id: 5
-      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
-    - name: Readme (UnityEngine.GameObject) (6)
-      id: 6
-      objectRef: {fileID: 1992065491}
-    - name: Cylinder (UnityEngine.GameObject) (7)
-      id: 7
-      objectRef: {fileID: 212527733}
-    - name: Directional Light (UnityEngine.GameObjec... (8)
-      id: 8
-      objectRef: {fileID: 465482173}
     - name: Directional Light (UnityEngine.Light) (9)
       id: 9
       objectRef: {fileID: 465482174}
-    - name: Cylinder (UnityEngine.MeshFilter) (10)
-      id: 10
+    - name: Directional Light (UnityEngine.GameObjec... (8)
+      id: 8
+      objectRef: {fileID: 465482173}
+    - name: Cylinder (UnityEngine.MeshFilter) (2)
+      id: 2
       objectRef: {fileID: 212527736}
+  managerConnected: 1
 --- !u!4 &1992527152
 Transform:
   m_ObjectHideFlags: 0
