@@ -1326,11 +1326,12 @@ namespace TP.Readme
         {
             bool isKeyboard = new KeyCode[] {KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(Event.current.keyCode);
             bool isDoubleClick = Event.current.clickCount == 2;
+            bool mouseInTextArea = TextAreaRect.Contains(currentEvent.mousePosition);
             if (isKeyboard || isDoubleClick || richTextChanged || AllTextSelected())
             {
                 int direction = isDoubleClick ? 1 : 0;
                 
-                if (isDoubleClick)
+                if (isDoubleClick && mouseInTextArea)
                 {
                     int mouseIndex = MousePositionToIndex;
                     SelectIndex = mouseIndex;
