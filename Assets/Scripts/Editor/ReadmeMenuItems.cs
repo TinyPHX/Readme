@@ -13,7 +13,7 @@ using PdfSharp.Pdf;
 
 namespace TP.Readme
 {
-    public static class ReameMenuItems
+    public static class ReadmeMenuItems
     {
         [MenuItem("Assets/Create/Readme", false, 100)]
         public static void CreateReadmePrefab()
@@ -52,16 +52,39 @@ namespace TP.Readme
             #endif
 
         }
+        
+        [MenuItem("CONTEXT/Readme/Toggle Read Only")]
+        static void ToggleReadOnly()
+        {
+            ReadmeEditor.ActiveReadmeEditor.ToggleReadOnly();
+        }
+        
+        [MenuItem("CONTEXT/Readme/Toggle Edit")]
+        static void ToggleEdit()
+        {
+            ReadmeEditor.ActiveReadmeEditor.ToggleEdit();
+        }
+        
+        [MenuItem("CONTEXT/Readme/Copy as Plain Text", false, 0)]
+        static void CopyPlainText()
+        {
+            ReadmeEditor.ActiveReadmeEditor.CopyPlainText();
+        }
+        
+        [MenuItem("CONTEXT/Readme/Copy as Rich Text", false, 1)]
+        static void CopyRichText()
+        {
+            ReadmeEditor.ActiveReadmeEditor.CopyRichText();
+        }
 
         [MenuItem("GameObject/Readme", false, 20)]
         public static void CreateReadmeGameObject()
         {
             EditorApplication.ExecuteMenuItem("GameObject/Create Empty");
-            GameObject gameObject = Selection.activeGameObject;
-            if (gameObject)
+            if (Selection.activeGameObject)
             {
-                gameObject.AddComponent<Readme>();
-                gameObject.name = "Readme";
+                Selection.activeGameObject.AddComponent<Readme>();
+                Selection.activeGameObject.name = "Readme";
             }
         }
 

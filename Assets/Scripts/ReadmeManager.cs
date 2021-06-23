@@ -31,6 +31,11 @@ namespace TP.Readme
         {
             get { return objectRef; }
         }
+
+        public string Name
+        {
+            get { return name; }
+        }
     }
     
     public class ReadmeManager : ISerializationCallbackReceiver
@@ -186,6 +191,11 @@ namespace TP.Readme
             ObjectIdPair objectIdPair = new ObjectIdPair(objId, obj);
             ObjectIdPairs.Add(objectIdPair);
             AddObjectIdPairToDicts(objectIdPair);
+            
+            Debug.Log("Object Id (" + objectIdPair + ") Pair Added." + 
+                      " ObjectIdPairs.Count=" + ObjectIdPairs.Count + 
+                      " IdDict.Count=" + IdDict.Count + 
+                      " ObjectDict.Count=" + ObjectDict.Count);
         }
 
         private static void AddObjectIdPairToDicts(ObjectIdPair objectIdPair)
@@ -206,6 +216,11 @@ namespace TP.Readme
             ObjectIdPairs.Clear();
             IdDict.Clear();
             ObjectDict.Clear();
+
+            Debug.Log("Object Id Pair Cleard." + 
+                      " ObjectIdPairs.Count=" + ObjectIdPairs.Count + 
+                      " IdDict.Count=" + IdDict.Count + 
+                      " ObjectDict.Count=" + ObjectDict.Count);
         }
         
         public static Object GetObjectFromId(int id, bool autoSync = true)
@@ -239,14 +254,6 @@ namespace TP.Readme
 
             return objFound;
         }
-        
-
-//        private static bool IsPrefab(GameObject gameObject)
-//        {
-//            bool isPrefab = gameObject != null && (gameObject.scene.name == null || gameObject.gameObject != null && gameObject.gameObject.scene.name == null);
-//
-//            return isPrefab;
-//        }
         
         public static int GetIdFromObject(Object obj)
         {
