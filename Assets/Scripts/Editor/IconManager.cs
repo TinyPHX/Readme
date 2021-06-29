@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace TP.Readme
+namespace TP
 {
     public class IconManager
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 using Object = UnityEngine.Object;
 
-namespace TP.Readme
+namespace TP
 {
     [Serializable]
     public class TextAreaObjectField
@@ -85,13 +85,8 @@ namespace TP.Readme
 
         public bool IsSelected(TextEditor textEditor)
         {
-            bool isSelected = false;
-
-            if (Mathf.Min(textEditor.selectIndex, textEditor.cursorIndex) <= index &&
-                Mathf.Max(textEditor.selectIndex, textEditor.cursorIndex) >= (index + length))
-            {
-                isSelected = true;
-            }
+            bool isSelected = Mathf.Min(textEditor.selectIndex, textEditor.cursorIndex) <= index &&
+                              Mathf.Max(textEditor.selectIndex, textEditor.cursorIndex) >= (index + length);
 
             return isSelected;
         }

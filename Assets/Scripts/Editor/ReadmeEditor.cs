@@ -14,8 +14,10 @@ using Object = UnityEngine.Object;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
 using PdfSharp;
 using PdfSharp.Pdf;
+using HtmlAgilityPack;
+using UnityEngine.UI;
 
-namespace TP.Readme 
+namespace TP 
 {
     [CustomEditor(typeof(Readme)), ExecuteInEditMode]
     public class ReadmeEditor : Editor
@@ -83,6 +85,62 @@ namespace TP.Readme
         private string previousCopyBuffer;
 
         private Event currentEvent;
+        
+        private void TestHtmlAgilityPack()
+        {
+            if (RichText != null)
+            {
+                string html = RichTextToHtml(readme.RichText);
+                
+                HtmlDocument htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(html);
+                foreach (var error in htmlDoc.ParseErrors)
+                {
+                    Debug.LogWarning(
+                        "Code: " + error.Code + "\n" +
+                        "Reason: " + error.Reason + "\n" +
+                        "Line: " + error.Line + "\n" +
+                        "LinePosition: " + error.LinePosition + "\n" +
+                        "SourceText: " + error.SourceText + "\n" +
+                        "StreamPosition: " + error.StreamPosition
+                    );
+                }
+                Debug.Log(htmlDoc.Text);
+                Debug.Log(htmlDoc.DocumentNode.InnerText);
+
+                //List<bool> htmlTagMap = new List<bool>();
+                foreach (HtmlNode node in htmlDoc.DocumentNode.Descendants())
+                {
+                    if (node.Name != "#text")
+                    {
+                        Debug.Log(string.Format("<{0}> Outer - line: {1} startline: {2} outerStart: {3} length: {4}",
+                            node.Name, node.Line, node.LinePosition, node.OuterStartIndex, node.OuterHtml.Length));
+                        Debug.Log(string.Format("<{0}> Inner - line: {1} startline: {2} innerStart: {3} length: {4}",
+                            node.Name, node.Line, node.LinePosition, node.InnerStartIndex, node.InnerHtml.Length));
+                        foreach (HtmlAttribute attribute in node.GetAttributes())
+                        {
+                            Debug.Log("\t" + attribute.Name + " " + attribute.Value);
+                        }
+                    }
+                }
+                
+                Debug.Log(HtmlToRichText(htmlDoc.Text));
+                
+                //currentCursorIndex
+            }
+        }
+
+        private string RichTextToHtml(string richText)
+        {
+            // Replace elements followed by equal like "<size=" with attribute formatting "<size value="
+            return Regex.Replace(richText, "<([a-zA-Z_0-9]+)=", "<$1 value=");
+        }
+
+        private string HtmlToRichText(string richText)
+        {
+            //Reverse RichTextToHtml
+            return Regex.Replace(richText, "<([a-zA-Z_0-9]+) value=", "<$1=");
+        }
 
         public void UpdateGuiStyles()
         {
@@ -165,6 +223,7 @@ namespace TP.Readme
             {
                 textAreaWidth = TextAreaRect.width;
             }
+
             float textAreaHeight = editableRichText.CalcHeight(new GUIContent(RichText), textAreaWidth);
             float smallButtonWidth = EditorGUIUtility.singleLineHeight * 2;
 
@@ -496,6 +555,12 @@ namespace TP.Readme
                     if (showDebugButtons)
                     {
                         float debugButtonWidth = smallButtonWidth * 6;
+                        
+                        if (GUILayout.Button("TestHtmlAgilityPack", GUILayout.Width(debugButtonWidth)))
+                        {
+                            TestHtmlAgilityPack();
+                        }
+                        
                         if (GUILayout.Button("ForceTextAreaRefresh", GUILayout.Width(debugButtonWidth)))
                         {
                             ForceTextAreaRefresh();
@@ -734,66 +799,82 @@ namespace TP.Readme
 
         void UpdateTextAreaObjectFieldArray()
         {
-            string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
-            MatchCollection matches = Regex.Matches(RichText, objectTagPattern, RegexOptions.None);
-            TextAreaObjectField[] newTextAreaObjectFields = new TextAreaObjectField[matches.Count];
-            for (int i = matches.Count - 1; i >= 0; i--)
+            if (TextEditor != null)
             {
-                Match match = matches[i];
-                
-                if (match.Success)
+                string objectTagPattern = "<o=\"[-,a-zA-Z0-9]*\"></o>";
+                MatchCollection matches = Regex.Matches(RichText, objectTagPattern, RegexOptions.None);
+                TextAreaObjectField[] newTextAreaObjectFields = new TextAreaObjectField[matches.Count];
+                for (int i = matches.Count - 1; i >= 0; i--)
                 {
-                    string idValue = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
-                    int objectId = 0;
-                    bool parseSuccess = int.TryParse(idValue, out objectId);
+                    Match match = matches[i];
 
-                    if (!parseSuccess && verbose)
+                    if (match.Success)
                     {
-                        Debug.Log("Unable to parse id: " + idValue);
-                    }
-                        
-                    int startIndex = match.Index ;
-                    int endIndex = match.Index + match.Value.Length;
-                    
-                    if (endIndex == RichText.Length || RichText[endIndex] != ' ') { RichText = RichText.Insert(endIndex, " "); }
-                    if (startIndex == 0 || RichText[startIndex - 1] != ' ') { RichText = RichText.Insert(startIndex, " "); }
-                    
-                    Rect rect = GetRect(startIndex - 1, endIndex + 1);
-                    rect.position += TextAreaRect.position;
-                    
-                    Rect rectWithCorrectHeigh = GetRect(startIndex - 1, endIndex);
-                    rect.height = rectWithCorrectHeigh.height;
+                        string idValue = match.Value.Replace("<o=\"", "").Replace("\"></o>", "");
+                        int objectId = 0;
+                        bool parseSuccess = int.TryParse(idValue, out objectId);
 
-                    if (rect.x > 0 && rect.y > 0 && rect.width > 0 && rect.height > 0)
-                    {
-                        TextAreaObjectField matchedField = TextAreaObjectFields.FirstOrDefault(item => item.ObjectId == objectId);
-                        if (matchedField != null && !matchedField.IdInSync)
+                        if (!parseSuccess && verbose)
                         {
-                            matchedField.UpdateId();
-                            objectId = matchedField.ObjectId;
-
-                            int idStartIndex = match.Index + 4;
-                            RichText = RichText
-                                .Remove(idStartIndex, idValue.Length)
-                                .Insert(idStartIndex, GetFixedLengthId(objectId.ToString()));
-                            
-                            ForceTextAreaRefresh();
+                            Debug.Log("Unable to parse id: " + idValue);
                         }
-                        
-                        TextAreaObjectField newField = new TextAreaObjectField(rect, objectId, startIndex, endIndex - startIndex);
-                        
-                        newTextAreaObjectFields[i] = newField;
-                    }
-                    else
-                    {
-                        return; //Abort everything. Position is incorrect! Probably no TextEditor found.
+
+                        int startIndex = match.Index;
+                        int endIndex = match.Index + match.Value.Length;
+
+                        if (endIndex == RichText.Length || RichText[endIndex] != ' ')
+                        {
+                            RichText = RichText.Insert(endIndex, " ");
+                        }
+
+                        if (startIndex == 0 || RichText[startIndex - 1] != ' ')
+                        {
+                            RichText = RichText.Insert(startIndex, " ");
+                        }
+
+                        Rect rect = GetRect(startIndex - 1, endIndex + 1);
+                        rect.position += TextAreaRect.position;
+
+                        Rect rectWithCorrectHeight = GetRect(startIndex - 1, endIndex);
+                        rect.height = rectWithCorrectHeight.height;
+                        rect.width = rectWithCorrectHeight.width;
+
+                        if (rect.x > 0 && rect.y > 0 && rect.width > 0 && rect.height > 0)
+                        {
+                            TextAreaObjectField matchedField = TextAreaObjectFields.FirstOrDefault(item => item.ObjectId == objectId);
+                            if (matchedField != null && !matchedField.IdInSync)
+                            {
+                                matchedField.UpdateId();
+                                objectId = matchedField.ObjectId;
+                                
+                                int idStartIndex = match.Index + 4;
+                                RichText = RichText
+                                    .Remove(idStartIndex, idValue.Length)
+                                    .Insert(idStartIndex, GetFixedLengthId(objectId.ToString()));
+
+                                ForceTextAreaRefresh();
+                            }
+
+                            if (matchedField != null && !matchedField.IdInSync)
+                            {
+                                ReadmeManager.AddObjectIdPair(matchedField.ObjectRef, objectId);
+                            }
+
+                            TextAreaObjectField newField = new TextAreaObjectField(rect, objectId, startIndex, endIndex - startIndex);
+
+                            newTextAreaObjectFields[i] = newField;
+                        }
+                        else
+                        {
+                            return; //Abort everything. Position is incorrect! Probably no TextEditor found.
+                        }
                     }
                 }
-            }
 
-            if (!TextAreaObjectFields.SequenceEqual(newTextAreaObjectFields))
-            {
-                TextAreaObjectFields = newTextAreaObjectFields;
+                if (!TextAreaObjectFields.SequenceEqual(newTextAreaObjectFields))
+                {
+                    TextAreaObjectFields = newTextAreaObjectFields;
+                }
             }
         }
 
@@ -989,9 +1070,38 @@ namespace TP.Readme
 
         private Rect GetRect(int startIndex, int endIndex, bool autoAdjust = true)
         {
-            Vector2 startPosition = GetGraphicalCursorPos(startIndex) + new Vector2(1, 0);
-            Vector2 endPosition = GetGraphicalCursorPos(endIndex) + new Vector2(-1, 0);
-            float height = editableRichText.CalcHeight(new GUIContent(""), 100) - 10;
+            Rect textEditorRect = TextEditor != null ? TextEditor.position : new Rect(); 
+            
+            int textSize = 12; //Todo get size from size map
+            float padding = 1;
+            string sizeWrapper = "<size={0}>{1}</size>";
+            
+            // Hack to get width of a space because later we have to adjust 
+            // string oneSpace = string.Format(sizeWrapper, textSize, " ");
+            // string twoSpaces = string.Format(sizeWrapper, textSize, "  ");
+            // float spaceWidth = editableRichText.CalcSize(new GUIContent(twoSpaces)).x -
+            //                    editableRichText.CalcSize(new GUIContent(oneSpace)).x;
+
+            Vector2 startPositionIndex1 = GetGraphicalCursorPos(startIndex);
+            Vector2 startPositionIndex2 = GetGraphicalCursorPos(startIndex + 1);
+            Vector2 startPosition;
+            
+            if (startPositionIndex1.y != startPositionIndex2.y)
+            {
+                startPosition = startPositionIndex2 + new Vector2(padding, 0);
+            }
+            else
+            {
+                startPosition = startPositionIndex1 + new Vector2(padding, 0);
+            }
+            
+            Vector2 endPosition = GetGraphicalCursorPos(endIndex) + new Vector2(-padding, 0);
+            float height = editableRichText.CalcHeight(new GUIContent(string.Format(sizeWrapper, textSize, " ")), 100) - 10;
+            
+            if (startPosition.y != endPosition.y)
+            {
+                endPosition.x = textEditorRect.xMax - 20;
+            }
             
             endPosition.y += height;
 
@@ -1810,7 +1920,7 @@ namespace TP.Readme
 
         public bool TextEditorActive
         {
-            get { return textEditor != null && textEditor.text == RichText; }
+            get { return textEditor != null && (textEditor.position == textAreaRect || textEditor.text == RichText); }
         }
 
         public TextAreaObjectField[] TextAreaObjectFields

@@ -11,7 +11,7 @@ using PdfSharp.Pdf;
 //    - https://www.nuget.org/packages/HtmlRenderer.Core
 //    - https://www.nuget.org/packages/HtmlRenderer.PdfSharp 
 
-namespace TP.Readme
+namespace TP
 {
     public static class ReadmeMenuItems
     {

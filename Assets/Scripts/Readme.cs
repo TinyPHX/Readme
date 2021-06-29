@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = System.Object;
 
-namespace TP.Readme {
+namespace TP {
     
     [Serializable]
     public class ReadmeData
@@ -81,9 +81,9 @@ namespace TP.Readme {
             
             if (!managerConnected)
             {
-                managerConnected = true;
                 ReadmeManager.AddReadme(this);
                 ObjectIdPairs = ReadmeManager.ObjectIdPairs;
+                managerConnected = true;
             }
         }
     
@@ -134,7 +134,6 @@ namespace TP.Readme {
                     string replacement = ReadmeManager.GetObjectString(pair.ObjectRef);
                     htmlText = Regex.Replace(htmlText, "<o=\"[0]*" + pair.Id + "\">", replacement);
                     htmlText = htmlText.Replace("</o>", "");
-                    Debug.Log("pair: " + pair.Id);
                 });
 
                 if (String.IsNullOrEmpty(htmlText))
@@ -529,7 +528,7 @@ namespace TP.Readme {
 #else
 
 using UnityEngine;
-namespace TP.Readme {
+namespace TP {
     public class Readme : MonoBehaviour
     {
     }

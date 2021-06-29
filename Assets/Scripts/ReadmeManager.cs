@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
-namespace TP.Readme
+namespace TP
 {
     
     [Serializable]
@@ -44,6 +45,7 @@ namespace TP.Readme
         private static List<ObjectIdPair> objectIdPairs;
         private static Dictionary<int, Object> objectDict;
         private static Dictionary<Object, int> idDict;
+        private static List<int> missingIds;
 
         public static string GetObjectIdPairListString()
         {
@@ -138,6 +140,18 @@ namespace TP.Readme
             set { idDict = value; }
         }
 
+        private static List<int> MissingIds
+        {
+            get 
+            { 
+                if (missingIds == null)
+                {
+                    missingIds = new List<int>();
+                }
+                return missingIds; 
+            }
+        }
+
         private static void SyncDictsWithList()
         {
             ObjectDict = new Dictionary<int, Object>();
@@ -163,7 +177,7 @@ namespace TP.Readme
         }
         
 
-        private static void AddObjectIdPair(Object obj, int objId)
+        public static void AddObjectIdPair(Object obj, int objId)
         {
             Object foundObject;
             int foundId;
@@ -227,7 +241,7 @@ namespace TP.Readme
         {
             Object objFound = null;
             bool found;
-            if (id != 0)
+            if (id != 0 && !MissingIds.Contains(id))
             {
                 found = ObjectDict.TryGetValue(id, out objFound);
 
@@ -247,6 +261,7 @@ namespace TP.Readme
 
                     if (!found)
                     {
+                        missingIds.Add(id);
                         Debug.LogWarning("Problem finding object with id: " + id + ".");
                     }
                 }
@@ -274,14 +289,16 @@ namespace TP.Readme
             return objId;
         }
 
+        //Could optimize by using GUIDs. Then we wouldn't need to iterate keys. 
         private static int GenerateId()
         {
-            int largestId = 0;
-            if (objectDict != null && objectDict.Count > 0)
-            {
-                largestId = objectDict.Keys.Max();
-            }
-            return largestId + 1;
+            //int largestId = 0;
+            //if (objectDict != null && objectDict.Count > 0)
+            //{
+            //    largestId = objectDict.Keys.Max();
+            //}
+            //return largestId + 1;
+            return Random.Range(1, 9999999);
         }
 
         public void OnBeforeSerialize()
