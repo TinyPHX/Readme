@@ -1,0 +1,10 @@
+{
+    "name": "Paid",
+    "id": "30c0eca9-01de-41b5-bf2e-1a8e9a1206f7",
+    "path": "Assets/Packages/TP/Readme/Editor\\..\\Settings",
+    "fileName": "Paid",
+    "redistributable": false,
+    "lite": false,
+    "priority": 5.0,
+    "type": "json"
+}

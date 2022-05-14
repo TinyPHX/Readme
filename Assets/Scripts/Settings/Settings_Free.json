@@ -1,0 +1,10 @@
+{
+    "name": "Free",
+    "id": "817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46",
+    "path": "Assets/Packages/TP/Readme/Settings",
+    "fileName": "Free",
+    "redistributable": true,
+    "lite": false,
+    "priority": 10.0,
+    "type": "json"
+}
