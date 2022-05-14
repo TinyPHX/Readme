@@ -9,7 +9,6 @@ namespace TP
 {
     public class IconManager
     {
-
         public enum LabelIcon
         {
             None = -1,
@@ -85,9 +84,13 @@ namespace TP
 
         private static void Internal_SetIcon(GameObject gObj, Texture2D texture)
         {
+#if UNITY_5_3_OR_NEWER
+            EditorGUIUtility.SetIconForObject(gObj, texture);
+#else
             var ty = typeof(EditorGUIUtility);
             var mi = ty.GetMethod("SetIconForObject", BindingFlags.NonPublic | BindingFlags.Static);
             mi.Invoke(null, new object[] { gObj, texture });
+#endif
         }
 
         private static GUIContent[] GetTextures(string baseName, string postFix, int startIndex, int count)
