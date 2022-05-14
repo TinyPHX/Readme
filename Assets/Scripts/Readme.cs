@@ -81,9 +81,9 @@ namespace TP {
             
             if (!managerConnected)
             {
+                managerConnected = true;
                 ReadmeManager.AddReadme(this);
                 ObjectIdPairs = ReadmeManager.ObjectIdPairs;
-                managerConnected = true;
             }
         }
     
