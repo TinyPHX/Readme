@@ -707,7 +707,7 @@ namespace TP
         {
             if (!Application.isPlaying)
             {
-                Undo.RegisterCompleteObjectUndo(readme.gameObject, "Readme edited");
+                Undo.RegisterCompleteObjectUndo(readme, "Readme edited");
                 
                 if (IsPrefab(readme.gameObject))
                 {
