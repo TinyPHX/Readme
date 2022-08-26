@@ -1,10 +1,12 @@
 {
     "name": "New",
-    "id": "f3de355d-ddb4-4eee-bf3d-388f95ac3ad0",
-    "path": "Assets/Packages/TP/Readme/Settings",
+    "id": "d1a122f7-4a79-44c0-9570-4911ded4c5b3",
+    "skin": "Default",
+    "path": "Assets\\TP\\Readme\\Scripts\\Settings",
     "fileName": "New",
-    "redistributable": false,
-    "lite": false,
+    "redistributable": true,
+    "lite": true,
     "priority": 1000.0,
-    "type": "json"
+    "type": "json",
+    "lastPopupDate": "1/1/2000 12:00:00 AM"
 }

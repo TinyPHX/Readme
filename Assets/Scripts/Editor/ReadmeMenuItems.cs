@@ -53,28 +53,36 @@ namespace TP
 
         }
         
-        [MenuItem("CONTEXT/Readme/Toggle Read Only")]
-        static void ToggleReadOnly()
+        [MenuItem("CONTEXT/Readme/Readme: Copy Plain Text", false, 200)]
+        static void CopyPlainText()
         {
-            ReadmeEditor.ActiveReadmeEditor.ToggleReadOnly();
+            ReadmeEditor.ActiveReadmeEditor.SelectAll();
+            ReadmeEditor.ActiveReadmeEditor.CopyPlainText();
         }
         
-        [MenuItem("CONTEXT/Readme/Toggle Edit")]
+        [MenuItem("CONTEXT/Readme/Readme: Copy Rich Text", false, 201)]
+        static void CopyRichText()
+        {
+            ReadmeEditor.ActiveReadmeEditor.SelectAll();
+            ReadmeEditor.ActiveReadmeEditor.CopyRichText();
+        }
+        
+        [MenuItem("CONTEXT/Readme/Readme: Toggle Edit", false, 202)]
         static void ToggleEdit()
         {
             ReadmeEditor.ActiveReadmeEditor.ToggleEdit();
         }
         
-        [MenuItem("CONTEXT/Readme/Copy as Plain Text", false, 0)]
-        static void CopyPlainText()
+        [MenuItem("CONTEXT/Readme/Readme: Toggle Read Only", false, 203)]
+        static void ToggleReadOnly()
         {
-            ReadmeEditor.ActiveReadmeEditor.CopyPlainText();
+            ReadmeEditor.ActiveReadmeEditor.ToggleReadOnly();
         }
         
-        [MenuItem("CONTEXT/Readme/Copy as Rich Text", false, 1)]
-        static void CopyRichText()
+        [MenuItem("CONTEXT/Readme/Readme: Toggle Scroll", false, 203)]
+        static void ToggleScroll()
         {
-            ReadmeEditor.ActiveReadmeEditor.CopyRichText();
+            ReadmeEditor.ActiveReadmeEditor.ToggleScroll();
         }
 
         [MenuItem("GameObject/Readme", false, 20)]

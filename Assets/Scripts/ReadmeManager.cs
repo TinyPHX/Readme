@@ -8,34 +8,18 @@ using Random = UnityEngine.Random;
 
 namespace TP
 {
-    
     [Serializable]
     public struct ObjectIdPair
     {
-        [SerializeField] private string name;
-        [SerializeField] private int id;
-        [SerializeField] private Object objectRef;
-        
+        [field: SerializeField] public string Name { get; }
+        [field: SerializeField] public int Id { get; }
+        [field: SerializeField] public Object ObjectRef { get; }
+
         public ObjectIdPair(int id, Object objectRef) : this()
         {
-            name = ReadmeManager.GetObjectString(objectRef) + " (" + id + ")";
-            this.id = id;
-            this.objectRef = objectRef;
-        }
-
-        public int Id
-        {
-            get { return id; }
-        }
-
-        public Object ObjectRef
-        {
-            get { return objectRef; }
-        }
-
-        public string Name
-        {
-            get { return name; }
+            Name = ReadmeManager.GetObjectString(objectRef) + " (" + id + ")";
+            Id = id;
+            ObjectRef = objectRef;
         }
     }
     
@@ -46,6 +30,17 @@ namespace TP
         private static Dictionary<int, Object> objectDict;
         private static Dictionary<Object, int> idDict;
         private static List<int> missingIds;
+        
+        private static ReadmeManager instance;
+        private static ReadmeManager Initialize()
+        {
+            if (instance == null)
+            {
+                instance = new ReadmeManager();
+            }
+
+            return instance;
+        }
 
         public static string GetObjectIdPairListString()
         {
@@ -80,6 +75,7 @@ namespace TP
         
         public static void AddReadme(Readme readme)
         {
+            Initialize();
             if (!readmes.Contains(readme))
             {
                 readmes.Add(readme);
@@ -176,23 +172,26 @@ namespace TP
             }
         }
         
-
         public static void AddObjectIdPair(Object obj, int objId)
         {
-            Object foundObject;
-            int foundId;
-            
-            if (ObjectDict.TryGetValue(objId, out foundObject))
+            if (ObjectDict.TryGetValue(objId, out Object foundObject))
             {
-                if (foundObject != obj)
+                if (foundObject == null && obj != null)
                 {
-                    Debug.LogWarning("Duplicate ids detected. Object ignored: " + obj);
+                    RemoveObjectIdPair(foundObject, objId); //Basically we'll replace it with what we have.
                 }
-
-                return;
+                else 
+                {
+                    if (foundObject != obj)
+                    {
+                        Debug.LogWarning("Duplicate ids detected. Object ignored: " + obj);
+                    }
+                    
+                    return;
+                }
             }
             
-            if (obj != null && IdDict.TryGetValue(obj, out foundId))
+            if (obj != null && IdDict.TryGetValue(obj, out int foundId))
             {
                 if (foundId != objId)
                 {
@@ -206,10 +205,17 @@ namespace TP
             ObjectIdPairs.Add(objectIdPair);
             AddObjectIdPairToDicts(objectIdPair);
             
-            Debug.Log("Object Id (" + objectIdPair + ") Pair Added." + 
-                      " ObjectIdPairs.Count=" + ObjectIdPairs.Count + 
-                      " IdDict.Count=" + IdDict.Count + 
-                      " ObjectDict.Count=" + ObjectDict.Count);
+            // Debug.Log("Object Id (" + objectIdPair + ") Pair Added." + 
+            //           " ObjectIdPairs.Count=" + ObjectIdPairs.Count + 
+            //           " IdDict.Count=" + IdDict.Count + 
+            //           " ObjectDict.Count=" + ObjectDict.Count);
+        }
+
+        private static void RemoveObjectIdPair(Object obj, int objId)
+        {
+            ObjectIdPair toRemove = new ObjectIdPair(objId, obj);
+            ObjectIdPairs.RemoveAll(item => item.ObjectRef == toRemove.ObjectRef && item.Id == toRemove.Id);
+            RemoveObjectIdPairFromDicts(toRemove);
         }
 
         private static void AddObjectIdPairToDicts(ObjectIdPair objectIdPair)
@@ -224,6 +230,13 @@ namespace TP
                 IdDict.Add(objectIdPair.ObjectRef, objectIdPair.Id);
             }
         }
+
+        private static void RemoveObjectIdPairFromDicts(ObjectIdPair objectIdPair)
+        {
+            objectDict.Remove(objectIdPair.Id);
+            IdDict.Remove(objectIdPair.ObjectRef);
+        }
+
 
         public static void Clear()
         {
@@ -240,10 +253,18 @@ namespace TP
         public static Object GetObjectFromId(int id, bool autoSync = true)
         {
             Object objFound = null;
-            bool found;
-            if (id != 0 && !MissingIds.Contains(id))
+            bool found = ObjectDict.TryGetValue(id, out objFound);
+            bool missing = MissingIds.Contains(id);
+            
+            if (found && missing)
             {
-                found = ObjectDict.TryGetValue(id, out objFound);
+                missing = false;
+                missingIds.Remove(id);
+            }
+            
+            if (id != 0 && !missing)
+            {
+                // found = ObjectDict.TryGetValue(id, out objFound);
 
                 if (autoSync)
                 {

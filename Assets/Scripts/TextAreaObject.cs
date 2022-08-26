@@ -17,11 +17,18 @@ namespace TP
         [SerializeField] private Rect fieldRect;
         [SerializeField] private int index;
         [SerializeField] private int length;
+
+        // public delegate void OnChangeDelegate();
+        // public OnChangeDelegate OnChangeHandler { get; set; }
+        // private void OnChange() { }
+        private Action<TextAreaObjectField> OnChange;
         
+        
+
         private static Color textBoxBackgroundColor;
         private static readonly Color selectedColor = new Color(0f / 255, 130f / 255, 255f / 255, .6f);
 
-        public TextAreaObjectField(Rect fieldRect, int objectId, int index, int length)
+        public TextAreaObjectField(Rect fieldRect, int objectId, int index, int length, Action<TextAreaObjectField> onChangeCallback)
         {
             this.fieldRect = fieldRect;
             this.index = index;
@@ -31,6 +38,8 @@ namespace TP
             ObjectRef = GetObjectFromId();
             
             name = (ObjectRef ? ObjectRef.name : "null") + " (" + ObjectId + ")";
+
+            OnChange = onChangeCallback;
         }
 
         public int GetIdFromObject()
@@ -54,39 +63,52 @@ namespace TP
                    this.objectRef == otherTextAreaObject.ObjectRef;
         }
 
-        public void Draw(TextEditor textEditor = null, int yOffset = 0)
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public void Draw(TextEditor textEditor = null, Vector2 offset = default, Rect bounds = default)
         {
             Rect fieldBounds = FieldRect;
-            if (yOffset != 0)
-            {
-                fieldBounds.y += yOffset;
-            }
-
-            Rect rectBounds = fieldBounds;
-            rectBounds.y += 1;
-            rectBounds.height -= 1;
+            fieldBounds.position += offset;
 
             textBoxBackgroundColor = EditorGUIUtility.isProSkin ? Readme.darkBackgroundColor : Readme.lightBackgroundColor;
-
-            EditorGUI.DrawRect(rectBounds, textBoxBackgroundColor);
-            Object obj = EditorGUI.ObjectField(fieldBounds, ObjectRef, typeof(Object), true);
             
+            //Only draw if in bounds
+            if (bounds != default)
+            {
+                fieldBounds.yMin += Mathf.Min(Mathf.Max(bounds.yMin - fieldBounds.yMin, 0), fieldBounds.height);
+                fieldBounds.yMax -= Mathf.Min(Mathf.Max(fieldBounds.yMax - bounds.yMax, 0), fieldBounds.height);
+                if (fieldBounds.height <= 0)
+                {
+                    Rect offscreen = new Rect(99999, 99999, 0, 0);
+                    fieldBounds = offscreen;
+                }
+            }
+            
+            EditorGUI.DrawRect(fieldBounds, textBoxBackgroundColor);
+            Object obj = EditorGUI.ObjectField(fieldBounds, ObjectRef, typeof(Object), true);
+
             if (IdInSync && ObjectRef != obj)
             {
                 ObjectRef = obj;
                 UpdateId();
+                OnChange(this);
             }
 
             if (textEditor != null && IsSelected(textEditor))
             {
-                EditorGUI.DrawRect(rectBounds, selectedColor);
+                EditorGUI.DrawRect(fieldBounds, selectedColor);
             }
         }
 
         public bool IsSelected(TextEditor textEditor)
         {
-            bool isSelected = Mathf.Min(textEditor.selectIndex, textEditor.cursorIndex) <= index &&
-                              Mathf.Max(textEditor.selectIndex, textEditor.cursorIndex) >= (index + length);
+            bool isSelected = 
+                textEditor.controlID != 0 &&
+                Mathf.Min(textEditor.selectIndex, textEditor.cursorIndex) <= index &&
+                Mathf.Max(textEditor.selectIndex, textEditor.cursorIndex) >= (index + length);
 
             return isSelected;
         }
@@ -121,6 +143,11 @@ namespace TP
         public int Index
         {
             get { return index; }
+        }
+
+        public int IdIndex
+        {
+            get { return index+4; } // +4 for the characters <o="
         }
     }
 }

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using Object = System.Object;
 
 namespace TP {
     
@@ -43,7 +42,7 @@ namespace TP {
         public bool iconBeingUsed = true;
         public bool useTackIcon = true;
         public static bool neverUseTackIcon = false;
-        public bool readonlyMode = false;
+        [SerializeField] public bool readonlyMode = false;
         public static bool disableAllReadonlyMode = false;
 
         [System.NonSerialized] public static UnityEngine.Object overrideSettings;
@@ -58,7 +57,7 @@ namespace TP {
         [SerializeField] private ReadmeData readmeData = new ReadmeData();
         private string lastSavedFileName = "";
 
-        public bool managerConnected = false; //This should never be serialized
+        [NonSerialized] public bool managerConnected = false; //This should never be serialized
 
         public void Initialize()
         {
@@ -81,9 +80,9 @@ namespace TP {
             
             if (!managerConnected)
             {
+                managerConnected = true;
                 ReadmeManager.AddReadme(this);
                 ObjectIdPairs = ReadmeManager.ObjectIdPairs;
-                managerConnected = true;
             }
         }
     
@@ -100,7 +99,7 @@ namespace TP {
                 }
                 else if (value != readmeData.richText)
                 {
-//                    readmeData.richText = RemoveEmptyTags(value);
+                    // readmeData.richText = RemoveEmptyTags(value);
                     readmeData.richText = value;
                 }
                 
@@ -201,7 +200,7 @@ namespace TP {
             get { return activeSettings; }
         }
 
-        public void UpdateSettings(string directory, bool force = false, bool verbose = false)
+        public void UpdateSettings(string directory = "", bool force = false, bool verbose = false)
         {
             if (!settingsLoaded || force)
             {
@@ -372,7 +371,7 @@ namespace TP {
                 "</color>",
                 "<size=\"?[0-9]*\"?>", 
                 "</size>",
-                "<o=\"[-,a-zA-Z0-9]*\">", 
+                " <o=\"[-,a-zA-Z0-9]*\">", 
                 "</o> "
             };
             
@@ -473,11 +472,26 @@ namespace TP {
     
             return richIndex;
         }
-        
+
+        public string BackupsLocation
+        {
+            get
+            {
+                string backupsLocation = Application.persistentDataPath + "/readme";
+                
+                if(!Directory.Exists(backupsLocation))
+                {    
+                    Directory.CreateDirectory(backupsLocation);
+                }
+                    
+                return backupsLocation;
+            }
+        }
+
         public void Save()
         {
             string jsonReadMeData = JsonUtility.ToJson(readmeData, true);
-            string fileName = Application.persistentDataPath + "/Readme_" + gameObject.name + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".json";
+            string fileName = BackupsLocation + "/Readme_" + gameObject.name + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".json";
             File.WriteAllText (fileName, jsonReadMeData);
             lastSavedFileName = fileName;
             Debug.Log("Readme RichText saved to file: " + fileName);

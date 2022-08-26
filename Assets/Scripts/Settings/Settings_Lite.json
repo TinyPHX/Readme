@@ -1,10 +1,12 @@
 {
     "name": "Lite",
     "id": "f3de355d-ddb4-4eee-bf3d-388f95ac3ad0",
+    "skin": "Custom",
     "path": "Assets/Packages/TP/Readme/Settings",
     "fileName": "Lite",
     "redistributable": false,
     "lite": true,
     "priority": 7.0,
-    "type": "json"
+    "type": "json",
+    "lastPopupDate": "8/24/2022 6:24:26 PM"
 }
