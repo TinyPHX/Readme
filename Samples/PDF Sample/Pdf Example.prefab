@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1718672123386104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4795546634590530}
+  - component: {fileID: 114384335483878358}
+  m_Layer: 0
+  m_Name: Pdf Example
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: bda08954ca14120468d5def5b44fc4b1, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4795546634590530
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718672123386104}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.7050781, y: 0.93359375, z: -1.1923828}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114384335483878358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718672123386104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  richTextTagMap: 0101010101010101010000000000000000000000000000000000000000000001010101010101000000000000000000000000000000000000000000000101010000000001010101000000010101000000000000010101010000000000010101010101010101010101010101010100000000000001010101010101010000000000000000000000000000000000000001010101010101010101010101010101010101
+  font: {fileID: 0}
+  fontSize: 12
+  iconBeingUsed: 1
+  useTackIcon: 1
+  readonlyMode: 0
+  activeSettings:
+    name: Paid
+    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+    skin: Custom
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Paid
+    redistributable: 0
+    lite: 0
+    priority: 5
+    type: json
+    lastPopupDate: 1/1/2000 12:00:00 AM
+  allSettings:
+  - name: Free
+    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
+    skin: Custom
+    path: Assets/Packages/TP/Readme/Settings
+    fileName: Free
+    redistributable: 1
+    lite: 0
+    priority: 10
+    type: json
+    lastPopupDate: 1/1/2000 12:00:00 AM
+  - name: Lite
+    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
+    skin: Custom
+    path: Assets/Packages/TP/Readme/Settings
+    fileName: Lite
+    redistributable: 0
+    lite: 1
+    priority: 7
+    type: json
+    lastPopupDate: 8/24/2022 6:24:26 PM
+  - name: New
+    id: d1a122f7-4a79-44c0-9570-4911ded4c5b3
+    skin: Default
+    path: Assets\TP\Readme\Scripts\Settings
+    fileName: New
+    redistributable: 1
+    lite: 1
+    priority: 1000
+    type: json
+    lastPopupDate: 1/1/2000 12:00:00 AM
+  - name: Paid
+    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
+    skin: Custom
+    path: Assets/Packages/TP/Readme/Editor\..\Settings
+    fileName: Paid
+    redistributable: 0
+    lite: 0
+    priority: 5
+    type: json
+    lastPopupDate: 1/1/2000 12:00:00 AM
+  readmeData:
+    richText: "<size=20>1-Click Export to PDF!</size>\n\nExport anything:\n * <b>bold</b>\n*
+      <i>italic</i> \n * <color=\"#4444ff\">colors</color> \n * object fields: <o=\"0000016\"></o> "
+    textAreaObjectFields:
+    - name: null (16)
+      objectId: 16
+      objectRef: {fileID: 102900000, guid: 8705acb24e8a40641a8e8a68b3078955, type: 3}
+      fieldRect:
+        serializedVersion: 2
+        x: 124
+        y: 110
+        width: 140
+        height: 15
+      index: 143
+      length: 17
+    objectIdPairs: []

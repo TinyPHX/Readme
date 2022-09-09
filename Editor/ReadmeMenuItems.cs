@@ -18,39 +18,33 @@ namespace TP
         [MenuItem("Assets/Create/Readme", false, 100)]
         public static void CreateReadmePrefab()
         {
-            var path = "";
-            var obj = Selection.activeObject;
-            
-            if (obj == null)
-            {
-                path = "Assets";
-            }
-            else
-            {
-                path = AssetDatabase.GetAssetPath(obj.GetInstanceID());
-            }
-            
-            EditorApplication.ExecuteMenuItem("GameObject/Create Empty");
-            GameObject tempReadmeGameObject = Selection.activeGameObject;
-            if (tempReadmeGameObject)
-            {
-                tempReadmeGameObject.AddComponent<Readme>();
-                tempReadmeGameObject.name = "Readme";
-            }
+            var path = Selection.activeObject == null ? "Assets" : AssetDatabase.GetAssetPath(Selection.activeObject.GetInstanceID());
             
             string absolutePath = EditorUtility.SaveFilePanel(
                 "Save Readme",
                 path,
-                 "Readme.prefab",
+                 "README",
                 "prefab");
-            
-            PrefabUtility.CreatePrefab(AbsolutePathToRelative(absolutePath), tempReadmeGameObject);
-            #if UNITY_EDITOR
-                GameObject.DestroyImmediate(tempReadmeGameObject);
-            #else
-                GameObject.Destroy(tempReadmeGameObject);
-            #endif
 
+            if (absolutePath != "")
+            {
+                EditorApplication.ExecuteMenuItem("GameObject/Create Empty");
+                
+                GameObject tempReadmeGameObject = Selection.activeGameObject;
+                if (tempReadmeGameObject)
+                {
+                    tempReadmeGameObject.AddComponent<Readme>();
+                    tempReadmeGameObject.name = "Readme";
+                }
+                
+                PrefabUtility.SaveAsPrefabAsset(tempReadmeGameObject, AbsolutePathToRelative(absolutePath));
+                
+                #if UNITY_EDITOR
+                    GameObject.DestroyImmediate(tempReadmeGameObject);
+                #else
+                    GameObject.Destroy(tempReadmeGameObject);
+                #endif
+            }
         }
         
         [MenuItem("CONTEXT/Readme/Readme: Copy Plain Text", false, 200)]

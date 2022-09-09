@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
@@ -22,7 +21,7 @@ namespace TP
 
         private TextAreaObjectField[] objectFields;
         
-        //Scrolling
+        // Scrolling
         public Vector2 Scroll { get; private set; } = new Vector2();
         public bool ScrollEnabled { get; set; } = true;
         private int scrollMaxHeight = 400;
@@ -42,7 +41,7 @@ namespace TP
         
         private Rect textAreaRect;
         private Rect scrollAreaRect;
-        private Rect intersectRect; //Overlaying area between textArea and scrollArea.
+        private Rect intersectRect; // Overlaying area between textArea and scrollArea.
         
         private GUIStyle activeTextAreaStyle;
         private GUIStyle emptyRichTextStyle;
@@ -56,7 +55,7 @@ namespace TP
         public string SourceName { get; }
         public string StyleName { get; }
 
-        //Delayed function call parameters. This is a workaround to not having access to coroutines in Unity Editors.  
+        // Delayed function call parameters. This is a workaround to not having access to coroutines in Unity Editors.  
         private int updateFocusFrame = int.MaxValue;
         private int updateReturnFocusFrame = int.MaxValue;
         private int updateCursorFrame = int.MaxValue;
@@ -73,7 +72,7 @@ namespace TP
         
         private int frame = 0;
 
-        public ReadmeTextEditor textEditor => ReadmeTextEditor.Instance;
+        private ReadmeTextEditor textEditor => ReadmeTextEditor.Instance;
 
         private Event currentEvent => new Event(Event.current);
         
@@ -142,8 +141,10 @@ namespace TP
         private void DrawTextArea()
         {
             Vector2 size = GetTextAreaSize();
+            
             GUILayoutOption[] options = new[] { GUILayout.Width(size.x), GUILayout.Height(size.y) };
             Vector2 scrollAreaSize = new Vector2(size.x + scrollAreaPad, size.y + scrollAreaPad);
+
             if (ScrollShowing(size.y))
             {
                 scrollAreaSize.x += scrollBarSize;
@@ -152,7 +153,7 @@ namespace TP
 
             GUILayoutOption[] scrollAreaOptions = new[] { GUILayout.Width(scrollAreaSize.x), GUILayout.Height(scrollAreaSize.y) };
             Scroll = EditorGUILayout.BeginScrollView(Scroll, scrollAreaOptions);
-            
+
             GUI.SetNextControlName(ActiveName);
             if (Editing)
             {
@@ -175,8 +176,10 @@ namespace TP
             AddControl(new Control(ActiveName, GetLastControlId(), Style, options));
             
             textAreaRect = ReadmeUtil.GetLastRect(textAreaRect, scrollAreaRect.position);
+            
             EditorGUILayout.EndScrollView();
             scrollAreaRect = ReadmeUtil.GetLastRect(scrollAreaRect);
+
             intersectRect = new Rect()
             {
                 x = textAreaRect.x,
@@ -206,6 +209,13 @@ namespace TP
                     TriggerOnInspectorGUI();
                 }
             }
+
+            #if UNITY_2018
+            if (frame == 5)
+            {
+                RepaintTextArea(); // Hack for 2018 which isn't ready until frame 5 to draw object fields. 
+            }
+            #endif
 
             return;
 
@@ -278,7 +288,7 @@ namespace TP
             #endregion
         }
         
-        public void RepaintTextArea(int newCursorIndex = -1, int newSelectIndex = -1, bool focusText = false)
+        public void RepaintTextArea(int newCursorIndex = -1, int newSelectIndex = -1, bool focusText = false, int delay = 0)
         {
             TriggerOnInspectorGUI();
             if (HasTextEditorFocus)
@@ -290,11 +300,11 @@ namespace TP
             bool textAlreadyFocused = textEditor != null && GetControlId(GetName()) == textEditor.controlID;
             if (focusText && !textAlreadyFocused)
             {
-                TriggerUpdateFocus(2);
-                TriggerUpdateCursor(textEditor.GetCursors(), 4);
+                TriggerUpdateFocus(2 + delay);
+                TriggerUpdateCursor(textEditor.GetCursors(), 4 + delay);
             }
             
-            TriggerUpdateObjectFields();
+            TriggerUpdateObjectFields(delay);
         }
 
         private void TriggerUpdateForceEditor(int frameDelay = 0)
@@ -417,7 +427,7 @@ namespace TP
                     {
                         int startIndex = match.Index;
                         int endIndex = match.Index + match.Value.Length;
-                        matches.Insert(0, (objectId, matchIndex, startIndex, endIndex)); //Add in reverse order for easy iteration where you modify indices. 
+                        matches.Insert(0, (objectId, matchIndex, startIndex, endIndex)); // Add in reverse order for easy iteration where you modify indices. 
                         matchIndex++; 
                     }
                 }
@@ -432,14 +442,14 @@ namespace TP
 
             foreach (var (_, _, startIndex, endIndex) in Matches)
             {
-                //1 space after all object fields
+                // 1 space after all object fields
                 bool firstEndSpace = endIndex < newText.Length && newText[endIndex] == ' ';
                 if (!firstEndSpace)
                 {
                     newText = newText.Insert(endIndex, " ");
                 }
                 
-                //2 spaces between all back to back object fields
+                // 2 spaces between all back to back object fields
                 bool secondEndSpace = endIndex + 1 < newText.Length && newText[endIndex + 1] == ' ';
                 bool objectTagAfter = endIndex + 4 < newText.Length && newText.Substring(endIndex + 1, 3) == "<o=";
                 if (objectTagAfter && !secondEndSpace)
@@ -447,7 +457,7 @@ namespace TP
                     newText = newText.Insert(endIndex + 1, " ");
                 }
                 
-                //1 space before all object fields
+                // 1 space before all object fields
                 bool startSpace = startIndex > 0 && Text[startIndex - 1] == ' ';
                 if (!startSpace)
                 {
@@ -481,11 +491,15 @@ namespace TP
                     TextAreaObjectField newField = new TextAreaObjectField(rect, objectId, startIndex, endIndex - startIndex, TextAreaObjectFieldChanged);
                     newObjectFields[i] = newField;
                 };
-                
-                if (!objectFields.SequenceEqual(newObjectFields))
+
+                if (!TextAreaObjectField.BaseFieldsEqual(objectFields, newObjectFields))
+                {
+                    textAreaChangeCallback(Text, newObjectFields);
+                }
+
+                if (!TextAreaObjectField.AllFieldsEqual(objectFields, newObjectFields))
                 {
                     objectFields = newObjectFields;
-                    textAreaChangeCallback(Text, objectFields);
                 }
             }
         }
@@ -527,7 +541,7 @@ namespace TP
                 if (objectsToDrop != null && textEditor != null)
                 {
                     int dropIndex = textEditor.PositionToIndex(objectDropPosition);
-                    if (dropIndex == -1) //dropped on last line away from last character.
+                    if (dropIndex == -1) // Dropped on last line away from last character.
                     {
                         dropIndex = Text.Length;
                     }

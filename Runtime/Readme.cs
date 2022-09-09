@@ -488,12 +488,16 @@ namespace TP {
             }
         }
 
-        public void Save()
+        public void Save(bool setLastSaved = true)
         {
             string jsonReadMeData = JsonUtility.ToJson(readmeData, true);
             string fileName = BackupsLocation + "/Readme_" + gameObject.name + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".json";
             File.WriteAllText (fileName, jsonReadMeData);
-            lastSavedFileName = fileName;
+            if (setLastSaved)
+            {
+                lastSavedFileName = fileName;
+            }
+
             Debug.Log("Readme RichText saved to file: " + fileName);
         }
     
@@ -504,7 +508,7 @@ namespace TP {
                 string fileToLoad = lastSavedFileName;
                 
                 //Save before loading just in case!
-                Save();
+                Save(false);
                 
                 string json = File.ReadAllText(fileToLoad);
                 RichText = JsonUtility.FromJson<ReadmeData>(json).richText;

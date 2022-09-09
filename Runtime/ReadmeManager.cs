@@ -178,7 +178,7 @@ namespace TP
             {
                 if (foundObject == null && obj != null)
                 {
-                    RemoveObjectIdPair(foundObject, objId); //Basically we'll replace it with what we have.
+                    RemoveObjectIdPair(foundObject, objId); // Basically we'll replace it with what we have.
                 }
                 else 
                 {
@@ -244,16 +244,15 @@ namespace TP
             IdDict.Clear();
             ObjectDict.Clear();
 
-            Debug.Log("Object Id Pair Cleard." + 
-                      " ObjectIdPairs.Count=" + ObjectIdPairs.Count + 
-                      " IdDict.Count=" + IdDict.Count + 
-                      " ObjectDict.Count=" + ObjectDict.Count);
+            // Debug.Log("Object Id Pair Cleared." + 
+            //           " ObjectIdPairs.Count=" + ObjectIdPairs.Count + 
+            //           " IdDict.Count=" + IdDict.Count + 
+            //           " ObjectDict.Count=" + ObjectDict.Count);
         }
         
         public static Object GetObjectFromId(int id, bool autoSync = true)
         {
-            Object objFound = null;
-            bool found = ObjectDict.TryGetValue(id, out objFound);
+            bool found = ObjectDict.TryGetValue(id, out var objFound);
             bool missing = MissingIds.Contains(id);
             
             if (found && missing)
@@ -264,8 +263,6 @@ namespace TP
             
             if (id != 0 && !missing)
             {
-                // found = ObjectDict.TryGetValue(id, out objFound);
-
                 if (autoSync)
                 {
                     if (!found)
@@ -310,7 +307,7 @@ namespace TP
             return objId;
         }
 
-        //Could optimize by using GUIDs. Then we wouldn't need to iterate keys. 
+        // Could optimize by using GUIDs. Then we wouldn't need to iterate keys. 
         private static int GenerateId()
         {
             //int largestId = 0;

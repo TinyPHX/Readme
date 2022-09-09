@@ -1,7 +1,8 @@
 #if UNITY_EDITOR
 
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using Object = UnityEngine.Object;
@@ -18,13 +19,8 @@ namespace TP
         [SerializeField] private int index;
         [SerializeField] private int length;
 
-        // public delegate void OnChangeDelegate();
-        // public OnChangeDelegate OnChangeHandler { get; set; }
-        // private void OnChange() { }
         private Action<TextAreaObjectField> OnChange;
         
-        
-
         private static Color textBoxBackgroundColor;
         private static readonly Color selectedColor = new Color(0f / 255, 130f / 255, 255f / 255, .6f);
 
@@ -52,20 +48,42 @@ namespace TP
             return ReadmeManager.GetObjectFromId(ObjectId, autoSync);
         }
 
-        public override bool Equals(object other)
+        public static bool AllFieldsEqual(IEnumerable<TextAreaObjectField> listA, IEnumerable<TextAreaObjectField> listB)
         {
-            TextAreaObjectField otherTextAreaObject = other as TextAreaObjectField;
-
-            return this.fieldRect == otherTextAreaObject.fieldRect &&
-                   this.index == otherTextAreaObject.index &&
-                   this.length == otherTextAreaObject.length &&
-                   this.objectId == otherTextAreaObject.ObjectId &&
-                   this.objectRef == otherTextAreaObject.ObjectRef;
+            return listA.OrderBy(item => item.Index).SequenceEqual(listB.OrderBy(item => item.Index), new AllFieldsEqualComparer());
         }
 
-        public override int GetHashCode()
+        public static bool BaseFieldsEqual(IEnumerable<TextAreaObjectField> listA, IEnumerable<TextAreaObjectField> listB)
         {
-            return base.GetHashCode();
+            return listA.OrderBy(item => item.Index).SequenceEqual(listB.OrderBy(item => item.Index), new BaseFieldsEqualComparer());
+        }
+        
+        private class AllFieldsEqualComparer : IEqualityComparer<TextAreaObjectField>
+        {
+            public bool Equals(TextAreaObjectField a, TextAreaObjectField b)
+            {
+                if (a == null || b == null) { return a == null && b == null; }
+                return a.fieldRect == b.fieldRect && a.index == b.index && a.length == b.length && a.objectId == b.ObjectId && a.objectRef == b.ObjectRef;
+            }
+            
+            public int GetHashCode(TextAreaObjectField a)
+            {
+                return a.fieldRect.GetHashCode() ^ a.index.GetHashCode() ^ a.length.GetHashCode() ^ a.objectId.GetHashCode() ^ a.objectRef.GetHashCode();
+            }
+        }
+        
+        private class BaseFieldsEqualComparer : IEqualityComparer<TextAreaObjectField>
+        {
+            public bool Equals(TextAreaObjectField a, TextAreaObjectField b)
+            {
+                if (a == null || b == null) { return a == null && b == null; }
+                return a.index == b.index && a.length == b.length && a.objectId == b.ObjectId && a.objectRef == b.ObjectRef;
+            }
+            
+            public int GetHashCode(TextAreaObjectField a)
+            {
+                return a.index.GetHashCode() ^ a.length.GetHashCode() ^ a.objectId.GetHashCode() ^ a.objectRef.GetHashCode();
+            }
         }
 
         public void Draw(TextEditor textEditor = null, Vector2 offset = default, Rect bounds = default)
@@ -75,7 +93,7 @@ namespace TP
 
             textBoxBackgroundColor = EditorGUIUtility.isProSkin ? Readme.darkBackgroundColor : Readme.lightBackgroundColor;
             
-            //Only draw if in bounds
+            // Only draw if in bounds
             if (bounds != default)
             {
                 fieldBounds.yMin += Mathf.Min(Mathf.Max(bounds.yMin - fieldBounds.yMin, 0), fieldBounds.height);

@@ -19,8 +19,7 @@ namespace TP
             {
                 MonoScript monoScript = MonoScript.FromScriptableObject(script);
                 string skinsPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(monoScript)) ?? "";
-                skinsPath = Path.Combine(skinsPath, "..");
-                skinsPath = Path.Combine(skinsPath, "Skins");
+                skinsPath = Path.Combine(skinsPath, "..", "Runtime", "Skins");
                 return skinsPath;
             }
             
@@ -28,7 +27,7 @@ namespace TP
             GUISkin guiSkin = default;
             
             string file = fileName + ".guiskin";
-            string filePath = Path.Combine(path, file).Replace("\\Editor\\..", "");
+            string filePath = Path.Combine(path, file);
             if (File.Exists(Path.GetFullPath(filePath)))
             {
                 guiSkin = (GUISkin)AssetDatabase.LoadAssetAtPath(filePath, typeof(GUISkin));
@@ -88,7 +87,7 @@ namespace TP
         {
             Rect lastRect = defaultRect;
                 
-            if (Event.current.type == EventType.Repaint) //GetLastRect returns dummy values except on repaint. 
+            if (Event.current.type == EventType.Repaint) // GetLastRect returns dummy values except on repaint. 
             {
                 lastRect = new Rect(GUILayoutUtility.GetLastRect());
                 lastRect.position += offset;
@@ -97,7 +96,7 @@ namespace TP
             return lastRect;
         }
         
-        //Replacement for null coalescing operator for older versions of unity.
+        // Replacement for null coalescing operator for older versions of unity.
         public delegate T GetObjectDelegate<out T>();
         public static T SetIfNull<T>(ref T obj, GetObjectDelegate<T> getNewValue)
         {

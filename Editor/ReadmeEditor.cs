@@ -34,7 +34,8 @@ namespace TP
         private bool italicOn;
         private bool sourceOn;
 
-        //OnInspectorGUI State
+        // OnInspectorGUI State
+        private static bool showDebugSettings;
         private static bool showDebugButtons;
         private static bool showAdvancedOptions;
         private static bool showCursorPosition;
@@ -49,23 +50,21 @@ namespace TP
         // Text area focus
         private Rect doneEditButtonRect;
         
-        //Advanced Options
+        // Advanced Options
         private string objectIdPairListString;
 
-        //Copy buffer fix
+        // Copy buffer fix
         private string previousCopyBuffer;
 
         private Event currentEvent;
 
-        private ReadmeTextArea readmeTextArea; 
+        private ReadmeTextArea readmeTextArea;
         #endregion
         
-        public ReadmeTextEditor textEditor => ReadmeTextEditor.Instance;
+        private ReadmeTextEditor textEditor => ReadmeTextEditor.Instance;
 
         public override void OnInspectorGUI()
         {
-            Debug.Log("OnInspectorGUI");
-            
             currentEvent = new Event(Event.current);
             
             Readme readmeTarget = (Readme)target;
@@ -75,7 +74,6 @@ namespace TP
                 ActiveReadmeEditor = this;
             }
 
-            // Initialize();
             readme.Initialize();
             readme.ConnectManager();
             readme.UpdateSettings(ReadmeSettings.GetFolder(this));
@@ -139,12 +137,12 @@ namespace TP
 
         private void OnTextAreaChange(string newText, TextAreaObjectField[] newTextAreaObjectFields)
         {
-            SetTargetDirty();
             RichText = newText;
             TextAreaObjectFields = newTextAreaObjectFields;
+            SetTargetDirty();
         }
 
-        private void AfterOnInspectorGUI()
+        private void AfterOnInspectorGUI() 
         {
             CheckKeyboardShortCuts();
 
@@ -412,7 +410,12 @@ namespace TP
                         EditorGUILayout.HelpBox("No textEditor Found", MessageType.Warning);
                     }
 
-
+                    EditorGUI.indentLevel--;
+                }
+                
+                showDebugSettings = EditorGUILayout.Foldout(showDebugSettings, "Debug Backups/Settings");
+                if (showDebugSettings)
+                {
                     GUILayout.BeginHorizontal();
 
                     if (GUILayout.Button("Save to File", GUILayout.Width(buttonWidth)))
@@ -423,7 +426,7 @@ namespace TP
                     if (GUILayout.Button("Load from File", GUILayout.Width(buttonWidth)))
                     {
                         readme.LoadLastSave();
-                        Repaint();
+                        readmeTextArea.RepaintTextArea();
                     }
 
                     GUILayout.EndHorizontal();
@@ -434,70 +437,67 @@ namespace TP
                     {
                         ReadmeSettings newSettings = new ReadmeSettings(ReadmeSettings.GetFolder(this));
                         newSettings.SaveSettings(ReadmeSettings.GetFolder(this));
-                        Repaint();
+                        readmeTextArea.RepaintTextArea();
                     }
 
                     if (GUILayout.Button("Reload Settings", GUILayout.Width(buttonWidth)))
                     {
                         readme.UpdateSettings(ReadmeSettings.GetFolder(this), true, verbose);
+                        readmeTextArea.RepaintTextArea();
+                    }
+
+                    Readme.overrideSettings = EditorGUILayout.ObjectField(Readme.overrideSettings, typeof(Object), false);
+
+                    GUILayout.EndHorizontal();
+                }
+
+                showDebugButtons = EditorGUILayout.Foldout(showDebugButtons, "Debug Buttons");
+                if (showDebugButtons)
+                {
+                    if (GUILayout.Button("TestHtmlAgilityPack", GUILayout.Width(buttonWidth)))
+                    {
+                        TestHtmlAgilityPack();
+                    }
+
+                    if (GUILayout.Button("RepaintTextArea", GUILayout.Width(buttonWidth)))
+                    {
+                        readmeTextArea.RepaintTextArea();
+                    }
+
+                    if (GUILayout.Button("GUI.FocusControl", GUILayout.Width(buttonWidth)))
+                    {
+                        GUI.FocusControl(readmeTextArea.ActiveName);
+                    }
+
+                    if (GUILayout.Button("OnGui", GUILayout.Width(buttonWidth)))
+                    {
+                        EditorUtility.SetDirty(readme.gameObject);
+                    }
+
+                    if (GUILayout.Button("SetDirty", GUILayout.Width(buttonWidth)))
+                    {
+                        EditorUtility.SetDirty(readme);
+                    }
+
+                    if (GUILayout.Button("Repaint", GUILayout.Width(buttonWidth)))
+                    {
                         Repaint();
                     }
 
-                    Readme.overrideSettings =
-                        EditorGUILayout.ObjectField(Readme.overrideSettings, typeof(Object), false);
-
-                    GUILayout.EndHorizontal();
-
-                    showDebugButtons = EditorGUILayout.Foldout(showDebugButtons, "Debug Buttons");
-                    if (showDebugButtons)
+                    if (GUILayout.Button("RecordObject", GUILayout.Width(buttonWidth)))
                     {
-                        if (GUILayout.Button("TestHtmlAgilityPack", GUILayout.Width(buttonWidth)))
-                        {
-                            TestHtmlAgilityPack();
-                        }
-
-                        if (GUILayout.Button("Repaint", GUILayout.Width(buttonWidth)))
-                        {
-                            readmeTextArea.RepaintTextArea();
-                        }
-
-                        if (GUILayout.Button("GUI.FocusControl", GUILayout.Width(buttonWidth)))
-                        {
-                            GUI.FocusControl(readmeTextArea.ActiveName); //readme_text_editor_style
-                        }
-
-                        if (GUILayout.Button("OnGui", GUILayout.Width(buttonWidth)))
-                        {
-                            EditorUtility.SetDirty(readme.gameObject);
-                        }
-
-                        if (GUILayout.Button("SetDirty", GUILayout.Width(buttonWidth)))
-                        {
-                            EditorUtility.SetDirty(readme);
-                        }
-
-                        if (GUILayout.Button("Repaint", GUILayout.Width(buttonWidth)))
-                        {
-                            Repaint();
-                        }
-
-                        if (GUILayout.Button("RecordObject", GUILayout.Width(buttonWidth)))
-                        {
-                            Undo.RecordObject(readme, "Force update!");
-                        }
-
-                        if (GUILayout.Button("FocusTextInControl", GUILayout.Width(buttonWidth)))
-                        {
-                            EditorGUI.FocusTextInControl(readmeTextArea.ActiveName);
-                        }
-
-                        if (GUILayout.Button("Un-FocusTextInControl", GUILayout.Width(buttonWidth)))
-                        {
-                            EditorGUI.FocusTextInControl("");
-                        }
+                        Undo.RecordObject(readme, "Force update!");
                     }
 
-                    EditorGUI.indentLevel--;
+                    if (GUILayout.Button("FocusTextInControl", GUILayout.Width(buttonWidth)))
+                    {
+                        EditorGUI.FocusTextInControl(readmeTextArea.ActiveName);
+                    }
+
+                    if (GUILayout.Button("Un-FocusTextInControl", GUILayout.Width(buttonWidth)))
+                    {
+                        EditorGUI.FocusTextInControl("");
+                    }
                 }
 
                 EditorGUI.indentLevel--;
@@ -566,7 +566,7 @@ namespace TP
                 {
                     Texture2D icon =
                         AssetDatabase.LoadAssetAtPath<Texture2D>(
-                            "Assets/Packages/TP/Readme/Assets/Textures/readme_icon_256_256.png"); //TODO need to make relative path. Then can remove the below check for null
+                            "Assets/Packages/TP/Readme/Assets/Textures/readme_icon_256_256.png"); // TODO need to make relative path. Then can remove the below check for null
                     if (icon != null)
                     {
                         IconManager.SetIcon(selectedObject as GameObject, icon);
@@ -583,7 +583,7 @@ namespace TP
 
         private void StopInvalidTextAreaEvents()
         {
-            //Stop button clicks from being used by text
+            // Stop button clicks from being used by text
             if (readmeTextArea.InvalidClick)
             {
                 currentEvent.Use();
@@ -605,7 +605,7 @@ namespace TP
 
         public bool LiteVersionPaywall(string feature = "This")
         {
-            return false; //Disabling this in favor of less intrusive FreeVersionDialogue.
+            return false; // Disabling this in favor of less intrusive FreeVersionDialogue.
             
             // if (liteEditor)
             // {
@@ -634,7 +634,7 @@ namespace TP
                 DateTime lastPopupDate = DateTime.Parse(activeSettings.lastPopupDate);
                 double daysSincePopup = (DateTime.Now - lastPopupDate).TotalDays;
 
-                if (daysSincePopup > 7)
+                if (daysSincePopup > 7 || daysSincePopup < 0)
                 {
                     activeSettings.lastPopupDate = DateTime.Now.ToString();
                     activeSettings.SaveSettings(ReadmeSettings.GetFolder(this));
@@ -666,7 +666,7 @@ namespace TP
                 {
                     showAdvancedOptions = !showAdvancedOptions;
                     Event.current.Use();
-                    Repaint();
+                    readmeTextArea.RepaintTextArea();
                 }
 
                 if (editing)
@@ -774,7 +774,7 @@ namespace TP
 
                 if (readmeTextArea.TagsError())
                 {
-                    readme.LoadLastSave(); //TODO this is sketchy. Probs should not auto load.
+                    readme.LoadLastSave(); //TODO review if there is better flow than this.
                     Debug.LogWarning("You can't do that!");
                 }
 
@@ -783,7 +783,7 @@ namespace TP
                 int newCursorIndex = readmeTextArea.GetNearestPoorTextIndex(readme.GetRichIndex(styleStartIndex+1)-1);
                 int newSelectIndex = readmeTextArea.GetNearestPoorTextIndex(readme.GetRichIndex(styleEndIndex+1)-1);
 
-                readmeTextArea.RepaintTextArea(newCursorIndex, newSelectIndex);
+                readmeTextArea.RepaintTextArea(newCursorIndex, newSelectIndex, true);
             }
         }
 

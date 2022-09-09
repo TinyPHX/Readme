@@ -1,19 +1,16 @@
 using System;
 using System.Collections;
-// using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-// using TP.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
-// using UnityEngine.UI;
 
 namespace TP
 {
     public class ReadmeTextEditor
     {
         private static ReadmeTextEditor instance;
-        public static ReadmeTextEditor Instance => ReadmeUtil.SetIfNull(ref instance, () => new ReadmeTextEditor()); //Returns instance if not null, otherwise instantiates new instance.
+        public static ReadmeTextEditor Instance => ReadmeUtil.SetIfNull(ref instance, () => new ReadmeTextEditor());
 
         private TextEditor textEditor;
         public TextEditor TextEditor => ReadmeUtil.SetIfNull(ref textEditor, () => GetPrivateTextEditor);
@@ -235,12 +232,12 @@ namespace TP
                     selectIndexChanged = false;
                 }
 
-                //Fixes double clicks that end with cursor within RichText tag.  
+                // Fixes double clicks that end with cursor within RichText tag.  
                 if (isDoubleClick && clickInTextArea && text.Length > 0)
                 {
                     int mouseIndex = MousePositionToIndex;
                     char characterClicked = text[Mathf.Clamp(mouseIndex, 0, text.Length - 1)];
-                    if (!char.IsWhiteSpace(characterClicked)) //Dont fix word select if clicked character is a a space
+                    if (!char.IsWhiteSpace(characterClicked)) // Dont fix word select if clicked character is a a space
                     {
                         SelectIndex = mouseIndex;
                         CursorIndex = mouseIndex;
@@ -269,13 +266,8 @@ namespace TP
             ReadmeUtil.SetIfNull(ref text, () => this.text);
             Rect textEditorRect = textEditor?.position ?? new Rect();
 
-            // if (text == null && TextEditorActive && readmeTextArea.HasTextEditorFocus && text != readmeTextArea.Text)
-            // {
-            //     text = readmeTextArea.Text;
-            // }
-
             float padding = 1;
-            int fontSize = 12; //Todo get size from size map
+            int fontSize = 12; // TODO get size from size map
 
             Vector2 startPositionIndex1 = GetGraphicalCursorPosition(startIndex, text);
             Vector2 startPositionIndex2 = GetGraphicalCursorPosition(startIndex + 1, text);
@@ -291,7 +283,6 @@ namespace TP
             }
 
             Vector2 endPosition = GetGraphicalCursorPosition(endIndex, text) + new Vector2(-padding, 0);
-            // float height = readmeTextArea?.Style ?? new GUIStyle()).CalcHeight(new GUIContent(string.Format(sizeWrapper, textSize, " ")), 100) - 10;
             float height = readmeTextArea.CalcHeight(fontSize: fontSize) - 10;
 
             if (startPosition.y != endPosition.y)
@@ -352,7 +343,7 @@ namespace TP
                     break;
                 }
 
-                //TODO: Check for end of word wrapped line.
+                // TODO: Check for end of word wrapped line.
                 bool isEndOfLine = text.Length <= currentIndex || text[currentIndex] == '\n';
 
                 if (currentGraphicalPosition.y < goalPosition.y - cursorYOffset)
@@ -500,18 +491,7 @@ namespace TP
             textEditor.selectIndex = (int)tempSelectIndex.Pop();
         }
 
-        
-
-        // private bool TextEditorActive => controlID == ActiveControl.id && GUI.GetNameOfFocusedControl() == ActiveControl.name;
-        
-        // public ReadmeTextArea ActiveTextArea => RegisteredTextAreas.FirstOrDefault(readmeTextArea => readmeTextArea.HasControl(controlID));
-        
-        // public ReadmeTextArea ActiveTextArea => 
-        //     RegisteredTextAreas.FirstOrDefault(readmeTextArea =>
-        //         readmeTextArea.HasControl(controlID) || readmeTextArea.HasControl(GUI.GetNameOfFocusedControl()));
-
         public bool TextEditorActive => HasTextEditor && TextAreaActive;
-        // RegisteredTextAreas.FirstOrDefault(readmeTextArea => readmeTextArea.HasControl(GUI.GetNameOfFocusedControl())) != default;
         
         #region Passthrough to public TextEditor interface
         

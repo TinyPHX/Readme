@@ -76,9 +76,7 @@ namespace TP
         {
             MonoScript monoScript = MonoScript.FromScriptableObject(script);
             string path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(monoScript)) ?? "";
-            path = Path.Combine(path, "..");
-            path = Path.Combine(path, "Settings");
-            path = path.Replace("\\Editor\\..", "");
+            path = Path.Combine(path, "..", "Runtime", "Settings");;
             return path;
         }
         
