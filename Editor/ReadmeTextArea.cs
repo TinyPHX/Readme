@@ -23,6 +23,7 @@ namespace TP
         
         // Scrolling
         public Vector2 Scroll { get; private set; } = new Vector2();
+        private bool pendingScrollUpdate = false;
         public bool ScrollEnabled { get; set; } = true;
         private int scrollMaxHeight = 400;
         private int scrollAreaPad = 6;
@@ -363,6 +364,7 @@ namespace TP
             if (Text != newText || SourceOn != sourceOn || Editing != editing)
             {
                 Text = newText;
+                textEditor.SetText(Text);
                 SourceOn = sourceOn;
                 Editing = editing;
                 selectable = !empty;
@@ -665,10 +667,14 @@ namespace TP
                 mouseDownInScrollArea = intersectRect.Contains(Event.current.mousePosition);
             }
 
-            if (previousCursor.Equals(textEditor.GetCursors()))
+            if (!previousCursor.Equals(textEditor.GetCursors()))
             {
+                pendingScrollUpdate = true;
                 previousCursor = textEditor.GetCursors();
-                
+            }
+
+            if (pendingScrollUpdate)
+            {
                 Vector2 resultScroll = Scroll;
 
                 if (textEditor.HasTextEditor)
@@ -687,11 +693,13 @@ namespace TP
                         if (dragScroll)
                         {
                             resultScroll.y += Mathf.Sign(scrollDiff) * cursorRect.height; //Scroll one line at a time. 
+                            pendingScrollUpdate = false;
                         }
 
                         if (fullScroll)
                         {
                             resultScroll.y += scrollDiff; //Scroll full distance to cursor 
+                            pendingScrollUpdate = false; 
                         }
                     }
                 }

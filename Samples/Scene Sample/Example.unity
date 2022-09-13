@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 10
+    serializedVersion: 12
     m_Resolution: 2
     m_BakeResolution: 40
     m_AtlasSize: 1024
@@ -62,6 +62,7 @@ LightmapSettings:
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
     m_CompAOExponentDirect: 0
+    m_ExtractAmbientOcclusion: 0
     m_Padding: 2
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
@@ -76,10 +77,16 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
+    m_PVREnvironmentSampleCount: 500
+    m_PVREnvironmentReferencePointCount: 2048
+    m_PVRFilteringMode: 2
+    m_PVRDenoiserTypeDirect: 0
+    m_PVRDenoiserTypeIndirect: 0
+    m_PVRDenoiserTypeAO: 0
     m_PVRFilterTypeDirect: 0
     m_PVRFilterTypeIndirect: 0
     m_PVRFilterTypeAO: 0
-    m_PVRFilteringMode: 1
+    m_PVREnvironmentMIS: 0
     m_PVRCulling: 1
     m_PVRFilteringGaussRadiusDirect: 1
     m_PVRFilteringGaussRadiusIndirect: 5
@@ -87,7 +94,9 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
+    m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -146,6 +155,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -157,6 +167,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -211,51 +222,28 @@ MonoBehaviour:
   useTackIcon: 0
   readonlyMode: 1
   activeSettings:
-    name: Paid
-    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
-    fileName: Paid
+    name: Default
+    id: 985bf5af-02f7-4b64-8065-141a8fe9f804
+    skin: Default
+    fileName: Default
     redistributable: 0
-    lite: 0
+    lite: 1
     priority: 5
     type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
+    lastPopupDate: 9/13/2022 2:50:36 PM
   allSettings:
-  - name: Free
-    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
-    fileName: Free
-    redistributable: 1
-    lite: 0
-    priority: 10
-    type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
-  - name: Lite
-    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
-    fileName: Lite
+  - name: Default
+    id: 985bf5af-02f7-4b64-8065-141a8fe9f804
+    skin: Default
+    fileName: Default
     redistributable: 0
     lite: 1
-    priority: 7
+    priority: 5
     type: json
-    lastPopupDate: 8/24/2022 6:24:26 PM
-  - name: New
-    id: d1a122f7-4a79-44c0-9570-4911ded4c5b3
-    skin: Default
-    path: Assets\TP\Readme\Scripts\Settings
-    fileName: New
-    redistributable: 1
-    lite: 1
-    priority: 1000
-    type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
+    lastPopupDate: 9/13/2022 2:50:36 PM
   - name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
@@ -274,9 +262,10 @@ MonoBehaviour:
       Unity</size>\n\nYou can create super cool cylindars with Unity 3D!\n\n<b>Context
       Menu</b>\n\n* <i>GameObject > 3D Object > Cylinder</i>\n* <i>Right Click in
       Sceen > 3D Object > Cylinder</i>\n\n<b>Manuall</b>\n\n1. Create a new GameObject\n2.
-      Add the \"MeshFilter\" component\n3. Set the MeshFilter's Mesh Property to <o=\"0082326\"></o>
-      \n4. Add a \"MeshRenderer\" and set the material. \n\nSee the components below
-      or  <o=\"5460480\"></o>  for an example of a Unity Cylindar in action!"
+      Add the \"MeshFilter\" component\n3. Set the MeshFilter's Mesh Property to
+      <o=\"0082326\"></o> \n4. Add a \"MeshRenderer\" and set the material. \n\nSee
+      the components below or  <o=\"5460480\"></o>  for an example of a Unity Cylindar
+      in action!"
     textAreaObjectFields:
     - name: Cylinder (82326)
       objectId: 82326
@@ -341,12 +330,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 465482173}
   m_Enabled: 1
-  serializedVersion: 8
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 0.56150657, g: 0.41468424, b: 0.86764705, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -356,6 +347,24 @@ Light:
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
@@ -363,12 +372,15 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!114 &465482175
@@ -394,7 +406,6 @@ MonoBehaviour:
     name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
@@ -405,7 +416,6 @@ MonoBehaviour:
   - name: Free
     id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
     skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
     fileName: Free
     redistributable: 1
     lite: 0
@@ -415,7 +425,6 @@ MonoBehaviour:
   - name: Lite
     id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
     skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
     fileName: Lite
     redistributable: 0
     lite: 1
@@ -425,7 +434,6 @@ MonoBehaviour:
   - name: New
     id: d1a122f7-4a79-44c0-9570-4911ded4c5b3
     skin: Default
-    path: Assets\TP\Readme\Scripts\Settings
     fileName: New
     redistributable: 1
     lite: 1
@@ -435,7 +443,6 @@ MonoBehaviour:
   - name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
@@ -531,9 +538,10 @@ Camera:
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_GateFitMode: 2
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -584,7 +592,6 @@ MonoBehaviour:
     name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
@@ -595,7 +602,6 @@ MonoBehaviour:
   - name: Free
     id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
     skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
     fileName: Free
     redistributable: 1
     lite: 0
@@ -605,7 +611,6 @@ MonoBehaviour:
   - name: Lite
     id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
     skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
     fileName: Lite
     redistributable: 0
     lite: 1
@@ -615,7 +620,6 @@ MonoBehaviour:
   - name: New
     id: d1a122f7-4a79-44c0-9570-4911ded4c5b3
     skin: Default
-    path: Assets\TP\Readme\Scripts\Settings
     fileName: New
     redistributable: 1
     lite: 1
@@ -625,7 +629,6 @@ MonoBehaviour:
   - name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
@@ -635,7 +638,8 @@ MonoBehaviour:
   readmeData:
     richText: '<b>DONT CHANGE THESE CAMERA SETTINGS!</b>
 
-      <size=12>This is in readonly mode!</size>'
+      <size=12>This is
+      in readonly mode!</size>'
     textAreaObjectFields: []
     objectIdPairs: []
 --- !u!4 &1992527152
@@ -672,51 +676,28 @@ MonoBehaviour:
   useTackIcon: 1
   readonlyMode: 0
   activeSettings:
-    name: Paid
-    id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
-    fileName: Paid
+    name: Default
+    id: 985bf5af-02f7-4b64-8065-141a8fe9f804
+    skin: Default
+    fileName: Default
     redistributable: 0
-    lite: 0
+    lite: 1
     priority: 5
     type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
+    lastPopupDate: 9/13/2022 2:50:36 PM
   allSettings:
-  - name: Free
-    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
-    fileName: Free
-    redistributable: 1
-    lite: 0
-    priority: 10
-    type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
-  - name: Lite
-    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
-    fileName: Lite
+  - name: Default
+    id: 985bf5af-02f7-4b64-8065-141a8fe9f804
+    skin: Default
+    fileName: Default
     redistributable: 0
     lite: 1
-    priority: 7
+    priority: 5
     type: json
-    lastPopupDate: 8/24/2022 6:24:26 PM
-  - name: New
-    id: d1a122f7-4a79-44c0-9570-4911ded4c5b3
-    skin: Default
-    path: Assets\TP\Readme\Scripts\Settings
-    fileName: New
-    redistributable: 1
-    lite: 1
-    priority: 1000
-    type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
+    lastPopupDate: 9/13/2022 2:50:36 PM
   - name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
@@ -745,22 +726,22 @@ MonoBehaviour:
       objectRef: {fileID: 102900000, guid: bdde231bca031074084989b606c30463, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 81
-        y: 444
-        width: 140
+        x: 79
+        y: 342
+        width: 120
         height: 15
-      index: 595
+      index: 596
       length: 17
     - name: Cylinder (5460480)
       objectId: 5460480
       objectRef: {fileID: 212527733}
       fieldRect:
         serializedVersion: 2
-        x: 128
-        y: 458
-        width: 140
+        x: 119
+        y: 357
+        width: 125
         height: 15
-      index: 631
+      index: 632
       length: 17
     - name: Prefab Dummy (6651506)
       objectId: 6651506
@@ -768,44 +749,44 @@ MonoBehaviour:
         type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 88
-        y: 472
-        width: 140
+        x: 83
+        y: 372
+        width: 121
         height: 15
-      index: 662
+      index: 663
       length: 17
     - name: ReadmeManager (5715158)
       objectId: 5715158
       objectRef: {fileID: 11500000, guid: 9c0cd4005c8f32a4295471dcd0ec2ec8, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 82
-        y: 486
-        width: 140
+        x: 79
+        y: 387
+        width: 119
         height: 15
-      index: 693
+      index: 694
       length: 17
     - name: Text File Dummy (4670739)
       objectId: 4670739
       objectRef: {fileID: 4900000, guid: f77a468c860d45942be3c861054408e7, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 68
-        y: 500
-        width: 140
+        x: 66
+        y: 402
+        width: 124
         height: 15
-      index: 722
+      index: 723
       length: 17
     - name: Scene Sample (9751950)
       objectId: 9751950
       objectRef: {fileID: 102900000, guid: d83cd37472bcadb4da30c2b07b21010f, type: 3}
       fieldRect:
         serializedVersion: 2
-        x: 82
-        y: 514
-        width: 140
+        x: 78
+        y: 417
+        width: 121
         height: 15
-      index: 752
+      index: 753
       length: 17
     objectIdPairs: []
 --- !u!4 &388619993126135773

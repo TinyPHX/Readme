@@ -200,28 +200,15 @@ namespace TP {
             get { return activeSettings; }
         }
 
-        public void UpdateSettings(string directory = "", bool force = false, bool verbose = false)
+        public void UpdateSettings(string unityDirectory = "", bool force = false, bool verbose = false)
         {
             if (!settingsLoaded || force)
             {
-                allSettings.Clear();
-                bool settingsFound = false;
-                
-                DirectoryInfo directoryInfo = new DirectoryInfo(directory);
-                FileInfo[] fileInfos = directoryInfo.GetFiles();
-                foreach (FileInfo fileInfo in fileInfos)
-                {
-                    if (fileInfo.Extension == "." + ReadmeSettings.DEFAULT_TYPE && 
-                        fileInfo.Name.Substring(0, ReadmeSettings.FILE_TAG.Length) == ReadmeSettings.FILE_TAG)
-                    {
-                        allSettings.Add(ReadmeSettings.LoadSettings(directory, fileInfo.Name));
-                        settingsFound = true;
-                    }
-                }
+                allSettings = ReadmeSettings.LoadAllSettings(unityDirectory);
 
-                if (settingsFound)
+                if (allSettings.Count > 0)
                 {
-                    if (Readme.overrideSettings != null)
+                    if (overrideSettings != null)
                     {
                         activeSettings = allSettings.Find(setting => "Settings_" + setting.fileName == overrideSettings.name);
                     }
@@ -389,6 +376,8 @@ namespace TP {
         
         public void RebuildStyleMaps()
         {
+            text = Text;
+            
             if (text.Length == 0)
             {
                 Dictionary<string, List<bool>> updatedStyleMaps = new Dictionary<string, List<bool>>();
@@ -473,25 +462,25 @@ namespace TP {
             return richIndex;
         }
 
-        public string BackupsLocation
+        public static string SaveLocation
         {
             get
             {
-                string backupsLocation = Application.persistentDataPath + "/readme";
+                string saveLocation = Application.persistentDataPath + "/readme/" + PlayerSettings.productName;
                 
-                if(!Directory.Exists(backupsLocation))
+                if(!Directory.Exists(saveLocation))
                 {    
-                    Directory.CreateDirectory(backupsLocation);
+                    Directory.CreateDirectory(saveLocation);
                 }
                     
-                return backupsLocation;
+                return saveLocation;
             }
         }
 
         public void Save(bool setLastSaved = true)
         {
             string jsonReadMeData = JsonUtility.ToJson(readmeData, true);
-            string fileName = BackupsLocation + "/Readme_" + gameObject.name + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".json";
+            string fileName = SaveLocation + "/Readme_" + gameObject.name + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".json";
             File.WriteAllText (fileName, jsonReadMeData);
             if (setLastSaved)
             {

@@ -76,7 +76,7 @@ namespace TP
 
             readme.Initialize();
             readme.ConnectManager();
-            readme.UpdateSettings(ReadmeSettings.GetFolder(this));
+            readme.UpdateSettings(ReadmeSettings.GetUnityFolder(this));
             
             ReadmeUtil.SetIfNull(ref readmeTextArea, () => new ReadmeTextArea(this, readme, TextAreaObjectFields, OnTextAreaChange, "Click \"Edit\" to add your readme!"));
 
@@ -264,9 +264,9 @@ namespace TP
                 Readme.disableAllReadonlyMode =
                     EditorGUILayout.Toggle(disableAllReadonlyModeTooltip, Readme.disableAllReadonlyMode);
 
-                if (GUILayout.Button("View Backups", GUILayout.Width(buttonWidth)))
+                if (GUILayout.Button("View Saves", GUILayout.Width(buttonWidth)))
                 {
-                    EditorUtility.RevealInFinder(readme.BackupsLocation);
+                    EditorUtility.RevealInFinder(Readme.SaveLocation);
                 }
 
                 showCursorPosition = EditorGUILayout.Foldout(showCursorPosition, "Cursor Position");
@@ -435,14 +435,14 @@ namespace TP
 
                     if (GUILayout.Button("New Settings File", GUILayout.Width(buttonWidth)))
                     {
-                        ReadmeSettings newSettings = new ReadmeSettings(ReadmeSettings.GetFolder(this));
-                        newSettings.SaveSettings(ReadmeSettings.GetFolder(this));
+                        ReadmeSettings newSettings = new ReadmeSettings();
+                        newSettings.SaveSettings();
                         readmeTextArea.RepaintTextArea();
                     }
 
                     if (GUILayout.Button("Reload Settings", GUILayout.Width(buttonWidth)))
                     {
-                        readme.UpdateSettings(ReadmeSettings.GetFolder(this), true, verbose);
+                        readme.UpdateSettings(ReadmeSettings.GetUnityFolder(this), true, verbose);
                         readmeTextArea.RepaintTextArea();
                     }
 
@@ -637,8 +637,8 @@ namespace TP
                 if (daysSincePopup > 7 || daysSincePopup < 0)
                 {
                     activeSettings.lastPopupDate = DateTime.Now.ToString();
-                    activeSettings.SaveSettings(ReadmeSettings.GetFolder(this));
-                    readme.UpdateSettings(ReadmeSettings.GetFolder(this), force:true);
+                    activeSettings.SaveSettings();
+                    readme.UpdateSettings(ReadmeSettings.GetUnityFolder(this), force:true);
                     
                     string title = "Tiny PHX Games - Readme (Free Version)";
                     string message =
@@ -780,8 +780,8 @@ namespace TP
 
                 UpdateStyleState();
 
-                int newCursorIndex = readmeTextArea.GetNearestPoorTextIndex(readme.GetRichIndex(styleStartIndex+1)-1);
-                int newSelectIndex = readmeTextArea.GetNearestPoorTextIndex(readme.GetRichIndex(styleEndIndex+1)-1);
+                int newCursorIndex = readmeTextArea.GetNearestPoorTextIndex(readme.GetRichIndex(styleStartIndex));
+                int newSelectIndex = readmeTextArea.GetNearestPoorTextIndex(readme.GetRichIndex(styleEndIndex));
 
                 readmeTextArea.RepaintTextArea(newCursorIndex, newSelectIndex, true);
             }
