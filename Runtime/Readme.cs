@@ -26,6 +26,7 @@ namespace TP {
         public static readonly Color darkBackgroundColor = new Color(0.22f, 0.22f, 0.22f);
         public static readonly Color lightFontColor = new Color(0, 0, 0);
         public static readonly Color darkFontColor = new Color(0.82f, 0.82f, 0.82f);
+        public static string SettingsLocation { get; private set; } = "";
         
         private bool initialized = false;
         
@@ -59,14 +60,17 @@ namespace TP {
 
         [NonSerialized] public bool managerConnected = false; //This should never be serialized
 
-        public void Initialize()
+        public void Initialize(string settingsLocation)
         {
             if (!initialized)
             {
                 initialized = true;
 
                 fontColor = EditorGUIUtility.isProSkin ? darkFontColor : lightFontColor;
+                RichText = RichText;
             }
+
+            SettingsLocation = settingsLocation;
         }
         
         public void ConnectManager()
@@ -200,11 +204,11 @@ namespace TP {
             get { return activeSettings; }
         }
 
-        public void UpdateSettings(string unityDirectory = "", bool force = false, bool verbose = false)
+        public void UpdateSettings(bool force = false, bool verbose = false)
         {
             if (!settingsLoaded || force)
             {
-                allSettings = ReadmeSettings.LoadAllSettings(unityDirectory);
+                allSettings = ReadmeSettings.LoadAllSettings();
 
                 if (allSettings.Count > 0)
                 {
@@ -231,7 +235,17 @@ namespace TP {
                 }
             }
         }
-        
+
+        public static string PersistentLocation
+        {
+            get
+            {
+                string saveLocation = Application.persistentDataPath + "/readme/" + PlayerSettings.productName;
+                if(!Directory.Exists(saveLocation)) { Directory.CreateDirectory(saveLocation); }
+                return saveLocation;
+            }
+        }
+
         public string RemoveEmptyTags(string input)
         {
             string output = input
@@ -462,25 +476,10 @@ namespace TP {
             return richIndex;
         }
 
-        public static string SaveLocation
-        {
-            get
-            {
-                string saveLocation = Application.persistentDataPath + "/readme/" + PlayerSettings.productName;
-                
-                if(!Directory.Exists(saveLocation))
-                {    
-                    Directory.CreateDirectory(saveLocation);
-                }
-                    
-                return saveLocation;
-            }
-        }
-
         public void Save(bool setLastSaved = true)
         {
             string jsonReadMeData = JsonUtility.ToJson(readmeData, true);
-            string fileName = SaveLocation + "/Readme_" + gameObject.name + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".json";
+            string fileName = PersistentLocation + "/Readme_" + gameObject.name + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".json";
             File.WriteAllText (fileName, jsonReadMeData);
             if (setLastSaved)
             {

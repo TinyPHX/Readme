@@ -73,10 +73,13 @@ namespace TP
                 readme = readmeTarget;
                 ActiveReadmeEditor = this;
             }
-
-            readme.Initialize();
+            
+            MonoScript monoScript = MonoScript.FromScriptableObject(this);
+            string path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(monoScript)) ?? "";
+            string settingsPath = Path.Combine(path, "..", "Runtime", "Settings");
+            readme.Initialize(settingsPath);
             readme.ConnectManager();
-            readme.UpdateSettings(ReadmeSettings.GetUnityFolder(this));
+            readme.UpdateSettings();
             
             ReadmeUtil.SetIfNull(ref readmeTextArea, () => new ReadmeTextArea(this, readme, TextAreaObjectFields, OnTextAreaChange, "Click \"Edit\" to add your readme!"));
 
@@ -264,9 +267,9 @@ namespace TP
                 Readme.disableAllReadonlyMode =
                     EditorGUILayout.Toggle(disableAllReadonlyModeTooltip, Readme.disableAllReadonlyMode);
 
-                if (GUILayout.Button("View Saves", GUILayout.Width(buttonWidth)))
+                if (GUILayout.Button("View Backups", GUILayout.Width(buttonWidth)))
                 {
-                    EditorUtility.RevealInFinder(Readme.SaveLocation);
+                    EditorUtility.RevealInFinder(Readme.PersistentLocation);
                 }
 
                 showCursorPosition = EditorGUILayout.Foldout(showCursorPosition, "Cursor Position");
@@ -442,7 +445,7 @@ namespace TP
 
                     if (GUILayout.Button("Reload Settings", GUILayout.Width(buttonWidth)))
                     {
-                        readme.UpdateSettings(ReadmeSettings.GetUnityFolder(this), true, verbose);
+                        readme.UpdateSettings(true, verbose);
                         readmeTextArea.RepaintTextArea();
                     }
 
@@ -638,7 +641,7 @@ namespace TP
                 {
                     activeSettings.lastPopupDate = DateTime.Now.ToString();
                     activeSettings.SaveSettings();
-                    readme.UpdateSettings(ReadmeSettings.GetUnityFolder(this), force:true);
+                    readme.UpdateSettings(force:true);
                     
                     string title = "Tiny PHX Games - Readme (Free Version)";
                     string message =

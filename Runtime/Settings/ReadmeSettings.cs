@@ -3,10 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
-using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace TP
 {
@@ -21,8 +18,12 @@ namespace TP
         public bool lite;
         public float priority;
         public string type;
-        public string lastPopupDate;
-        
+        public string lastPopupDate
+        {
+            get => LastPopupDate.Instance.value;
+            set => LastPopupDate.Instance.value = value;
+        }
+
         public static string FILE_TAG = "Settings_";
         public static string DEFAULT_TYPE = "json";
 
@@ -36,21 +37,27 @@ namespace TP
             this.lite = lite;
             this.priority = priority;
             type = DEFAULT_TYPE;
-            lastPopupDate = DateTime.Parse("1/1/2000 12:00:00 AM").ToString();
         }
 
         private string FileName => FILE_TAG + fileName + "." + type;
-        private string FilePath => Path.Combine(Readme.SaveLocation, FileName);
+        private string FilePath => Path.Combine(Readme.SettingsLocation, FileName);
+        private static string PersistentFileName => FILE_TAG + "PopUpDate" + "." + DEFAULT_TYPE;
+        private static string PersistentFilePath => Path.Combine(Readme.PersistentLocation, PersistentFileName);
 
         public bool FileExists()
         {
             return File.Exists(FilePath);
         }
 
+        public static bool PersistantFileExists()
+        {
+            return File.Exists(PersistentFilePath);
+        }
+
         public static void CreateDefaultSettings()
         {
             ReadmeSettings defaultSettings = new ReadmeSettings("Default", false, true, 7);
-            if (!defaultSettings.FileExists())
+            if (!defaultSettings.FileExists() || !PersistantFileExists())
             {
                 defaultSettings.SaveSettings();
             }
@@ -61,31 +68,29 @@ namespace TP
             string jsonReadmeSettingsData = JsonUtility.ToJson(this, true);
             File.WriteAllText (FilePath, jsonReadmeSettingsData);
             Debug.Log("Settings saved to file: " + FilePath);
+            
+            string jsonLastPupUpDateData = JsonUtility.ToJson(LastPopupDate.Instance, true);
+            File.WriteAllText (PersistentFilePath, jsonLastPupUpDateData);
+            Debug.Log("Persistent settings saved to file: " + PersistentFilePath);
         }
 
-        public static List<ReadmeSettings> LoadAllSettings(string unityPath)
+        public static List<ReadmeSettings> LoadAllSettings()
         {
             CreateDefaultSettings();
 
             List<ReadmeSettings> allSettings = new List<ReadmeSettings>() { };
             
-            DirectoryInfo directoryInfo = new DirectoryInfo(unityPath);
+            string tmpPopupDate = LoadLastPopUpDate().value;
+            
+            DirectoryInfo directoryInfo = new DirectoryInfo(Readme.SettingsLocation);
             FileInfo[] fileInfos = directoryInfo.GetFiles();
             foreach (FileInfo fileInfo in fileInfos)
             {
                 if (fileInfo.Extension == "." + DEFAULT_TYPE && fileInfo.Name.Substring(0, FILE_TAG.Length) == FILE_TAG)
                 {
-                    MoveSettings(unityPath, fileInfo.Name);
-                }
-            }
-            
-            directoryInfo = new DirectoryInfo(GetUserFolder());
-            fileInfos = directoryInfo.GetFiles();
-            foreach (FileInfo fileInfo in fileInfos)
-            {
-                if (fileInfo.Extension == "." + DEFAULT_TYPE && fileInfo.Name.Substring(0, FILE_TAG.Length) == FILE_TAG)
-                {
-                    allSettings.Add(LoadSettings(fileInfo.Name));
+                    ReadmeSettings loadedSettings = LoadSettings(fileInfo.Name);
+                    loadedSettings.lastPopupDate = tmpPopupDate;
+                    allSettings.Add(loadedSettings);
                 }
             }
 
@@ -95,7 +100,7 @@ namespace TP
         public static void MoveSettings(string unityPath, string fileName)
         {
             string unityFilePath = Path.GetFullPath(Path.Combine(unityPath, fileName));
-            string userFilePath = Path.Combine(GetUserFolder(), fileName);
+            string userFilePath = Path.Combine(Readme.SettingsLocation, fileName);
             
             if (File.Exists(unityFilePath))
             {
@@ -111,18 +116,17 @@ namespace TP
                     }
                 }
             }
-            
         }
 
         public static ReadmeSettings LoadSettings(string fileName)
         {
             ReadmeSettings loadedSettings = new ReadmeSettings();
             
-            string userFilePath = Path.Combine(GetUserFolder(), fileName);
+            string filePath = Path.Combine(Readme.SettingsLocation, fileName);
             
-            if (File.Exists(userFilePath))
+            if (File.Exists(filePath))
             {
-                string json = File.ReadAllText(userFilePath);
+                string json = File.ReadAllText(filePath);
                 loadedSettings = JsonUtility.FromJson<ReadmeSettings>(json);
             }
             else
@@ -132,18 +136,40 @@ namespace TP
 
             return loadedSettings;
         }
-        
-        public static string GetUnityFolder(ScriptableObject script)
-        {
-            MonoScript monoScript = MonoScript.FromScriptableObject(script);
-            string path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(monoScript)) ?? "";
-            path = Path.Combine(path, "..", "Runtime", "Settings");;
-            return path;
-        }
 
-        public static string GetUserFolder()
+        public static LastPopupDate LoadLastPopUpDate()
         {
-            return Readme.SaveLocation;
+            LastPopupDate loadedPopupDate = new LastPopupDate();
+            if (File.Exists(PersistentFilePath))
+            {
+                string json = File.ReadAllText(PersistentFilePath);
+                loadedPopupDate = JsonUtility.FromJson<LastPopupDate>(json);
+            }
+            else
+            {
+                Debug.LogWarning("Settings file not found.");
+            }
+
+            return loadedPopupDate;
+        }
+    }
+    
+    [Serializable]
+    public class LastPopupDate
+    {
+        [SerializeField] public string value = DateTime.Parse("1/1/2000 12:00:00 AM").ToString(CultureInfo.InvariantCulture);
+
+        private static LastPopupDate instance;
+        public static LastPopupDate Instance {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new LastPopupDate();
+                }
+
+                return instance;
+            }
         }
     }
 }
