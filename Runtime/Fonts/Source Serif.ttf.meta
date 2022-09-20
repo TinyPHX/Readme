@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5807c77e08faa1147ba8b8d4976ff6b0
+guid: 4b3410607272a9f46b48edaae7bc563b
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,11 +8,10 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
+  fontName: Source Serif Pro
   fontNames:
-  - Century Gothic
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: a6b3c28b7fa203d409bfdbb99b95f74e, type: 3}
-  - {fileID: 12800000, guid: 7236267609d065b49adaab52f6bd80df, type: 3}
+  - Source Serif Pro
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

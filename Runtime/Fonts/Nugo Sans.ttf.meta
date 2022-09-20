@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 40b4966cfd01da44489670045dc4e6dc
+guid: bb9d58a12dc977645a3caed2a5320160
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,8 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
+  fontName: Nugo Sans
   fontNames:
-  - Consolas
+  - Nugo Sans
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
