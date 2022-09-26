@@ -16,6 +16,7 @@ namespace TP
         [SerializeField] private int objectId;
         [SerializeField] private Object objectRef;
         [SerializeField] private Rect fieldRect;
+        [SerializeField] private Rect absoluteFieldRect;
         [SerializeField] private int index;
         [SerializeField] private int length;
 
@@ -88,25 +89,25 @@ namespace TP
 
         public void Draw(TextEditor textEditor = null, Vector2 offset = default, Rect bounds = default)
         {
-            Rect fieldBounds = FieldRect;
-            fieldBounds.position += offset;
+            absoluteFieldRect = FieldRect;
+            absoluteFieldRect.position += offset;
 
             textBoxBackgroundColor = EditorGUIUtility.isProSkin ? Readme.darkBackgroundColor : Readme.lightBackgroundColor;
             
             // Only draw if in bounds
             if (bounds != default)
             {
-                fieldBounds.yMin += Mathf.Min(Mathf.Max(bounds.yMin - fieldBounds.yMin, 0), fieldBounds.height);
-                fieldBounds.yMax -= Mathf.Min(Mathf.Max(fieldBounds.yMax - bounds.yMax, 0), fieldBounds.height);
-                if (fieldBounds.height <= 0)
+                absoluteFieldRect.yMin += Mathf.Min(Mathf.Max(bounds.yMin - absoluteFieldRect.yMin, 0), absoluteFieldRect.height);
+                absoluteFieldRect.yMax -= Mathf.Min(Mathf.Max(absoluteFieldRect.yMax - bounds.yMax, 0), absoluteFieldRect.height);
+                if (absoluteFieldRect.height <= 0)
                 {
                     Rect offscreen = new Rect(99999, 99999, 0, 0);
-                    fieldBounds = offscreen;
+                    absoluteFieldRect = offscreen;
                 }
             }
             
-            EditorGUI.DrawRect(fieldBounds, textBoxBackgroundColor);
-            Object obj = EditorGUI.ObjectField(fieldBounds, ObjectRef, typeof(Object), true);
+            EditorGUI.DrawRect(absoluteFieldRect, textBoxBackgroundColor);
+            Object obj = EditorGUI.ObjectField(absoluteFieldRect, ObjectRef, typeof(Object), true);
 
             if (IdInSync && ObjectRef != obj)
             {
@@ -117,7 +118,7 @@ namespace TP
 
             if (textEditor != null && IsSelected(textEditor))
             {
-                EditorGUI.DrawRect(fieldBounds, selectedColor);
+                EditorGUI.DrawRect(absoluteFieldRect, selectedColor);
             }
         }
 
@@ -156,6 +157,11 @@ namespace TP
         public Rect FieldRect
         {
             get { return fieldRect; }
+        }
+
+        public Rect AbsoluteFieldRect
+        {
+            get { return absoluteFieldRect; }
         }
 
         public int Index

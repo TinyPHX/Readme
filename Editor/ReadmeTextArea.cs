@@ -114,7 +114,10 @@ namespace TP
             UpdateAvailableWidth();
             ScrollToCursor();
 
-            DrawTextAreaObjectFields();
+            if (!Editing)
+            {
+                DrawTextAreaObjectFields(); //Bit of a weird hack to get events to execute in the correct order. Without this clicking object fields doesn't highlight where it is in the project window.
+            }
             DrawTextArea();
             DrawTextAreaObjectFields();
             
@@ -506,6 +509,19 @@ namespace TP
             }
         }
 
+        private bool IsMouseOverObjectField()
+        {
+            foreach (var objectField in objectFields)
+            {
+                if (objectField.AbsoluteFieldRect.Contains(currentEvent.mousePosition))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void DragAndDropObjectField()
         {
             if (Editing && ReadmeUtil.UnityInFocus)
@@ -529,7 +545,7 @@ namespace TP
 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Link;
 
-                        if (currentEvent.type == EventType.DragPerform && objectsToDrop == null)
+                        if (currentEvent.type == EventType.DragPerform && objectsToDrop == null && !IsMouseOverObjectField())
                         {
                             DragAndDrop.AcceptDrag();
 
