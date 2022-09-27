@@ -114,10 +114,11 @@ namespace TP
             UpdateAvailableWidth();
             ScrollToCursor();
 
-            if (!Editing)
-            {
-                DrawTextAreaObjectFields(); //Bit of a weird hack to get events to execute in the correct order. Without this clicking object fields doesn't highlight where it is in the project window.
-            }
+            // if (!Editing)
+            // {
+            //     DrawTextAreaObjectFields(); //Bit of a weird hack to get events to execute in the correct order. Without this clicking object fields doesn't highlight where it is in the project window.
+            // }
+            DrawTextAreaObjectFields();
             DrawTextArea();
             DrawTextAreaObjectFields();
             

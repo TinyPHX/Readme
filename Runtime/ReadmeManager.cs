@@ -234,7 +234,11 @@ namespace TP
         private static void RemoveObjectIdPairFromDicts(ObjectIdPair objectIdPair)
         {
             objectDict.Remove(objectIdPair.Id);
-            IdDict.Remove(objectIdPair.ObjectRef);
+
+            if (objectIdPair.ObjectRef != null)
+            {
+                IdDict.Remove(objectIdPair.ObjectRef);
+            }
         }
 
 
