@@ -7,7 +7,7 @@
 /UserSettings/
 [Ii]gnore*
 [Rr]esources*
-[Pp]lugins*
+#[Pp]lugins*
 /Assets/AssetStoreTools*
 /Assets/Samples
 
