@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEditor;
@@ -13,11 +14,14 @@ using TheArtOfDev.HtmlRenderer.PdfSharp;
 using PdfSharp;
 using PdfSharp.Pdf;
 using HtmlAgilityPack;
+using TP.Util._Editor;
+
+// using OpenAi;
 
 namespace TP 
 {
     [CustomEditor(typeof(Readme)), ExecuteInEditMode]
-    public class ReadmeEditor : Editor
+    public class ReadmeEditor : EditorWidowOrInspector<ReadmeEditor>
     {
         public static ReadmeEditor ActiveReadmeEditor;
 
@@ -114,6 +118,153 @@ namespace TP
                             ExportToPdf();
                         }
                     }
+                    
+                    // if (GUILayout.Button("Auto"))
+                    // {
+                    //     if (readmeTarget.TextAreaObjectFields.Length == 1)
+                    //     {
+                    //         TextAreaObjectField objectField = readmeTarget.TextAreaObjectFields[0];
+                    //         object objectRef = objectField.ObjectRef;
+                    //         
+                    //         if (objectRef is GameObject)
+                    //         {
+                    //             GameObject gameObject = objectRef as GameObject;
+                    //             Debug.Log(gameObject);
+                    //             // System.Object obj = gameObject as System.Object;
+                    //             // FieldInfo field = obj.GetField("test"); 
+                    //
+                    //             SwellWater component = gameObject.GetComponent<SwellWater>();
+                    //
+                    //             MonoScript script = MonoScript.FromMonoBehaviour(component);
+                    //             
+                    //             Debug.Log(DisplayObjectInfo(component));
+                    //             Debug.Log(DisplayObjectInfo(script));
+                    //             
+                    //             string scriptText = script.text;
+                    //             
+                    //             // char[] splitAndKeep =
+                    //             // {
+                    //             //     ' ', '\t', '\r\n', '{', '}', '(', ')', '[', ']', ';', ':', '.', ',', '+', '-', 
+                    //             //     '*', '/', '%', '&', '|', '^', '!', '~', '<', '>', '=', '?', ':', '&', '|',
+                    //             //     '\'', '\"'
+                    //             // }
+                    //             
+                    //             char splitChar = '\uE006';
+                    //             scriptText = scriptText.Replace("\r\n", splitChar + "\n" + splitChar);
+                    //             // scriptText = Regex.Replace(scriptText, @"[\t ]+", splitChar.ToString());
+                    //             // scriptText = Regex.Replace(scriptText, @"[\t ]+", " ");
+                    //             scriptText = Regex.Replace(scriptText, "([^A-Za-z0-9]+)", splitChar + "$1" + splitChar);
+                    //
+                    //             // string pattern = @"(?<=[\s\t\n{}()[];:.,+-*/%&|^!~<>=?:&|'""])";
+                    //             // string pattern = @"(?<=[,.;])";
+                    //             // string[] parts = Regex.Split(scriptText, pattern);
+                    //             
+                    //             // string[] parts = Regex.Split(scriptText, scriptText);
+                    //             // string[] partsString = scriptText.Split(new[] { splitChar }, StringSplitOptions.RemoveEmptyEntries););
+                    //             string[] partsString = scriptText.Split(new[] { splitChar }, StringSplitOptions.None);
+                    //             IEnumerable<string> parts = partsString;
+                    //
+                    //             int prePromptTokens = 100;
+                    //             int maxTokens = 4092 - 500;
+                    //             
+                    //             int estimatedTokens = partsString.Length;
+                    //             int reductionToTokensGoal = 2000; //Reduction we want
+                    //             float ratio = reductionToTokensGoal / (float)estimatedTokens;
+                    //             
+                    //             int responseTokens = (int)(maxTokens * ratio);
+                    //             int maxSendTokens = maxTokens - responseTokens - prePromptTokens; //Dont know why we are so over on tokens 2000 for extra padding.
+                    //             
+                    //             int totalSendPackets = estimatedTokens / maxSendTokens + 1;
+                    //
+                    //             string prePrompt = "Convert this partial code segment to sudo code that uses less than " + (4092 / totalSendPackets) + " words: \n";
+                    //             // string prePrompt = "Rate the quality of this code on a scale of 1 to 100. Return only the rating.";
+                    //             string postPrompt = "<|endoftext|>";
+                    //             
+                    //             OpenAiApi openAi = new OpenAiApi();
+                    //
+                    //             string allCompletions = "";
+                    //             // int[] sendChunks = new int[totalSendPackets];
+                    //             int chunkSize;
+                    //             while (partsString.Length > 0)
+                    //             {
+                    //                 // int checkStart = i * maxSendTokens;
+                    //                 // if (i == sendChunks.Length - 1)
+                    //                 // {
+                    //                 //     chunkSize = estimatedTokens % maxSendTokens;
+                    //                 // }
+                    //                 chunkSize = maxSendTokens;
+                    //                 if (chunkSize >= partsString.Length)
+                    //                 {
+                    //                     chunkSize = partsString.Length;
+                    //                 }
+                    //                 else
+                    //                 {
+                    //                     // Only get up until last new line in chunk size.
+                    //                     int chunkAdjust = partsString.Take(chunkSize).Reverse().ToArray().IndexOfItem("\n");
+                    //                     if (chunkAdjust != -1)
+                    //                     {
+                    //                         chunkSize -= chunkAdjust;
+                    //                     }
+                    //                 }
+                    //                 
+                    //                 string prompt = string.Join("", partsString.Take(chunkSize).Prepend(prePrompt).Append(postPrompt));
+                    //                 partsString = partsString.Skip(chunkSize).ToArray();
+                    //                 
+                    //                 // string prompt = string.Join("", partsString.Skip(checkStart).Take(chunkSize).Prepend(prePrompt));
+                    //                 // Completion completion = await openAi.CreateCompletion(prompt);
+                    //                 AiText aiText = await openAi.CreateCompletion(new AiText.Request(
+                    //                         prompt,
+                    //                         OpenAiApi.Model.TEXT_DAVINCI_003,
+                    //                         1,
+                    //                         .5f,
+                    //                         responseTokens
+                    //                     ));
+                    //                 allCompletions += aiText.choices[0].text;
+                    //
+                    //                 Debug.Log("Request resolved. " +
+                    //                             (int)((estimatedTokens - partsString.Length) / (float)estimatedTokens * 100) +
+                    //                             "% complete");
+                    //             }
+                    //             
+                    //             Debug.Log(allCompletions);
+                    //
+                    //             string readmePrompt =
+                    //                 "Generate a readme file using only these supported richttext tags:\n" +
+                    //                 "\tBold: <b>example bold text</b>\n" +
+                    //                 "\tItalic: <i>example italicised text</i>\n" +
+                    //                 "\tDifferent font sizes: <size=50>example large text</size>\n" +
+                    //                 "\tDifferent font sizes: <size24>example medium sized text</size>\n" +
+                    //                 "\tDifferent font sizes: <size=12>example normal sized text</size>\n" +
+                    //                 "\tDifferent colored: <color=#ff0000ff>Example red text</color>\n" +
+                    //                 "\tDifferent colored: <color=#00ff00ff>Example green text</color>\n" +
+                    //                 "\tDifferent colored: <color=#0000ffff>Example blue text</color>\n" + 
+                    //                 "\n of what this sudo code is for and does. It's a unity component:\n\n" +
+                    //                 allCompletions + "\n" +
+                    //                 postPrompt;
+                    //             
+                    //             AiText readmeAiText = await openAi.CreateCompletion(new AiText.Request(
+                    //                 readmePrompt,
+                    //                 OpenAiApi.Model.TEXT_DAVINCI_003,
+                    //                 1,
+                    //                 .5f,
+                    //                 2000
+                    //             ));
+                    //
+                    //             string newReadme = readmeAiText.choices[0].text;
+                    //
+                    //             // while (parts.Length > 0)
+                    //             // {
+                    //             //     firstArray = array.Take(array.Length / 2).ToArray();
+                    //             //     secondArray = array.Skip(array.Length / 2).ToArray();
+                    //             //     Completion completion = openAi.CreateCompletion();
+                    //             // }
+                    //
+                    //             Debug.Log(newReadme);
+                    //         }
+                    //     }
+                    //     
+                    //     readmeTarget.AutoGenerate();
+                    // }
                 }
             }
             else
@@ -136,6 +287,58 @@ namespace TP
             #endregion Editor GUI
 
             AfterOnInspectorGUI();
+        }
+        
+        private static string DisplayObjectInfo(Object objectToDisplay, Type typeOverride=null)
+        {
+            var objectInfo = new System.Text.StringBuilder();
+
+            // Include the type of the object
+            System.Type type = typeOverride;
+            if (type == null)
+            {
+                type = objectToDisplay.GetType(); 
+            }
+            objectInfo.Append("Type: " + type.Name);
+
+            // Include information for each Field
+            objectInfo.Append("\n\nFields:");
+            var searchFlags =  BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy;
+            System.Reflection.FieldInfo[] fi = type.GetFields(searchFlags);
+            if (fi.Length > 0)
+            {
+                foreach (FieldInfo f in fi)
+                {
+                    objectInfo.Append("\n " + f.ToString() + " = " + f.GetValue(objectToDisplay));
+                }
+            }
+            else
+                objectInfo.Append("\n None");
+
+            // Include information for each Property
+            objectInfo.Append("\n\nProperties:");
+            System.Reflection.PropertyInfo[] pi = type.GetProperties(searchFlags);
+            if (pi.Length > 0)
+            {
+                foreach (PropertyInfo p in pi)
+                {
+                    try
+                    {
+                        objectInfo.Append("\n " + p.ToString() + " = " +
+                                          p.GetValue(objectToDisplay, null));
+                    }
+                    catch (Exception)
+                    {
+                        //ignore
+                    }
+                }
+            }
+            else
+            {
+                objectInfo.Append("\n None");
+            }
+
+            return objectInfo.ToString();
         }
 
         private void OnTextAreaChange(string newText, TextAreaObjectField[] newTextAreaObjectFields)
@@ -829,9 +1032,11 @@ namespace TP
 
             if (pdfSavePath != "")
             {
+#pragma warning disable 1702
                 PdfDocument pdf = PdfGenerator.GeneratePdf(readme.HtmlText, PageSize.A4);
                 pdf.Save(pdfSavePath);
                 AssetDatabase.Refresh();
+#pragma warning restore 1702
             }
         }
 

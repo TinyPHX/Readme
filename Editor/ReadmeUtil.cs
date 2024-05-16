@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -55,7 +54,7 @@ namespace TP
             EditorWindow GetEditorWindow(string editorWindowTitle)
             {
                 EditorWindow[] allWindows = Resources.FindObjectsOfTypeAll<EditorWindow>();
-                EditorWindow editorWindow = allWindows.SingleOrDefault(window => window.titleContent.text == editorWindowTitle);
+                EditorWindow editorWindow = allWindows.FirstOrDefault(window => window.titleContent.text == editorWindowTitle);
 
                 return editorWindow;
             }

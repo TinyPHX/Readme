@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 17680dc214fdb4f42a86df981b55177b
+guid: a9e10129a379044478ff9e2539feeddb
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,8 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Salma Pro
   fontNames:
-  - Salma Pro
+  - Anton
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

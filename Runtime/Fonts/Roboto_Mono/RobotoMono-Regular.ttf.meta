@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d422033e7f4cd564aac0396738f7fed3
+guid: f25b1640d6890e94495a9682c293dd99
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,8 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: LDFComicSansLight
   fontNames:
-  - LDFComicSansLight
+  - Roboto Mono
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

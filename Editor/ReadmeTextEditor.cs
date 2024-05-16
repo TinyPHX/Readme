@@ -51,7 +51,7 @@ namespace TP
                 .GetField("activeEditor", BindingFlags.Static | BindingFlags.NonPublic)
                 ?.GetValue(null) as TextEditor;
         
-        private Event currentEvent => new Event(Event.current);
+        private Event currentEvent => Event.current != null ? new Event(Event.current) : default;
 
         public void Update()
         {
@@ -92,7 +92,7 @@ namespace TP
         {
             if (!readmeTextArea.TagsError() && !readmeTextArea.SourceOn)
             {
-                if (currentEvent.type == EventType.KeyDown &&
+                if (currentEvent != null && currentEvent.type == EventType.KeyDown &&
                     new KeyCode[] { KeyCode.Backspace, KeyCode.Delete }.Contains(currentEvent.keyCode) &&
                     CursorIndex == SelectIndex)
                 {
@@ -142,7 +142,7 @@ namespace TP
 
         public void AfterTextAreaChange(ReadmeTextArea readmeTextArea)
         {
-            if (!readmeTextArea.TagsError() && !readmeTextArea.SourceOn)
+            if (!readmeTextArea.TagsError() && !readmeTextArea.SourceOn && currentEvent != null)
             {
                 int direction = currentEvent.keyCode == KeyCode.Backspace ? -1 : 0;
                 CursorIndex = readmeTextArea.GetNearestPoorTextIndex(CursorIndex, -direction);
@@ -170,11 +170,10 @@ namespace TP
 
         private void FixMouseCursor()
         {
-            bool mouseEvent =
-                new EventType[] { EventType.MouseDown, EventType.MouseDrag, EventType.MouseUp }.Contains(currentEvent
-                    .type);
+            EventType[] mouseEvents = new EventType[] { EventType.MouseDown, EventType.MouseDrag, EventType.MouseUp };
+            bool mouseEvent = currentEvent != null && mouseEvents.Contains(currentEvent.type);
 
-            if (currentEvent.type == EventType.MouseDown && readmeTextArea.Contains(currentEvent.mousePosition))
+            if (currentEvent != null && currentEvent.type == EventType.MouseDown && readmeTextArea.Contains(currentEvent.mousePosition))
             {
                 mouseCaptured = true;
             }
@@ -198,7 +197,7 @@ namespace TP
                 }
             }
 
-            if (currentEvent.type == EventType.MouseUp)
+            if (currentEvent != null && currentEvent.type == EventType.MouseUp)
             {
                 mouseCaptured = false;
             }
@@ -206,12 +205,12 @@ namespace TP
 
         private void FixArrowCursor()
         {
-            bool isKeyboard =
-                new KeyCode[] { KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow }.Contains(
-                    Event.current.keyCode);
-            bool isDoubleClick = Event.current.clickCount == 2;
-            bool clickInTextArea = readmeTextArea.Contains(currentEvent.mousePosition);
-            if (isKeyboard || isDoubleClick || richTextChanged || AllTextSelected())
+            KeyCode[] arrowKeys = new KeyCode[] { KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.LeftArrow };
+            bool isKeyboard = Event.current != null && arrowKeys.Contains(Event.current.keyCode);
+
+            bool isDoubleClick = Event.current != null && Event.current.clickCount == 2;
+            bool clickInTextArea = currentEvent != null && readmeTextArea.Contains(currentEvent.mousePosition);
+            if (currentEvent != null && (isKeyboard || isDoubleClick || richTextChanged || AllTextSelected()))
             {
                 int direction = isDoubleClick ? 1 : 0;
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using TP.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
 
@@ -112,6 +113,75 @@ namespace TP {
                 BuildRichTextTagMap();
                 RebuildStyleMaps();
             }
+        }
+
+        public void AutoGenerate()
+        {
+            // string fullHeirary = "";
+            //
+            // // Transform parent = gameObject.transform.parent;
+            // //
+            // // GameObject[] siblings = null;
+            // // if (parent == null)
+            // // {
+            // //     siblings = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+            // // }
+            // // else
+            // // {
+            // //     int siblingCount = parent.childCount;
+            // //     siblings = new GameObject[siblingCount];
+            // //     for (int i = 0; i < siblingCount; i++)
+            // //     {
+            // //         siblings[i] = parent.GetChild(i).gameObject;
+            // //     }    
+            // // }
+            //
+            // // GameObject[] siblings = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+            // //
+            // // foreach (GameObject sibling in siblings)
+            // // {
+            // //     // MonoBehaviour[] components = sibling.GetComponents<MonoBehaviour>();
+            // //     // foreach (MonoBehaviour component in components)
+            // //     // {
+            // //     //     //todo
+            // //     // }
+            // //
+            // //     fullHeirary += appendGameObject(fullHeirary, sibling, 0);
+            // // }
+            //
+            // if (ObjectIdPairs.Count == 1)
+            // {
+            //     object objectRef = ObjectIdPairs[0].ObjectRef;
+            //     if (objectRef is MonoBehaviour)
+            //     {
+            //         MonoBehaviour monoBehaviour = objectRef as MonoBehaviour;
+            //         System.Object objectInstance = property.GetTargetObjectWithProperty();
+            //         //This is my attribute class
+            //         var comparisonAttribute = attribute as ConditionalAttribute;
+            //         // Don't forget to use BindingFlags
+            //         FieldInfo field = objectInstance.GetField(comparisonAttribute.PropertyName);
+            //         PropertyInfo hiddenProperty = objectInstance.GetProperty(comparisonAttribute.PropertyName);
+            //     }
+            // }
+            //
+            // Debug.Log(fullHeirary);
+        }
+
+        private string appendGameObject(string current, GameObject go, int level)
+        {
+            for (int i = 0; i < level; i++)
+            {
+                current += "\t";
+            }
+            current += go.name + "\n"; 
+            level++;
+            foreach (GameObject child in go.Children())
+            {
+                // GameObject child = childTransform.gameObject;
+                current += appendGameObject(current, child, level);
+            }
+
+            return current;
         }
     
         public string HtmlText

@@ -1,0 +1,83 @@
+This package contains third-party software components governed by the license(s) indicated below:
+
+---
+
+- Location: Readme\Runtime\Fonts\Anton\Anton-Regular.ttf
+- Component Name: Anton-Regular.ttf
+- License Type: SIL Open Font License (OFL)
+
+[Anton-Regular License](Readme/Runtime/Fonts/Anton/OFL.txt)
+
+---
+
+- Location: Readme\Runtime\Fonts\Comic_Neue\ComicNeue-Regular.ttf
+- Component Name: ComicNeue-Regular.ttf
+- License Type: SIL Open Font License (OFL)
+
+[ComicNeue-Regular License](Readme/Runtime/Fonts/Comic_Neue/OFL.txt)
+
+---
+
+- Location: Readme\Runtime\Fonts\Corben\Corben-Regular.ttf
+- Component Name: Corben-Regular.ttf
+- License Type: SIL Open Font License (OFL)
+
+[Corben-Regular License](Readme/Runtime/Fonts/Corben/OFL.txt)
+
+---
+
+- Location: Readme\Runtime\Fonts\Didact_Gothic\DidactGothic-Regular.ttf
+- Component Name: DidactGothic-Regular.ttf
+- License Type: SIL Open Font License (OFL)
+
+[DidactGothic-Regular License](Readme/Runtime/Fonts/Didact_Gothic/OFL.txt)
+
+---
+
+- Location: Readme\Runtime\Fonts\Gruppo\Gruppo-Regular.ttf
+- Component Name: Gruppo-Regular.ttf
+- License Type: SIL Open Font License (OFL)
+
+[Gruppo-Regular License](Readme/Runtime/Fonts/Gruppo/OFL.txt)
+
+---
+
+- Location: Readme\Runtime\Fonts\Nixie_One\NixieOne-Regular.ttf
+- Component Name: NixieOne-Regular.ttf
+- License Type: SIL Open Font License (OFL)
+
+[NixieOne-Regular License](Readme/Runtime/Fonts/Nixie_One/OFL.txt)
+
+---
+
+- Location: Readme\Runtime\Fonts\Roboto_Mono\RobotoMono-Regular.ttf
+- Component Name: RobotoMono-Regular.ttf
+- License Type: Apache 2.0
+
+[RobotoMono-Regular License](Readme/Runtime/Fonts/Roboto_Mono/LICENSE.txt)
+
+---
+
+- Location: Readme/Plugins/Editor/PdfSharp.dll
+- Component Name: PdfSharp
+- License Type: MIT
+
+[PdfSharp License](http://www.pdfsharp.net/PDFsharp_License.ashx)
+
+---
+
+- Location: Readme/Plugins/Editor/HtmlRenderer.dll
+- Component Name: HTMLRenderer
+- License Type: BSD 3-Clause New or Revised License
+
+[HTMLRenderer License](https://github.com/ArthurHub/HTML-Renderer/blob/master/LICENSE)
+
+---
+
+- Location: Readme/Plugins/HtmlAgilityPack.dll
+- Component Name: HTMLAgilityPack
+- License Type: MIT
+
+[HTMLAgilityPack License](https://github.com/zzzprojects/html-agility-pack/blob/master/LICENSE)
+
+---

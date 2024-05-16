@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718672123386104}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7050781, y: 0.93359375, z: -1.1923828}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dac210a80c64f089652dec17dda8e47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fontColor: {r: 0, g: 0, b: 0, a: 1}
+  fontColor: {r: 0.82, g: 0.82, b: 0.82, a: 1}
   richTextTagMap: 0101010101010101010000000000000000000000000000000000000000000001010101010101000000000000000000000000000000000000000000000101010000000001010101000000010101000000000000010101010000000000010101010101010101010101010101010100000000000001010101010101010000000000000000000000000000000000000001010101010101010101010101010101010101
   font: {fileID: 0}
   fontSize: 12
@@ -54,54 +54,28 @@ MonoBehaviour:
     name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
     priority: 5
     type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
   allSettings:
-  - name: Free
-    id: 817f8bd3-6a31-4b68-a1dc-7c2bb2b78c46
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
-    fileName: Free
-    redistributable: 1
-    lite: 0
-    priority: 10
-    type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
-  - name: Lite
-    id: f3de355d-ddb4-4eee-bf3d-388f95ac3ad0
-    skin: Custom
-    path: Assets/Packages/TP/Readme/Settings
-    fileName: Lite
+  - name: Default
+    id: 06d9302a-b288-402f-8f1c-b00178d18860
+    skin: Default
+    fileName: Default
     redistributable: 0
     lite: 1
     priority: 7
     type: json
-    lastPopupDate: 8/24/2022 6:24:26 PM
-  - name: New
-    id: d1a122f7-4a79-44c0-9570-4911ded4c5b3
-    skin: Default
-    path: Assets\TP\Readme\Scripts\Settings
-    fileName: New
-    redistributable: 1
-    lite: 1
-    priority: 1000
-    type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
   - name: Paid
     id: 30c0eca9-01de-41b5-bf2e-1a8e9a1206f7
     skin: Custom
-    path: Assets/Packages/TP/Readme/Editor\..\Settings
     fileName: Paid
     redistributable: 0
     lite: 0
     priority: 5
     type: json
-    lastPopupDate: 1/1/2000 12:00:00 AM
   readmeData:
     richText: "<size=20>1-Click Export to PDF!</size>\n\nExport anything:\n * <b>bold</b>\n*
       <i>italic</i> \n * <color=\"#4444ff\">colors</color> \n * object fields: <o=\"0000016\"></o> "
@@ -115,6 +89,12 @@ MonoBehaviour:
         y: 110
         width: 140
         height: 15
+      absoluteFieldRect:
+        serializedVersion: 2
+        x: 99999
+        y: 99999
+        width: 0
+        height: 0
       index: 143
       length: 17
     objectIdPairs: []

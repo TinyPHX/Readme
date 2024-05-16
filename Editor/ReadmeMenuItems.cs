@@ -1,9 +1,5 @@
-using System.IO;
 using UnityEngine;
 using UnityEditor;
-using TheArtOfDev.HtmlRenderer.PdfSharp;
-using PdfSharp;
-using PdfSharp.Pdf;
 
 // using html to pdf libraries from: 
 // - https://www.nuget.org/packages/PdfSharp/1.50.5147

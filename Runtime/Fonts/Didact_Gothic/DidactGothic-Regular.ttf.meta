@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 74d440b1413cc0c4da54cf751ba3d090
+guid: cce8a1b85f5a98f4c9d163c889b5b160
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,8 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Source Code Pro
   fontNames:
-  - Source Code Pro
+  - Didact Gothic
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

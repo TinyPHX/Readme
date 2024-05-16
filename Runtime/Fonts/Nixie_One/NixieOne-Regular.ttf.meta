@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0dfa628e40ac9dc4889a076e7443ef14
+guid: 20fa5e9453c04554a86db833c9f5e715
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,8 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Rondal
   fontNames:
-  - Rondal
+  - Nixie One
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

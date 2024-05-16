@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4b3410607272a9f46b48edaae7bc563b
+guid: 740f934ca82d3044b984867eedf3c3cb
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,8 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Source Serif Pro
   fontNames:
-  - Source Serif Pro
+  - Corben
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
